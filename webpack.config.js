@@ -29,6 +29,9 @@ module.exports = {
     react: "react",
     "react-dom": "react-dom",
     scrivito: "scrivito",
+    lodash: "lodash",
+    "date-fns": "date-fns",
+    "date-fns/locale": "date-fns/locale",
   },
   output: {
     filename: "index.js",

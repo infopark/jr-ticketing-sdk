@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
 import paperclipIcon from "../assets/images/icons/paperclip.svg";
-import { translate } from "../utils/translate";
-
+import { translate, dictTranslate } from "../utils/translate";
+import { parseDate } from "../utils/dateUtils";
+import { DEFAULT_DATE_FORMAT } from "../utils/constants";
 interface ticketEntryProps {
   ticket: {
     status: string;
@@ -54,13 +55,19 @@ export function TicketEntry({
               </span>
               <span className="col-md-3">
                 <span className="ticket-box ticket-status">
-                  <span className="running-ticket">{ticket.status}</span>
+                  <span className="running-ticket">
+                    {dictTranslate(ticket.status, statusDictionary)}
+                  </span>
                 </span>
               </span>
               <span className="col-md-3">
                 <span className="ticket-box">
-                  <span className="d-md-none">{translate("Created on")}</span>
-                  {ticket.creationdate}
+                  <span className="d-md-none">{translate("Created on")} </span>
+                  {parseDate(
+                    ticket.creationdate,
+                    DEFAULT_DATE_FORMAT,
+                    userData.timelocale
+                  )}
                 </span>
               </span>
             </span>
