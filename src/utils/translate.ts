@@ -7,6 +7,17 @@ const getLanguage = () => {
   return siteId ? languages[siteId] : languages.portalEn;
 };
 
+const getDictionary = (localizations, defaultLanguage = "en") => {
+  if (!localizations) {
+    return {};
+  }
+  const lang = getLanguage();
+  if (!lang) {
+    return {};
+  }
+  return localizations[lang] || localizations[defaultLanguage] || {};
+};
+
 const translate = (
   key: keyof typeof translations.en | keyof typeof translations.de
 ) => {
@@ -24,4 +35,4 @@ const dictTranslate = (key: string, dict: any) => {
   return result;
 };
 
-export { translate, getLanguage, dictTranslate };
+export { translate, getLanguage, getDictionary, dictTranslate };

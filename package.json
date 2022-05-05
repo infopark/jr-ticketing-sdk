@@ -12,9 +12,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/react": "^17.0.2",
+    "axios": "^0.27.2",
+    "classnames": "^2.3.1",
     "date-fns": "^2.28.0",
     "file-loader": "^6.2.0",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "react-overlays": "^5.1.1",
     "scrivito": "^1.29.0",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.3",
@@ -28,6 +32,10 @@
     "react-dom": "*",
     "lodash": "*",
     "date-fns": "*",
-    "date-fns/locale": "*"
+    "date-fns/locale": "*",
+    "classnames": "*",
+    "react-overlays": "*",
+    "lodash-es": "*",
+    "axios": "*"
   }
 }
