@@ -25,7 +25,7 @@ function InputField({
   const isUploadField = type === "file";
 
   const validate = (e) => {
-    validations?.map((validation) => {
+    validations && validations.map((validation) => {
       if (validation.validator(e, validation.constraint)) {
         setInvalid(true);
         setValidationMessages(

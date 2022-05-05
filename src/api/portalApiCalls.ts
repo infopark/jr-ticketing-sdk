@@ -65,7 +65,7 @@ function addSkipIamHeader(config) {
 }
 
 function checkIamAuthRedirect(response) {
-  const responseStatus = response?.status;
+  const responseStatus = response && response.status;
   const synthResponse = {
     failedRequest: true,
     statusCode: responseStatus || 404,

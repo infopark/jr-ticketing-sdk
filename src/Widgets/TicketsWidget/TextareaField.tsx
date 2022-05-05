@@ -13,7 +13,7 @@ function TextareaField({ fieldName, fieldConfig, onChange }) {
     if (e.keyCode !== 13 && e.keyCode !== 8) {
       return;
     }
-    const message = e.target?.value;
+    const message = e.target && e.target.value;
     if (!message) {
       return;
     }
@@ -26,7 +26,7 @@ function TextareaField({ fieldName, fieldConfig, onChange }) {
   };
 
   const validate = (e) => {
-    validations?.map((validation) => {
+    validations && validations.map((validation) => {
       if (validation.validator(e, validation.constraint)) {
         setInvalid(true);
         setValidationMessages(

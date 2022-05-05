@@ -99,10 +99,10 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
       });
   };
   const handleAttachmentChange = (e) => {
-    const files = e.target?.files;
+    const files = e.target && e.target.files;
     const uploadFile = files[0];
-    const size = uploadFile?.size || 0;
-    const fileName = uploadFile?.name;
+    const size = uploadFile && uploadFile.size || 0;
+    const fileName = uploadFile && uploadFile.name;
     if (size > MAX_ATTACHMENT_SIZE) {
       setAttachmentTooBig(true);
       return;

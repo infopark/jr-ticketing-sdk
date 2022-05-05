@@ -1,6 +1,6 @@
 const attachmentSize = (e, maxSize) => {
   const file = e.target.files[0];
-  const fileSize = file?.size || 0;
+  const fileSize = file && file.size || 0;
   return fileSize > maxSize;
 };
 
