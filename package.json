@@ -32,7 +32,6 @@
     "react-dom": "*",
     "lodash": "*",
     "date-fns": "*",
-    "date-fns/locale": "*",
     "classnames": "*",
     "react-overlays": "*",
     "lodash-es": "*",
