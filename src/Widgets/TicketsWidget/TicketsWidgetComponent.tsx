@@ -1,5 +1,3 @@
-/* eslint-disable no-alert */
-
 import React, { useState, useEffect } from "react";
 import * as Scrivito from "scrivito";
 import { translate } from "../../utils/translate";
