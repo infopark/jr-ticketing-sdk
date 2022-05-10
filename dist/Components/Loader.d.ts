@@ -1,6 +1,5 @@
-/// <reference types="react" />
 declare const Loader: ({ comp, bg }: {
     comp?: string | undefined;
-    bg: any;
+    bg?: string | undefined;
 }) => JSX.Element;
 export default Loader;
