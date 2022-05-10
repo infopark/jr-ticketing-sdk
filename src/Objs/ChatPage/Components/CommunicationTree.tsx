@@ -8,7 +8,7 @@ import sanitizeHtml from "sanitize-html";
 import { isImageFormat } from "../../../utils/isImage";
 import Loader from "../../../Components/Loader";
 import { DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from "../../../utils/constants";
-import noUserImg from "src/assets/images/icons/profile_img.svg";
+import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { useUserData } from "../../../Components/UserDataContext";
 import { translate } from "../../../utils/translate";
 import { matchExtension } from "../../../utils/fileExtension";

@@ -1,6 +1,6 @@
-import txtIcon from "src/assets/images/icons/txt.svg";
-import pdfIcon from "src/assets/images/icons/pdf.svg";
-import fileIcon from "src/assets/images/icons/file.svg";
+import txtIcon from "../assets/images/icons/txt.svg";
+import pdfIcon from "../assets/images/icons/pdf.svg";
+import fileIcon from "../assets/images/icons/file.svg";
 
 const getFileExtension = (fileName) => {
   if (!fileName || !fileName.split(".").length) {
