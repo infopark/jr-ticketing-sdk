@@ -280,6 +280,6 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 });
 
 function wasTicketCreatedLessThanMsAgo(ticket, diffMs) {
-  const d = new Date(ticket?.creationdate);
+  const d = new Date(ticket && ticket.creationdate);
   return Date.now() - d.getTime() < diffMs;
 }

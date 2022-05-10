@@ -8,7 +8,7 @@ import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const { userData } = useUserData();
-  const userId = userData?.userid;
+  const userId = userData && userData.userid;
   const [message, setMessage] = useState("");
   const [file, setFile] = useState("" as any);
   const [textareaHeight, setTextareaHeight] = useState<number | null>(null);

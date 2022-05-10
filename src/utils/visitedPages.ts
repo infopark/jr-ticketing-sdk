@@ -10,12 +10,12 @@ const getEssentialObjInfo = (obj) => {
     return null;
   }
   const baseUrl = Scrivito.urlFor(obj);
-  const id = obj?.id();
-  const pageType = obj?.objClass();
+  const id = obj && obj.id();
+  const pageType = obj && obj.objClass();
   const query = window.location.search;
   const url = query ? `${baseUrl}${query}` : baseUrl;
-  const title = obj?.get("title");
-  const language = obj?.siteId();
+  const title = obj && obj.get("title");
+  const language = obj && obj.siteId();
   return { id, url, query, title, pageType, language };
 };
 
@@ -46,12 +46,13 @@ const addToVisitedPages = (obj) => {
   if (!obj) {
     return null;
   }
-  const lang = Scrivito.currentPage()?.siteId();
+  const currentPage = Scrivito.currentPage();
+  const lang = currentPage && currentPage.siteId();
   const objInfo = getEssentialObjInfo(obj) as any;
   const visited = getVisitedPages(obj);
   const visitedArray = JSON.parse(visited as any);
   const localisedVisitedArray =
-    lang && visitedArray?.filter((o) => o?.language === lang);
+    lang && visitedArray && visitedArray.filter((o) => (o && o.language) === lang);
   if (!(!objInfo.query && objInfo.pageType === "ChatPage")) {
     localisedVisitedArray.unshift(objInfo);
   }

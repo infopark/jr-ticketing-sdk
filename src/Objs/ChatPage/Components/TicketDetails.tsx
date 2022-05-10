@@ -88,7 +88,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             {translate("Creation date")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {parseDate(creationdate, DEFAULT_DATE_FORMAT, userData?.timelocale)}
+            {parseDate(creationdate, DEFAULT_DATE_FORMAT, userData && userData.timelocale)}
           </dd>
         </dl>
       </InnerPageContentWrapper>

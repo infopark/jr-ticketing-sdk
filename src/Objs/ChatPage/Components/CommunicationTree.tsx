@@ -32,7 +32,7 @@ const CommunicationTree = ({
   const { userData } = useUserData();
   const messagesEndRef = useRef(null as any);
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+    messagesEndRef.current && messagesEndRef.current.scrollIntoView({ behavior: "auto" });
   };
 
   const isAttachmentsMode = mode === "attachments";
@@ -78,7 +78,7 @@ const CommunicationDayTree = ({
 }) => {
   const { userData } = useUserData();
   const days = groupBy(communications, (message) =>
-    parseDate(message.creationdate, DEFAULT_DATE_FORMAT, userData?.timelocale)
+    parseDate(message.creationdate, DEFAULT_DATE_FORMAT, userData && userData.timelocale)
   );
   const loggedUserId = loggedUserData.userid;
 
@@ -205,7 +205,7 @@ const Message = ({
             {parseDate(
               message.creationdate,
               DEFAULT_TIME_FORMAT,
-              userData?.timelocale
+              userData && userData.timelocale
             )}
           </span>
           {!isAttachmentsMode && (

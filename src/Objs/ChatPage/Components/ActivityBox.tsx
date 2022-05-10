@@ -37,7 +37,7 @@ const ActivityBox = ({ activity }) => {
               {parseDate(
                 activity["PSA_ACT_XRO.BEG_DAT"],
                 undefined,
-                userData?.timelocale
+                userData && userData.timelocale
               )}{" "}
             </span>
             <span className="mr-3">|</span>
@@ -47,7 +47,7 @@ const ActivityBox = ({ activity }) => {
               {parseDate(
                 activity["PSA_ACT_XRO.END_DAT"],
                 undefined,
-                userData?.timelocale
+                userData && userData.timelocale
               )}{" "}
             </span>
           </small>

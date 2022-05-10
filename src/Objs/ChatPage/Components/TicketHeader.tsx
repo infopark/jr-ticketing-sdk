@@ -15,8 +15,8 @@ const TicketHeader = ({ ticket }) => {
       <div className="row">
         <span className="wrapper_info_content no_wrap w-100">
           <span className="info_item extra_bold ticket-name dots">
-            {ticket?.title &&
-              parse(newlinesToBreaks(stripHtmlTags(ticket?.title)))}
+            {ticket && ticket.title &&
+              parse(newlinesToBreaks(stripHtmlTags(ticket && ticket.title)))}
           </span>
           <span className="info_item on_progress ticket-status dots float-right float-md-none">
             {dictTranslate(status, statusDictionary)}
