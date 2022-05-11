@@ -1,4 +1,3 @@
-/// <reference types="react" />
 declare const CommunicationTree: ({ comm, status, mode, refreshCallback, isClosed, }: {
     comm: any;
     status: any;

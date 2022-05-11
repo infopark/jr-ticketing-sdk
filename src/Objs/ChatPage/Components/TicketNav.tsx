@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
-import viewWrapper from "../../../utils/viewWrapper";
 import { translate } from "../../../utils/translate";
 
 const TicketNav = ({ toggleMode, mode, viewModes }) => {
@@ -41,4 +40,4 @@ const TicketNav = ({ toggleMode, mode, viewModes }) => {
   );
 };
 
-export default viewWrapper(TicketNav) as any;
+export default TicketNav;

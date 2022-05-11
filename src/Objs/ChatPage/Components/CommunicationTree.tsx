@@ -55,7 +55,7 @@ const CommunicationTree = ({
       <InnerPageContentWrapper additionalBoxClass="min_hight_box">
         <CommunicationDayTree
           communications={communications}
-          loggedUserData={userData}
+          loggedUserData={userData || {}}
           isAttachmentsMode={isAttachmentsMode}
           refreshCallback={refreshCallback}
           isClosed={isClosed}

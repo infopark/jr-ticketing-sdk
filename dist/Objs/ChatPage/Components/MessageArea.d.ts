@@ -1,4 +1,3 @@
-/// <reference types="react" />
 declare const MessageArea: ({ ticketId, refreshCallback, isClosed }: {
     ticketId: any;
     refreshCallback: any;

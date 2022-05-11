@@ -1,4 +1,3 @@
-/// <reference types="react" />
 declare const TicketDetails: ({ ticket, refreshCallback, isClosed }: {
     ticket: any;
     refreshCallback: any;

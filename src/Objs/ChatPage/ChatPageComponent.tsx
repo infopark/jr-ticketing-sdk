@@ -7,7 +7,6 @@ import React, {
   useMemo,
 } from "react";
 import * as Scrivito from "scrivito";
-import { useHistory } from "react-router-dom";
 import { isNil } from "lodash-es";
 import { callApiPost } from "../../api/portalApiCalls";
 import Loader from "../../Components/Loader";
@@ -22,7 +21,6 @@ import { translate } from "../../utils/translate";
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
 Scrivito.provideComponent("ChatPage", ({ page }) => {
-  const history = useHistory();
   const { isTicketStatusClosed } = useTenantContext();
   const [chatContent, setChatContent] = useState();
   const [activeTicket, setActiveTicket] = useState(undefined as any);
@@ -130,11 +128,6 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
   useEffect(() => {
     const effectStatus = { canceled: false };
     getTicketCallback(effectStatus);
-    history.listen(() => {
-      if (!effectStatus.canceled) {
-        getTicketCallback(effectStatus);
-      }
-    });
     return () => {
       effectStatus.canceled = true;
     };
