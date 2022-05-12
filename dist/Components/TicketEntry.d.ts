@@ -11,9 +11,7 @@ interface ticketEntryProps {
     };
     targetLink: Scrivito.Link;
     statusDictionary: object;
-    userData: {
-        timelocale: string;
-    };
+    timeLocale: string;
 }
-export declare function TicketEntry({ ticket, targetLink, statusDictionary, userData, }: ticketEntryProps): JSX.Element;
+export declare function TicketEntry({ ticket, targetLink, statusDictionary, timeLocale, }: ticketEntryProps): JSX.Element;
 export {};

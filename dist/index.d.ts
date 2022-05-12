@@ -1,5 +1,6 @@
 import UserProfile from "./Components/Layout/UserProfile";
 import LanguageRedirect from "./Components/LanguageRedirect";
+import TicketList from "./Components/TicketList";
 import { TicketEntry } from "./Components/TicketEntry";
 import { UserDataProvider } from "./Components/UserDataContext";
 import "./Objs/ChatPage/ChatPageComponent";
@@ -14,4 +15,4 @@ import "./Widgets/EditProfileWidget/EditProfileWidgetEditingConfig";
 import "./Widgets/TicketsWidget/TicketsWidgetClass";
 import "./Widgets/TicketsWidget/TicketsWidgetComponent";
 import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
-export { TicketEntry, UserDataProvider, UserProfile, LanguageRedirect };
+export { TicketEntry, TicketList, UserDataProvider, UserProfile, LanguageRedirect, };
