@@ -15,16 +15,14 @@ interface ticketEntryProps {
   };
   targetLink: Scrivito.Link;
   statusDictionary: object;
-  userData: {
-    timelocale: string;
-  };
+  timeLocale: string;
 }
 
 export function TicketEntry({
   ticket,
   targetLink,
   statusDictionary,
-  userData,
+  timeLocale,
 }: ticketEntryProps) {
   return (
     <div className="row ticket_list">
@@ -66,7 +64,7 @@ export function TicketEntry({
                   {parseDate(
                     ticket.creationdate,
                     DEFAULT_DATE_FORMAT,
-                    userData.timelocale
+                    timeLocale
                   )}
                 </span>
               </span>

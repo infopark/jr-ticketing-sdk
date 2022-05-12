@@ -6,20 +6,17 @@ import { ticketsListSorters } from "../utils/listSorters";
 import { TicketEntry } from "./TicketEntry";
 import { translate } from "../utils/translate";
 import TicketListHeadEntry from "./TicketListHeadEntry";
-// import { useUserData } from "./UserDataContext";
 
 function TicketList({
   ticketList,
   sortKey,
   baseLink,
-  widgetId,
   loading,
   ticketsListFilters,
   filterKey,
   statusDictionary,
+  timeLocale,
 }) {
-  const userData = { timelocale: "de-DE" };
-
   if (loading) {
     return (
       <div className="loader_overlay">
@@ -53,7 +50,7 @@ function TicketList({
             targetLink={targetLink}
             key={index}
             statusDictionary={statusDictionary}
-            userData={userData}
+            timeLocale={timeLocale}
           />
         );
       })}
