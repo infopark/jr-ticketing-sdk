@@ -11,6 +11,7 @@
   "author": "JustRelate",
   "license": "ISC",
   "devDependencies": {
+    "@honeybadger-io/js": "^4.0.1",
     "@types/react": "^17.0.2",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
@@ -45,6 +46,7 @@
     "html-react-parser": "*",
     "sanitize-html": "*",
     "react-bootstrap": "*",
-    "uuid": "*"
+    "uuid": "*",
+    "@honeybadger-io/js": "*"
   }
 }

@@ -1,4 +1,6 @@
 import UserProfile from "./Components/Layout/UserProfile";
+import ErrorAPIProvider from "./Components/ErrorAPIContext";
+import ErrorNotification from "./Components/ErrorNotification";
 import LanguageRedirect from "./Components/LanguageRedirect";
 import { UserDataProvider, useUserData } from "./Components/UserDataContext";
 import { TenantContextProvider, useTenantContext } from "./Components/TenantContextProvider";
@@ -25,4 +27,6 @@ export {
   LanguageRedirect,
   TenantContextProvider,
   useTenantContext,
+  ErrorAPIProvider,
+  ErrorNotification,
 };

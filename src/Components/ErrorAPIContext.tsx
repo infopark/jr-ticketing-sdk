@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 
 export const ErrorAPIContext = React.createContext({
-  error: null,
+  error: null as any,
   addError: (() => {}) as any,
   removeError: () => {},
 });
