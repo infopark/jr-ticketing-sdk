@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { translate } from "../utils/translate";
+import { translate } from "../../utils/translate";
 
 function TicketListHeadEntry() {
   return (

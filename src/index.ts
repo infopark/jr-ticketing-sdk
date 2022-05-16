@@ -1,7 +1,5 @@
 import UserProfile from "./Components/Layout/UserProfile";
 import LanguageRedirect from "./Components/LanguageRedirect";
-import TicketList from "./Components/TicketList";
-import { TicketEntry } from "./Components/TicketEntry";
 import { UserDataProvider } from "./Components/UserDataContext";
 import "./Objs/ChatPage/ChatPageComponent";
 import "./Objs/ChatPage/ChatPageEditingConfig";
@@ -12,14 +10,14 @@ import "./Objs/ProfilePage/ProfilePageObjClass";
 import "./Widgets/EditProfileWidget/EditProfileWidgetClass";
 import "./Widgets/EditProfileWidget/EditProfileWidgetComponent";
 import "./Widgets/EditProfileWidget/EditProfileWidgetEditingConfig";
-
+import "./Widgets/TicketListWidget/TicketListWidgetClass";
+import "./Widgets/TicketListWidget/TicketListWidgetComponent";
+import "./Widgets/TicketListWidget/TicketListWidgetEditingConfig";
 import "./Widgets/TicketsWidget/TicketsWidgetClass";
 import "./Widgets/TicketsWidget/TicketsWidgetComponent";
 import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
 
 export {
-  TicketEntry,
-  TicketList,
   UserDataProvider,
   UserProfile,
   LanguageRedirect,

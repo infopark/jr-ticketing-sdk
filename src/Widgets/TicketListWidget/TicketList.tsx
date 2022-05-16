@@ -1,21 +1,22 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
 
-import Loader from "./Loader";
-import { ticketsListSorters } from "../utils/listSorters";
-import { TicketEntry } from "./TicketEntry";
-import { translate } from "../utils/translate";
+import Loader from "../../Components/Loader";
+import { ticketsListSorters } from "../../utils/listSorters";
+import { translate } from "../../utils/translate";
+
+import TicketEntry from "./TicketEntry";
 import TicketListHeadEntry from "./TicketListHeadEntry";
 
 function TicketList({
   ticketList,
   sortKey,
   baseLink,
+  widgetId,
   loading,
   ticketsListFilters,
   filterKey,
   statusDictionary,
-  timeLocale,
 }) {
   if (loading) {
     return (
@@ -24,7 +25,6 @@ function TicketList({
       </div>
     );
   }
-
   if (ticketList.length === 0) {
     return (
       <>
@@ -50,7 +50,6 @@ function TicketList({
             targetLink={targetLink}
             key={index}
             statusDictionary={statusDictionary}
-            timeLocale={timeLocale}
           />
         );
       })}
