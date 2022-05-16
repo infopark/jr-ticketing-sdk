@@ -1,4 +1,4 @@
-// import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   each,
   head,
@@ -9,18 +9,18 @@ import {
   reduce,
   sortBy,
 } from "lodash-es";
-// import { CDN_BASE_PATH, DEVELOPMENT_ENVIRONMENT } from "../utils/constants";
-// import { callApiPost } from "../api/portalApiCalls";
+import { CDN_BASE_PATH, DEVELOPMENT_ENVIRONMENT } from "../utils/constants";
+import { callApiPost } from "../api/portalApiCalls";
 import { dictTranslate, getDictionary, getLanguage } from "../utils/translate";
 
-// const TenantContext = React.createContext({} as any);
+const TenantContext = React.createContext({} as any);
 
-// /**
-//  * Warning: This context provider uses tenant specific IDs in order to
-//  * manage meaningful defaults. Please use the provided contxt functions,
-//  * never access the IDs directly outside this module and simply add
-//  * additional functions to the context if necessary.
-//  */
+/**
+ * Warning: This context provider uses tenant specific IDs in order to
+ * manage meaningful defaults. Please use the provided contxt functions,
+ * never access the IDs directly outside this module and simply add
+ * additional functions to the context if necessary.
+ */
 
 const DEFAULT_LOCALIZATION = {
   en: {
@@ -53,67 +53,67 @@ const DEFAULT_TICKET_STATUS_POSITIONS = {
 
 const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
 
-// const QUICKFIXED_TENANT = DEVELOPMENT_ENVIRONMENT ? "psatst" : "jrint";
+const QUICKFIXED_TENANT = DEVELOPMENT_ENVIRONMENT ? "psatst" : "jrint";
 
-// export function TenantContextProvider(props) {
-//   const [readyLocalization, setReadyLocalization] = useState(false);
-//   const [readySalesMeta, setReadySalesMeta] = useState(false);
-//   const [tenantLocalization, setTenantLocalization] = useState<any>();
-//   const [localizationTimestamp, setLocalizationTimestamp] = useState();
-//   const [ticketStatusPositions, setTicketStatusPositions] = useState<any>();
-//   const ticketTypesAsOptions = useRef({});
+export function TenantContextProvider(props) {
+  const [readyLocalization, setReadyLocalization] = useState(false);
+  const [readySalesMeta, setReadySalesMeta] = useState(false);
+  const [tenantLocalization, setTenantLocalization] = useState<any>();
+  const [localizationTimestamp, setLocalizationTimestamp] = useState();
+  const [ticketStatusPositions, setTicketStatusPositions] = useState<any>();
+  const ticketTypesAsOptions = useRef({});
 
-//   useEffect(() => {
-//     const loadLocalization = async () => {
-//       if (!readySalesMeta) {
-//         return;
-//       }
+  useEffect(() => {
+    const loadLocalization = async () => {
+      if (!readySalesMeta) {
+        return;
+      }
 
-//       const localizationFile = `sales_idns${
-//         localizationTimestamp ? `_${localizationTimestamp}` : ""
-//       }.json`;
+      const localizationFile = `sales_idns${
+        localizationTimestamp ? `_${localizationTimestamp}` : ""
+      }.json`;
 
-//       try {
-//         const localizationResponse = await fetch(
-//           `${CDN_BASE_PATH}/cdn/i18ns/${QUICKFIXED_TENANT}/${localizationFile}`
-//         )
-//           .then(async (response) => {
-//             const result = await response.json();
-//             return result;
-//           })
-//           .catch(() => {});
+      try {
+        const localizationResponse = await fetch(
+          `${CDN_BASE_PATH}/cdn/i18ns/${QUICKFIXED_TENANT}/${localizationFile}`
+        )
+          .then(async (response) => {
+            const result = await response.json();
+            return result;
+          })
+          .catch(() => {});
 
-//         const localization = localizationResponse || DEFAULT_LOCALIZATION;
-//         setTenantLocalization(localization);
-//       } catch (error) {
-//         setTenantLocalization(DEFAULT_LOCALIZATION);
-//       }
-//       setReadyLocalization(true);
-//     };
-//     loadLocalization();
-//   }, [readySalesMeta, localizationTimestamp]);
+        const localization = localizationResponse || DEFAULT_LOCALIZATION;
+        setTenantLocalization(localization);
+      } catch (error) {
+        setTenantLocalization(DEFAULT_LOCALIZATION);
+      }
+      setReadyLocalization(true);
+    };
+    loadLocalization();
+  }, [readySalesMeta, localizationTimestamp]);
 
-//   useEffect(() => {
-//     const loadSalesMeta = async () => {
-//       try {
-//         const salesMetaData = await callApiPost(
-//           `get-sales-meta/${QUICKFIXED_TENANT}`,
-//           {}
-//         );
+  useEffect(() => {
+    const loadSalesMeta = async () => {
+      try {
+        const salesMetaData = await callApiPost(
+          `get-sales-meta/${QUICKFIXED_TENANT}`,
+          {}
+        );
 
-//         const ticketPositions = extractTicketStatusPositions(salesMetaData);
-//         setTicketStatusPositions(ticketPositions);
-//         setLocalizationTimestamp(extractLocalizationTimestamp(salesMetaData));
-//       } catch (error) {
-//         setTicketStatusPositions(DEFAULT_TICKET_STATUS_POSITIONS);
-//       }
-//       setReadySalesMeta(true);
-//     };
-//     loadSalesMeta();
-//   }, []);
+        const ticketPositions = extractTicketStatusPositions(salesMetaData);
+        setTicketStatusPositions(ticketPositions);
+        setLocalizationTimestamp(extractLocalizationTimestamp(salesMetaData));
+      } catch (error) {
+        setTicketStatusPositions(DEFAULT_TICKET_STATUS_POSITIONS);
+      }
+      setReadySalesMeta(true);
+    };
+    loadSalesMeta();
+  }, []);
 
-//   // useMemo, useEffect do not work here, the language is set too late
-//   // so we useRef to cache computation results
+  // useMemo, useEffect do not work here, the language is set too late
+  // so we useRef to cache computation results
   const getTicketTypesAsOptions = () => {
     if (!readyLocalization || !readySalesMeta) {
       return [];
@@ -128,12 +128,12 @@ const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
     }
 
     // stored version
-    // if (
-    //   ticketTypesAsOptions.current &&
-    //   !isEmpty(ticketTypesAsOptions.current[language])
-    // ) {
-    //   return ticketTypesAsOptions.current[language];
-    // }
+    if (
+      ticketTypesAsOptions.current &&
+      !isEmpty(ticketTypesAsOptions.current[language])
+    ) {
+      return ticketTypesAsOptions.current[language];
+    }
 
     // ok, let's compute the type names
     const tickettypes = keys(ticketStatusPositions);
@@ -144,7 +144,7 @@ const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
       })),
       "name"
     );
-    // ticketTypesAsOptions.current[language] = result;
+    ticketTypesAsOptions.current[language] = result;
     return result;
   };
 
@@ -215,157 +215,134 @@ const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
     return readyLocalization && readySalesMeta;
   }
 
-//   return (
-//     <TenantContext.Provider
-//       value={{
-//         tenantLocalization,
-//         isTicketStatusOpen,
-//         isTicketStatusClosed,
-//         getInitialTicketStatusOpen,
-//         getInitialTicketStatusClosed,
-//         getTicketTypesAsOptions,
-//         isTenantContextReady,
-//       }}
-//     >
-//       {props.children}
-//     </TenantContext.Provider>
-//   );
-// }
-
-// export function useTenantLocalization() {
-//   return React.useContext(TenantContext);
-// }
-
-// export function useTenantContext() {
-//   return React.useContext(TenantContext);
-// }
-
-// function extractTicketStatusPositions(metadata) {
-//   if (!metadata) {
-//     return DEFAULT_TICKET_STATUS_POSITIONS;
-//   }
-//   if (!metadata.ticket_status || !metadata.ticket_status.length) {
-//     return DEFAULT_TICKET_STATUS_POSITIONS;
-//   }
-
-//   const positions = createTicketStatusPositionsPerType(metadata.ticket_type);
-//   assignTicketStatiToTicketTypes(positions, metadata.ticket_status);
-//   filterInvalidTicketStatusPositions(positions);
-
-//   // keep default ticket type around if everything else fails
-//   if (isEmpty(positions)) {
-//     return DEFAULT_TICKET_STATUS_POSITIONS;
-//   }
-
-//   return positions;
-// }
-
-// function extractLocalizationTimestamp(metadata) {
-//   if (
-//     !metadata ||
-//     !metadata.localization_timestamp ||
-//     !metadata.localization_timestamp.length
-//   ) {
-//     return "";
-//   }
-//   return metadata.localization_timestamp[0].id;
-// }
-
-// function createTicketStatusPositionsPerType(ticketTypes) {
-//   if (isEmpty(ticketTypes)) {
-//     return {};
-//   }
-//   return reduce(
-//     ticketTypes,
-//     (accum, t) => {
-//       if (!t) {
-//         return accum;
-//       }
-//       accum[t.id] = createInitialTicketStatusPositions();
-//       return accum;
-//     },
-//     {}
-//   );
-// }
-
-// function assignTicketStatiToTicketTypes(ticketTypes, ticketStati) {
-//   reduce(
-//     ticketStati,
-//     (accum, value) => {
-//       if (!value) {
-//         return accum;
-//       }
-//       const { id, tags, ref } = value;
-//       if (isEmpty(id) || isNil(tags) || isEmpty(ref)) {
-//         return accum;
-//       }
-//       if (!accum[ref]) {
-//         accum[ref] = createInitialTicketStatusPositions();
-//       }
-//       const typePositions = accum[ref];
-
-//       const initial = tags.indexOf("initial") >= 0;
-//       if (tags.indexOf("open") >= 0) {
-//         typePositions.open.push(id);
-//         if (initial) {
-//           typePositions.initial_open = id;
-//         }
-//       } else if (tags.indexOf("done") >= 0) {
-//         typePositions.closed.push(id);
-//         if (initial) {
-//           typePositions.initial_closed = id;
-//         }
-//       }
-
-//       return accum;
-//     },
-//     ticketTypes
-//   );
-// }
-
-// function filterInvalidTicketStatusPositions(positions) {
-//   if (isEmpty(positions)) {
-//     return;
-//   }
-//   each(keys(positions), (k) => {
-//     const p = positions[k];
-//     if (isNil(p)) {
-//       return;
-//     }
-//     if (isEmpty(p.open) || isEmpty(p.closed)) {
-//       delete positions[k];
-//     }
-//   });
-// }
-
-// function createInitialTicketStatusPositions() {
-//   return {
-//     initial_open: undefined,
-//     initial_closed: undefined,
-//     open: [],
-//     closed: [],
-//   };
-// }
-
-const readyLocalization = true;
-const readySalesMeta = true;
-const tenantLocalization = DEFAULT_LOCALIZATION;
-const ticketStatusPositions = DEFAULT_TICKET_STATUS_POSITIONS;
-
-const tenantMock = {
-  tenantLocalization,
-  isTicketStatusOpen,
-  isTicketStatusClosed,
-  getInitialTicketStatusOpen,
-  getInitialTicketStatusClosed,
-  getTicketTypesAsOptions,
-  isTenantContextReady,
-};
+  return (
+    <TenantContext.Provider
+      value={{
+        tenantLocalization,
+        isTicketStatusOpen,
+        isTicketStatusClosed,
+        getInitialTicketStatusOpen,
+        getInitialTicketStatusClosed,
+        getTicketTypesAsOptions,
+        isTenantContextReady,
+      }}
+    >
+      {props.children}
+    </TenantContext.Provider>
+  );
+}
 
 export function useTenantLocalization() {
-  return tenantMock;
+  return React.useContext(TenantContext);
 }
 
 export function useTenantContext() {
-  return tenantMock;
+  return React.useContext(TenantContext);
+}
+
+function extractTicketStatusPositions(metadata) {
+  if (!metadata) {
+    return DEFAULT_TICKET_STATUS_POSITIONS;
+  }
+  if (!metadata.ticket_status || !metadata.ticket_status.length) {
+    return DEFAULT_TICKET_STATUS_POSITIONS;
+  }
+
+  const positions = createTicketStatusPositionsPerType(metadata.ticket_type);
+  assignTicketStatiToTicketTypes(positions, metadata.ticket_status);
+  filterInvalidTicketStatusPositions(positions);
+
+  // keep default ticket type around if everything else fails
+  if (isEmpty(positions)) {
+    return DEFAULT_TICKET_STATUS_POSITIONS;
+  }
+
+  return positions;
+}
+
+function extractLocalizationTimestamp(metadata) {
+  if (
+    !metadata ||
+    !metadata.localization_timestamp ||
+    !metadata.localization_timestamp.length
+  ) {
+    return "";
+  }
+  return metadata.localization_timestamp[0].id;
+}
+
+function createTicketStatusPositionsPerType(ticketTypes) {
+  if (isEmpty(ticketTypes)) {
+    return {};
+  }
+  return reduce(
+    ticketTypes,
+    (accum, t) => {
+      if (!t) {
+        return accum;
+      }
+      accum[t.id] = createInitialTicketStatusPositions();
+      return accum;
+    },
+    {}
+  );
+}
+
+function assignTicketStatiToTicketTypes(ticketTypes, ticketStati) {
+  reduce(
+    ticketStati,
+    (accum, value) => {
+      if (!value) {
+        return accum;
+      }
+      const { id, tags, ref } = value;
+      if (isEmpty(id) || isNil(tags) || isEmpty(ref)) {
+        return accum;
+      }
+      if (!accum[ref]) {
+        accum[ref] = createInitialTicketStatusPositions();
+      }
+      const typePositions = accum[ref];
+
+      const initial = tags.indexOf("initial") >= 0;
+      if (tags.indexOf("open") >= 0) {
+        typePositions.open.push(id);
+        if (initial) {
+          typePositions.initial_open = id;
+        }
+      } else if (tags.indexOf("done") >= 0) {
+        typePositions.closed.push(id);
+        if (initial) {
+          typePositions.initial_closed = id;
+        }
+      }
+
+      return accum;
+    },
+    ticketTypes
+  );
+}
+
+function filterInvalidTicketStatusPositions(positions) {
+  if (isEmpty(positions)) {
+    return;
+  }
+  each(keys(positions), (k) => {
+    const p = positions[k];
+    if (isNil(p)) {
+      return;
+    }
+    if (isEmpty(p.open) || isEmpty(p.closed)) {
+      delete positions[k];
+    }
+  });
+}
+
+function createInitialTicketStatusPositions() {
+  return {
+    initial_open: undefined,
+    initial_closed: undefined,
+    open: [],
+    closed: [],
+  };
 }

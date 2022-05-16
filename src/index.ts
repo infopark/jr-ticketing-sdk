@@ -1,6 +1,7 @@
 import UserProfile from "./Components/Layout/UserProfile";
 import LanguageRedirect from "./Components/LanguageRedirect";
-import { UserDataProvider } from "./Components/UserDataContext";
+import { UserDataProvider, useUserData } from "./Components/UserDataContext";
+import { TenantContextProvider, useTenantContext } from "./Components/TenantContextProvider";
 import "./Objs/ChatPage/ChatPageComponent";
 import "./Objs/ChatPage/ChatPageEditingConfig";
 import "./Objs/ChatPage/ChatPageObjClass";
@@ -19,6 +20,9 @@ import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
 
 export {
   UserDataProvider,
+  useUserData,
   UserProfile,
   LanguageRedirect,
+  TenantContextProvider,
+  useTenantContext,
 };
