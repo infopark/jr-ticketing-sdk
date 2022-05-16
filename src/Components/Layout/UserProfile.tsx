@@ -5,14 +5,9 @@ import { useUserData } from "../UserDataContext";
 import defaultProfile from "../../assets/images/icons/profile_img.svg";
 
 import { Dropdown } from "react-bootstrap";
-// import {
-//   useNavigationContext,
-//   isNavigationInNarrowMode,
-// } from "../NavigationContext";
 import ProfileMenu from "../ProfileMenu";
 
-function UserProfile({ language, alternate }) {
-  // const navigationContext = useNavigationContext();
+function UserProfile({ language, alternate, beforeOpen }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const { userData } = useUserData();
   const avatar = userData && userData.avatarurl || defaultProfile;
@@ -20,13 +15,9 @@ function UserProfile({ language, alternate }) {
   const email = userData && userData.email;
 
   const setVisible = (visible) => {
-    // if (
-    //   visible &&
-    //   navigationContext.navigationOpen &&
-    //   isNavigationInNarrowMode()
-    // ) {
-    //   navigationContext.setNavigationOpen(false);
-    // }
+    if (visible && beforeOpen) {
+      beforeOpen();
+    }
     setMenuVisible(visible);
   };
   return (
