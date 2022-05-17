@@ -40,6 +40,8 @@ module.exports = {
     "html-react-parser": "html-react-parser",
     "sanitize-html": "sanitize-html",
     "react-bootstrap": "react-bootstrap",
+    "uuid": "uuid",
+    "@honeybadger-io/js": "@honeybadger-io/js",
   },
   output: {
     filename: "index.js",
