@@ -11,6 +11,7 @@ import "./Objs/ChatPage/ChatPageObjClass";
 import "./Objs/ProfilePage/ProfilePageComponent";
 import "./Objs/ProfilePage/ProfilePageEditingConfig";
 import "./Objs/ProfilePage/ProfilePageObjClass";
+import { translate, getLanguage } from "./utils/translate";
 import "./Widgets/EditProfileWidget/EditProfileWidgetClass";
 import "./Widgets/EditProfileWidget/EditProfileWidgetComponent";
 import "./Widgets/EditProfileWidget/EditProfileWidgetEditingConfig";
@@ -42,4 +43,6 @@ export {
   isLoggedIn,
   HeadlineWidget,
   SectionWidget,
+  translate,
+  getLanguage,
 };
