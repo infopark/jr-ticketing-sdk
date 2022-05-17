@@ -1,3 +1,4 @@
+import isLoggedIn from "./Components/Auth/utils";
 import UserProfile from "./Components/Layout/UserProfile";
 import ErrorAPIProvider from "./Components/ErrorAPIContext";
 import ErrorNotification from "./Components/ErrorNotification";
@@ -32,4 +33,5 @@ export {
   useTenantContext,
   ErrorAPIProvider,
   ErrorNotification,
+  isLoggedIn,
 };
