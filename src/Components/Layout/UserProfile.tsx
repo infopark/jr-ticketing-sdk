@@ -7,7 +7,7 @@ import defaultProfile from "../../assets/images/icons/profile_img.svg";
 import { Dropdown } from "react-bootstrap";
 import ProfileMenu from "../ProfileMenu";
 
-function UserProfile({ language, alternate, beforeOpen }) {
+function UserProfile({ beforeOpen }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const { userData } = useUserData();
   const avatar = userData && userData.avatarurl || defaultProfile;
@@ -40,7 +40,7 @@ function UserProfile({ language, alternate, beforeOpen }) {
           </span>
         </span>
       </Dropdown.Toggle>
-      <ProfileMenu language={language} alternate={alternate} />
+      <ProfileMenu />
     </Dropdown>
   );
 }

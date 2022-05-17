@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as Scrivito from "scrivito";
 import SignOutLink from "./SignOutLink";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { getPage } from "../utils/page";
+import { getPage, getLanguage } from "../utils/page";
 import { translate } from "../utils/translate";
 
 import { Dropdown } from "react-bootstrap";
@@ -24,11 +24,11 @@ const CustomMenu = React.forwardRef(
     </ul>
   )) as any
 );
-function ProfileMenu({ language, alternate }) {
+function ProfileMenu() {
   const [profilePage, setProfilePage] = useState(null);
   useEffect(() => {
-    getPage("ProfilePage", setProfilePage, language);
-  }, [language]);
+    getPage("ProfilePage", setProfilePage, getLanguage());
+  }, [getLanguage()]);
   return (
     <Dropdown.Menu className="profil_menu" as={CustomMenu}>
       <Dropdown.Item key="profile">
@@ -42,9 +42,7 @@ function ProfileMenu({ language, alternate }) {
         <SignOutLink />
       </Dropdown.Item>
       <DropdownItem key="langswitch">
-        {language && alternate && (
-          <LanguageSwitcher currentLanguage={language} alternate={alternate} />
-        )}
+        <LanguageSwitcher />
       </DropdownItem>
     </Dropdown.Menu>
   );

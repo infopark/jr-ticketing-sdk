@@ -52,4 +52,4 @@ const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   }
 };
 
-export default Scrivito.connect(LanguageRedirect as any);
+export default Scrivito.connect(LanguageRedirect as any) as any;

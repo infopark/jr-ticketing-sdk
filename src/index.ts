@@ -2,7 +2,7 @@ import isLoggedIn from "./Components/Auth/utils";
 import UserProfile from "./Components/Layout/UserProfile";
 import ErrorAPIProvider from "./Components/ErrorAPIContext";
 import ErrorNotification from "./Components/ErrorNotification";
-import LanguageRedirect from "./Components/LanguageRedirect";
+import LanguageRedirectWrapper from "./Components/LanguageRedirectWrapper";
 import { UserDataProvider, useUserData } from "./Components/UserDataContext";
 import { TenantContextProvider, useTenantContext } from "./Components/TenantContextProvider";
 import "./Objs/ChatPage/ChatPageComponent";
@@ -36,7 +36,7 @@ export {
   UserDataProvider,
   useUserData,
   UserProfile,
-  LanguageRedirect,
+  LanguageRedirectWrapper,
   TenantContextProvider,
   useTenantContext,
   ErrorAPIProvider,

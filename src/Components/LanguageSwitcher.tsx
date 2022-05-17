@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Scrivito from "scrivito";
 import classNames from "classnames";
 import { useUserData } from "./UserDataContext";
@@ -6,9 +6,25 @@ import { languages } from "../api/utils";
 import { callApiPost } from "../api/portalApiCalls";
 import getUserData from "../api/getUserData";
 import { translate } from "../utils/translate";
+import { getPageLinkInLanguage, getLanguage } from "../utils/page";
 
-const LanguageSwitcher = ({ currentLanguage, alternate }) => {
+const LanguageSwitcher = () => {
   const { userData, updateUserData } = useUserData();
+  const [currentLanguage, setCurrentLanguage] = useState<string|null>(null);
+  const [alternate, setAlternate] = useState<string|null>(null);
+
+  Scrivito.load(() => {
+    const lang = getLanguage();
+    const alt =
+      lang &&
+      getPageLinkInLanguage(lang === "portalEn" ? "portalDe" : "portalEn");
+    const availableAlt = alt && !alt.startsWith("#SCRIVITO_UNAVAILABLE");
+    setCurrentLanguage(lang);
+    if (alt && availableAlt) {
+      setAlternate(alt);
+    }
+  });
+
   if (!alternate) {
     return null;
   }
@@ -35,7 +51,7 @@ const LanguageSwitcher = ({ currentLanguage, alternate }) => {
           alternate && new Scrivito.Link({ url: alternate, target: null as any });
         return (
           <Scrivito.LinkTag
-            to={currentLanguage !== lang.siteId ? link : Scrivito.currentPage()}
+            to={(currentLanguage !== lang.siteId ? link : Scrivito.currentPage()) as any}
             target={null as any}
             key={lang.siteId}
             title={lang.siteId}
