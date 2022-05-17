@@ -14,9 +14,15 @@ import "./Objs/ProfilePage/ProfilePageObjClass";
 import "./Widgets/EditProfileWidget/EditProfileWidgetClass";
 import "./Widgets/EditProfileWidget/EditProfileWidgetComponent";
 import "./Widgets/EditProfileWidget/EditProfileWidgetEditingConfig";
+import HeadlineWidget from "./Widgets/HeadlineWidget/HeadlineWidgetClass";
+import "./Widgets/HeadlineWidget/HeadlineWidgetComponent";
+import "./Widgets/HeadlineWidget/HeadlineWidgetEditingConfig";
 import "./Widgets/HistoryWidget/HistoryWidgetClass";
 import "./Widgets/HistoryWidget/HistoryWidgetComponent";
 import "./Widgets/HistoryWidget/HistoryWidgetEditingConfig";
+import SectionWidget from "./Widgets/SectionWidget/SectionWidgetClass";
+import "./Widgets/SectionWidget/SectionWidgetComponent";
+import "./Widgets/SectionWidget/SectionWidgetEditingConfig";
 import "./Widgets/TicketListWidget/TicketListWidgetClass";
 import "./Widgets/TicketListWidget/TicketListWidgetComponent";
 import "./Widgets/TicketListWidget/TicketListWidgetEditingConfig";
@@ -34,4 +40,6 @@ export {
   ErrorAPIProvider,
   ErrorNotification,
   isLoggedIn,
+  HeadlineWidget,
+  SectionWidget,
 };
