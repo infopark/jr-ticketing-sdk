@@ -12,6 +12,7 @@ import "./Objs/ProfilePage/ProfilePageComponent";
 import "./Objs/ProfilePage/ProfilePageEditingConfig";
 import "./Objs/ProfilePage/ProfilePageObjClass";
 import { translate, getLanguage } from "./utils/translate";
+import { isInVisitedPages, addToVisitedPages } from "./utils/visitedPages";
 import "./Widgets/EditProfileWidget/EditProfileWidgetClass";
 import "./Widgets/EditProfileWidget/EditProfileWidgetComponent";
 import "./Widgets/EditProfileWidget/EditProfileWidgetEditingConfig";
@@ -45,4 +46,6 @@ export {
   SectionWidget,
   translate,
   getLanguage,
+  isInVisitedPages,
+  addToVisitedPages,
 };
