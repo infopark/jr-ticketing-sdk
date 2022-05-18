@@ -1,6 +1,6 @@
 {
   "name": "jr-customer-portal-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Library for JustRelate Customer Portal apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -38,7 +38,6 @@
     "react-dom": "*",
     "lodash": "*",
     "date-fns": "*",
-    "date-fns/locale": "*",
     "classnames": "*",
     "react-overlays": "*",
     "lodash-es": "*",
