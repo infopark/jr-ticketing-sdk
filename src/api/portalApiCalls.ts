@@ -1,5 +1,6 @@
 import axios from "axios";
 import { isMockEnabled, mockGet, mockPost } from "./mockEndpoint";
+import { isLocalhost } from "../utils/constants";
 
 const callApiPost = async (endpoint, body) => {
   if (isMockEnabled()) {
@@ -8,7 +9,6 @@ const callApiPost = async (endpoint, body) => {
   const stage = process.env.API_DEPLOYMENT_STAGE || "develop";
   const apiUrl = process.env.API_BASE_URL;
   const config = { withCredentials: true };
-  addSkipIamHeader(config);
 
   try {
     const result = await axios
@@ -27,7 +27,6 @@ const callApiGet = async (endpoint) => {
   const stage = process.env.API_DEPLOYMENT_STAGE || "develop";
   const apiUrl = process.env.API_BASE_URL;
   const config = { withCredentials: true };
-  addSkipIamHeader(config);
 
   try {
     const result = await axios
@@ -44,8 +43,16 @@ const callLogout = () => {
     window.location.reload();
     return;
   }
+  const apiUrl = getApiTargetUrl();
+  window.location.href = `${apiUrl}/iam/logout`;
+};
+
+const getApiTargetUrl = () => {
   const domain = window.location.host;
-  window.location.href = `${window.location.protocol}//jr-api.${domain}/iam/logout`;
+  if (isLocalhost()) {
+    return `${window.location.protocol}//${domain}`;
+  }
+  return `${window.location.protocol}//jr-api.${domain}`;
 };
 
 const RETURN_TO_PLACEHOLDER = "$RETURN_TO";
@@ -54,15 +61,6 @@ const IAM_MISSING_AUTH_CODE = "auth_missing";
 const IAM_MISSING_AUTH_CODE_LEGACY = "auth.missing";
 const IAM_REDIRECT_TIMEOUT_MS = 5000; // within 5 seconds, second of consecutive iam redirects blocked
 const LS_LAST_REDIRECT_TIMESTAMP = "last-iam-redirect-timestamp";
-
-function addSkipIamHeader(config) {
-  if (
-    process.env.JR_IAM_SKIP_USER &&
-    window.location.hostname === "localhost"
-  ) {
-    config.headers = { "jr-skip-iam": process.env.JR_IAM_SKIP_USER };
-  }
-}
 
 function checkIamAuthRedirect(response) {
   const responseStatus = response && response.status;
@@ -82,15 +80,12 @@ function checkIamAuthRedirect(response) {
   ) {
     return synthResponse;
   }
-  const domain = window.location.host;
 
+  const apiTargetUrl = getApiTargetUrl();
   let url = result.details.visit;
   url = url
     .replace(RETURN_TO_PLACEHOLDER, encodeURIComponent(window.location.origin))
-    .replace(
-      API_LOCATION_PLACEHOLDER,
-      `${window.location.protocol}//jr-api.${domain}`
-    );
+    .replace(API_LOCATION_PLACEHOLDER, `${apiTargetUrl}`);
 
   if (isRepeatedIamRedirect()) {
     synthResponse.statusCode = 421;

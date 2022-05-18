@@ -30,4 +30,5 @@ export {
   CDN_BASE_PATH,
   DEVELOPMENT_ENVIRONMENT,
   MAX_ATTACHMENT_SIZE,
+  isLocalhost,
 };
