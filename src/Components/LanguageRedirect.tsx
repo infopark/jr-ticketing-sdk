@@ -1,7 +1,6 @@
 import React from "react";
 import * as Scrivito from "scrivito";
-import { Redirect, useHistory } from "react-router-dom";
-import { Router } from "react-router";
+import { Router, Redirect, useHistory } from "react-router-dom";
 import {
   setUserLanguageHandledFlag,
   userLanguageHandled,

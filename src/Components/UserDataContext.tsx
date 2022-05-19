@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback } from "react";
-import { Router, Route, useHistory } from "react-router";
+import { Router, Route, useHistory } from "react-router-dom";
 import getUserData from "../api/getUserData";
 import useAPIError from "../utils/useAPIError";
 import { setLoggedIn, setUserUuid, removeUserUuid } from "./Auth/utils";
