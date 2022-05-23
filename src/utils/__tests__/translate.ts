@@ -1,9 +1,15 @@
 import { translate } from "../../utils/translate";
-const getLanguage = () => "de";
+import * as Scrivito from "./../../__mocks__/scrivito";
+
 describe("translations", () => {
-  describe("translate", () => {
-    it("returns translation", () => {
-      expect(translate("Description")).toEqual("Description");
-    });
+  it("returns en translation", () => {
+    expect(translate("Description")).toEqual("Description");
+  });
+  it("returns de translation", () => {
+    const spy = jest
+      .spyOn(Scrivito, "currentSiteId")
+      .mockImplementation(() => "portalDe");
+    expect(translate("Description")).toEqual("Beschreibung");
+    spy.mockRestore();
   });
 });
