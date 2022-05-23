@@ -11,7 +11,7 @@ const getFileExtension = (fileName) => {
 
 const knownFileTypes = { txt: txtIcon, pdf: pdfIcon };
 
-const matchExtension = (ext) => {
+const matchExtension = (ext: string) => {
   const imgExts = ["jpg", "jpeg", "png", "svg", "tiff", "gif"];
   if (imgExts.includes(ext)) {
     return "image";
