@@ -1,6 +1,5 @@
 import * as Scrivito from "scrivito";
-import HeadlineWidget from "../../Widgets/HeadlineWidget/HeadlineWidgetClass";
-import SectionWidget from "../../Widgets/SectionWidget/SectionWidgetClass";
+import { PROFILE_PAGE_PROVIDER, waitForInitialContentBodyProvider } from "../../Bridge/InitialContentBodyFactory";
 import {
   metadataEditingConfigAttributes,
   metadataInitialContent,
@@ -8,24 +7,22 @@ import {
   metadataValidations,
 } from "../_metadataEditingConfig";
 
-Scrivito.provideEditingConfig("ProfilePage", {
-  title: "Profile Page",
-  attributes: {
-    ...metadataEditingConfigAttributes,
-    title: {
-      title: "Title",
-      description: "Limit to 55 characters.",
+waitForInitialContentBodyProvider(PROFILE_PAGE_PROVIDER).then((bodyProvider) => {  
+  Scrivito.provideEditingConfig("ProfilePage", {
+    title: "Profile Page",
+    attributes: {
+      ...metadataEditingConfigAttributes,
+      title: {
+        title: "Title",
+        description: "Limit to 55 characters.",
+      },
     },
-  },
-  properties: ["title"],
-  propertiesGroups: [...metadataPropertiesGroups],
-  initialContent: {
-    body: [
-      new SectionWidget({
-        content: [new HeadlineWidget({ style: "h1" })],
-      }),
-    ],
-    ...metadataInitialContent,
-  },
-  validations: [...metadataValidations as any],
+    properties: ["title"],
+    propertiesGroups: [...metadataPropertiesGroups],
+    initialContent: {
+      body: bodyProvider(),
+      ...metadataInitialContent,
+    },
+    validations: [...metadataValidations as any],
+  });
 });
