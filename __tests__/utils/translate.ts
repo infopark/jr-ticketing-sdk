@@ -1,5 +1,5 @@
-import { translate } from "../../utils/translate";
-import * as Scrivito from "./../../__mocks__/scrivito";
+import { translate } from "../../src/utils/translate";
+import * as Scrivito from "../../__mocks__/scrivito";
 
 describe("translations", () => {
   it("returns en translation", () => {

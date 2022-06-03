@@ -1,3 +1,3 @@
-export default function newlinesToBreaks(string) {
+export default function newlinesToBreaks(string: string) {
   return string.replace(/\n/gi, "<br>");
 }
