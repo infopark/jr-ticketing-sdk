@@ -1,4 +1,4 @@
-export default function stripHtmlTags(string) {
+export default function stripHtmlTags(string: string) {
   let result = string;
   result = result.replace(/<style([\s\S]*?)<\/style>/gi, "");
   result = result.replace(/<script([\s\S]*?)<\/script>/gi, "");
