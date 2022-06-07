@@ -3,8 +3,11 @@ function isImage(object) {
 }
 
 function isImageFormat(extension) {
+  if (!extension) {
+    return null;
+  }
   const images = ["png", "jpg", "jpeg", "gif"];
-  return images.includes(extension);
+  return images.includes(extension.toLowerCase());
 }
 
 export { isImage, isImageFormat };
