@@ -6,13 +6,14 @@ const callApiPost = async (endpoint, body) => {
   if (isMockEnabled()) {
     return mockPost(endpoint, body);
   }
+  const instanceId = process.env.API_INSTANCE_ID || "00000000000000000000000000000000";
   const stage = process.env.API_DEPLOYMENT_STAGE || "develop";
   const apiUrl = process.env.API_BASE_URL;
   const config = { withCredentials: true };
 
   try {
     const result = await axios
-      .post(`${apiUrl}/${stage}/${endpoint}`, body, config)
+      .post(`${apiUrl}/${stage}/${instanceId}/${endpoint}`, body, config)
       .then((response) => response.data);
     return result;
   } catch (error: any) {
@@ -24,13 +25,14 @@ const callApiGet = async (endpoint) => {
   if (isMockEnabled()) {
     return mockGet(endpoint);
   }
+  const instanceId = process.env.API_INSTANCE_ID || "00000000000000000000000000000000";
   const stage = process.env.API_DEPLOYMENT_STAGE || "develop";
   const apiUrl = process.env.API_BASE_URL;
   const config = { withCredentials: true };
 
   try {
     const result = await axios
-      .get(`${apiUrl}/${stage}/${endpoint}`, config)
+      .get(`${apiUrl}/${stage}/${instanceId}/${endpoint}`, config)
       .then((response) => response.data);
     return result;
   } catch (error: any) {
