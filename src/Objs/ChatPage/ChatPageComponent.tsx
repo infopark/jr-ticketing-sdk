@@ -44,6 +44,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
           JSON.stringify({
             action: "registerTicketId",
             ticketId: ticketid,
+            instanceId: process.env.API_INSTANCE_ID || "00000000000000000000000000000000",
           })
         );
       };
