@@ -86,7 +86,7 @@ function checkIamAuthRedirect(response) {
   const apiTargetUrl = getApiTargetUrl();
   let url = result.details.visit;
   url = url
-    .replace(RETURN_TO_PLACEHOLDER, encodeURIComponent(window.location.origin))
+    .replace(RETURN_TO_PLACEHOLDER, encodeURIComponent(window.location.href))
     .replace(API_LOCATION_PLACEHOLDER, `${apiTargetUrl}`);
 
   if (isRepeatedIamRedirect()) {
