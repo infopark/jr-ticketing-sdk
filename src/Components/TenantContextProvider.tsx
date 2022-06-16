@@ -73,7 +73,6 @@ export function TenantContextProvider(props) {
       }.json`;
 
       try {
-        
         const localizationResponse = await fetch(
           `${CDN_BASE_PATH}/cdn/i18ns/${instanceId}/${localizationFile}`
         )
@@ -96,10 +95,7 @@ export function TenantContextProvider(props) {
   useEffect(() => {
     const loadSalesMeta = async () => {
       try {
-        const salesMetaData = await callApiPost(
-          `get-sales-meta/${instanceId}`,
-          {}
-        );
+        const salesMetaData = await callApiPost(`get-sales-meta`, {});
 
         const ticketPositions = extractTicketStatusPositions(salesMetaData);
         setTicketStatusPositions(ticketPositions);
