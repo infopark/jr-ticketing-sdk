@@ -9,7 +9,7 @@ import {
   reduce,
   sortBy,
 } from "lodash-es";
-import { CDN_BASE_PATH, DEVELOPMENT_ENVIRONMENT } from "../utils/constants";
+import { CDN_BASE_PATH } from "../utils/constants";
 import { callApiPost } from "../api/portalApiCalls";
 import { dictTranslate, getDictionary, getLanguage } from "../utils/translate";
 
@@ -53,8 +53,6 @@ const DEFAULT_TICKET_STATUS_POSITIONS = {
 
 const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
 
-const QUICKFIXED_TENANT = DEVELOPMENT_ENVIRONMENT ? "psatst" : "jrint";
-
 export function TenantContextProvider(props) {
   const [readyLocalization, setReadyLocalization] = useState(false);
   const [readySalesMeta, setReadySalesMeta] = useState(false);
@@ -62,6 +60,7 @@ export function TenantContextProvider(props) {
   const [localizationTimestamp, setLocalizationTimestamp] = useState();
   const [ticketStatusPositions, setTicketStatusPositions] = useState<any>();
   const ticketTypesAsOptions = useRef({});
+  const instanceId = process.env.API_INSTANCE_ID || "00000000000000000000000000000000";
 
   useEffect(() => {
     const loadLocalization = async () => {
@@ -74,8 +73,9 @@ export function TenantContextProvider(props) {
       }.json`;
 
       try {
+        
         const localizationResponse = await fetch(
-          `${CDN_BASE_PATH}/cdn/i18ns/${QUICKFIXED_TENANT}/${localizationFile}`
+          `${CDN_BASE_PATH}/cdn/i18ns/${instanceId}/${localizationFile}`
         )
           .then(async (response) => {
             const result = await response.json();
@@ -97,7 +97,7 @@ export function TenantContextProvider(props) {
     const loadSalesMeta = async () => {
       try {
         const salesMetaData = await callApiPost(
-          `get-sales-meta/${QUICKFIXED_TENANT}`,
+          `get-sales-meta/${instanceId}`,
           {}
         );
 
