@@ -1,7 +1,8 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./src/index.ts",
+  entry: ["./src/index.ts", "./src/assets/stylesheets/index.scss"],
   module: {
     rules: [
       {
@@ -20,31 +21,48 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.s?css$/,
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          "css-loader",
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        type: "asset/resource",
+      },
     ],
   },
   resolve: {
-    extensions: [".ts", ".js", ".tsx"],
+    extensions: [".ts", ".js", ".tsx", ".scss"],
   },
   externals: {
     "@honeybadger-io/js": "@honeybadger-io/js",
     axios: "axios",
     classnames: "classnames",
     "date-fns": "date-fns",
-    "date-fns/locale": "date-fns/locale",    
-    "history": "history",
+    "date-fns/locale": "date-fns/locale",
+    history: "history",
     "html-react-parser": "html-react-parser",
     lodash: "lodash",
     "lodash-es": "lodash-es",
     react: "react",
     "react-dom": "react-dom",
     "react-bootstrap": "react-bootstrap",
-    "react-overlays": "react-overlays",        
+    "react-overlays": "react-overlays",
     "react-router": "react-router",
     "react-router-dom": "react-router-dom",
     "sanitize-html": "sanitize-html",
     scrivito: "scrivito",
-    "uuid": "uuid",
+    uuid: "uuid",
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+    }),
+  ],
   output: {
     filename: "index.js",
     path: path.resolve(__dirname, "dist"),
