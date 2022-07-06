@@ -2,7 +2,10 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: ["./src/index.ts", "./src/assets/stylesheets/index.scss"],
+  entry: {
+    index: "./src/index.ts",
+    cssBundle: "./src/assets/stylesheets/main.scss",
+  },
   module: {
     rules: [
       {
@@ -64,7 +67,7 @@ module.exports = {
     }),
   ],
   output: {
-    filename: "index.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
     publicPath: path.resolve(__dirname, "dist"),
     libraryTarget: "umd",
