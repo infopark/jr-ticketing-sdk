@@ -22,8 +22,6 @@ import "./Widgets/TicketListWidget/TicketListWidgetEditingConfig";
 import "./Widgets/TicketsWidget/TicketsWidgetClass";
 import "./Widgets/TicketsWidget/TicketsWidgetComponent";
 import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
-import { Router as PortalRouter } from "react-router-dom";
-import { createBrowserHistory as createPortalHistory } from "history";
 import * as InitialContentBodyFactory from "./Bridge/InitialContentBodyFactory";
 
 export {
@@ -40,7 +38,5 @@ export {
   getLanguage,
   isInVisitedPages,
   addToVisitedPages,
-  PortalRouter,
-  createPortalHistory,
   InitialContentBodyFactory
 };

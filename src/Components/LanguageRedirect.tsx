@@ -1,6 +1,6 @@
 import React from "react";
 import * as Scrivito from "scrivito";
-import { Router, Redirect, useHistory } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import {
   setUserLanguageHandledFlag,
   userLanguageHandled,
@@ -8,7 +8,6 @@ import {
 import { useUserData } from "./UserDataContext";
 
 const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
-  const history = useHistory();
   const { userData } = useUserData();
   const userLanguage = userData && userData.language;
   const userLanguageIsDe = userLanguage && userLanguage.startsWith("de") || false;
@@ -35,19 +34,11 @@ const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   }
 
   if (shouldRedirect && alternate) {
-    return (
-      <Router history={history}>
-        <Redirect to={alternate} />
-      </Router>
-    );
+    return <Navigate replace to={alternate}></Navigate>
   }
 
   if (shouldRedirectToDefault && defaultAlternate) {
-    return (
-      <Router history={history}>
-        <Redirect to={defaultAlternate} />
-      </Router>
-    );
+    return <Navigate replace to={defaultAlternate}></Navigate>;
   }
 };
 
