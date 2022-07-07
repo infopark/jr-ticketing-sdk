@@ -1,0 +1,26 @@
+.sdk-tickets-widget {
+  .custom_plus {
+    background: #fff;
+    border-radius: 100%;
+    color: var(--bs-primary, grey);
+    font-size: 20px;
+    height: 60px;
+    margin-bottom: 10px;
+    text-align: center;
+    padding-top: 20px;
+    width: 60px;
+  }
+
+  .fa {
+    display: inline-block;
+    font: normal normal normal 14px / 1 FontAwesome;
+    font-size: 20px !important;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .ticket-number-box .ticket-number-box-count {
+    padding: 7px 0;
+  }
+}
