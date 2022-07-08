@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback } from "react";
-import { Router, Route, useHistory } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import getUserData from "../api/getUserData";
 import useAPIError from "../utils/useAPIError";
 import { setLoggedIn, setUserUuid, removeUserUuid } from "./Auth/utils";
@@ -8,7 +8,6 @@ import { setLoggedIn, setUserUuid, removeUserUuid } from "./Auth/utils";
 const UserDataContext = React.createContext({} as any);
 
 export function UserDataProvider(props) {
-  const history = useHistory();
   const [userData, setUserData] = useState(undefined as any);
   const { addError } = useAPIError();
   useEffect(() => {
@@ -52,15 +51,7 @@ export function UserDataProvider(props) {
       }}
     >
       {userData && userData.visit ? (
-        <Router history={history}>
-          <Route
-            path="/"
-            component={() => {
-              window.location.href = userData.visit;
-              return null;
-            }}
-          />
-        </Router>
+        <Navigate replace to={userData.visit}></Navigate>
       ) : (
         props.children
       )}

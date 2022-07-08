@@ -47,7 +47,6 @@ module.exports = {
     classnames: "classnames",
     "date-fns": "date-fns",
     "date-fns/locale": "date-fns/locale",
-    history: "history",
     "html-react-parser": "html-react-parser",
     lodash: "lodash",
     "lodash-es": "lodash-es",
