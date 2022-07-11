@@ -1,3 +1,85 @@
-* {
-  box-sizing: border-box;
+@import "./variables.scss";
+@import "./tickets-widgets.scss";
+
+.sdk-widget {
+  .box {
+    padding: $box-padding;
+    position: relative;
+  }
+
+  a.box {
+    color: var(--dark, #495054);
+  }
+
+  .space_box {
+    padding: $space-box-padding !important;
+  }
+
+  .text_center {
+    text-align: center;
+  }
+
+  .brand_bg {
+    background: var(--bs-primary, grey);
+    color: $white;
+  }
+
+  .radius {
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  .h-100 {
+    height: 100% !important;
+  }
+
+  .equal_target {
+    height: 100%;
+  }
+
+  .pointer,
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .brand_color {
+    color: var(--bs-primary, grey) !important;
+  }
+
+  .box_bg_white {
+    background: $white !important;
+    border-radius: 0;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
+  .equal_target {
+    height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    font-family: var(--bs-font-sans-serif);
+  }
+
+  h1,
+  .h1 {
+    font-size: $h1-font-size;
+    line-height: $h1-line-height;
+  }
+
+  .m_auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

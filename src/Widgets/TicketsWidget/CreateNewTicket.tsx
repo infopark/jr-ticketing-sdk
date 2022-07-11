@@ -11,9 +11,9 @@ function CreateNewTicket({ className, chatPage, text, formFields }) {
           setOverlayOpen(true);
         }}
       >
-        <span className="box block equal_target pointer">
+        <span className="box d-block equal_target pointer">
           <i
-            className="fa fa-plus custom_plus block m_auto"
+            className="fa fa-plus custom_plus d-block m_auto"
             aria-hidden="true"
           />
           <span className="block">{text}</span>
