@@ -1,14 +1,7 @@
+@import "./variables.scss";
 @import "./tickets-widgets.scss";
 
 .sdk-widget {
-  $white: #fff;
-
-  $box-padding: 20px;
-  $space-box-padding: 10px;
-
-  $h1-font-size: 36px;
-  $h1-line-height: 1.3;
-
   .box {
     padding: $box-padding;
     position: relative;
