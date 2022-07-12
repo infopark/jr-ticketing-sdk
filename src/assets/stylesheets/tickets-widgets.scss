@@ -23,4 +23,189 @@
   .ticket-number-box .ticket-number-box-count {
     padding: 7px 0;
   }
+
+  section#overlay {
+    form {
+      display: flex;
+      flex-direction: column;
+      .overlay_content {
+        position: unset;
+        flex-shrink: 1;
+      }
+      #overlay_footer {
+        position: unset;
+      }
+    }
+  }
+
+  /****** overlays ******/
+  #overlay {
+    background: #fff;
+    border-radius: 8px;
+    height: 85vh;
+    left: 5vw;
+    overflow: hidden;
+    position: fixed;
+    top: 12vh;
+    width: 90vw;
+    z-index: 10;
+    @media screen and (min-width: 992px) {
+      left: 10vw;
+      width: 80vw;
+    }
+  }
+
+  #overlay_footer {
+    bottom: 0;
+    left: 0;
+    padding: 14px 20px;
+    position: absolute;
+    width: 100%;
+
+    .attachment_file {
+      background: var(--brand-bg);
+      height: 30px;
+      left: 0;
+      margin: 0;
+      position: absolute;
+      top: -31px;
+      width: 100%;
+    }
+    .btn {
+      width: 100%;
+      &:first-child {
+        margin-bottom: 1rem;
+      }
+      @media screen and (min-width: 768px) {
+        margin-right: 0.5rem;
+        width: auto;
+        &:first-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  #overlay.ticket-modal-section {
+    height: auto;
+    .overlay_content {
+      height: auto;
+    }
+  }
+
+  .overlay_content {
+    border-top: solid 1px #eae7e3;
+    border-bottom: solid 1px #eae7e3;
+    padding: 20px 20px 50px 20px;
+    height: 65vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    @media screen and (min-width: 768px) {
+      height: 75vh;
+    }
+    h2 {
+      border-bottom: solid 1px #eae7e3;
+      padding-bottom: 20px;
+    }
+    h3 {
+      margin-top: 50px;
+    }
+  }
+
+  #overlay.ticket-modal-section {
+    height: auto;
+    .overlay_content {
+      height: auto;
+    }
+  }
+
+  .ticket-modal-form {
+    max-height: 80vh;
+  }
+
+  /****** scroll in div (touch) ******/
+  .scroll_content {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  .inline_form .item_label {
+    margin-top: 9px;
+  }
+
+  .item_label {
+    margin-bottom: 10px;
+    min-width: auto;
+    width: 100%;
+    @media screen and (min-width: 992px) {
+      min-width: 250px;
+      width: auto;
+    }
+  }
+
+  .inline_form .form-control-wrapper {
+    width: 100%;
+    @media screen and (min-width: 992px) {
+      width: 50%;
+    }
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: $input-padding-y $input-padding-x;
+    font-size: $font-size-base;
+    line-height: $input-line-height;
+    color: $input-color;
+    background-color: $input-bg;
+    background-clip: padding-box;
+    border: $input-border-width solid $input-border-color;
+  }
+
+  /***** button primary *****/
+  .btn-primary {
+    background: var(--bs-primary, grey) !important;
+    border: solid 1px var(--bs-primary, grey) !important;
+    border-radius: 5px;
+    color: #fff !important;
+    &:hover,
+    &:focus,
+    &:active {
+      background: var(--bs-primary, grey) !important;
+      border: solid 1px var(--bs-primary, grey) !important;
+      color: #fff !important;
+    }
+    &:not(:disabled):not(.disabled):active:focus,
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgb(227 94 59 / 50%);
+    }
+  }
+
+  /****** button secondary ******/
+  .btn-secondary {
+    border: solid 1px $dark !important;
+    background: none !important;
+    border-radius: 5px;
+    color: $dark !important;
+    &:hover,
+    &:focus,
+    &:active {
+      border: solid 1px $dark !important;
+      background: none !important;
+      color: $dark !important;
+    }
+    &:not(:disabled):not(.disabled):active:focus,
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgb(73 80 84 / 50%);
+    }
+  }
+
+  .float_left {
+    float: left !important;
+  }
+  .float_right {
+    float: right !important;
+  }
 }

@@ -20,7 +20,9 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
   const [loading, setLoading] = useState(false);
   const [uploadId, setUploadId] = useState<number | null>(null);
   const [attachmentLoading, setAttachmentLoading] = useState(false);
-  const [attachmentFileName, setAttachmentFileName] = useState<string | null>(null);
+  const [attachmentFileName, setAttachmentFileName] = useState<string | null>(
+    null
+  );
   const [attachmentTooBig, setAttachmentTooBig] = useState(false);
   const [showError, setShowError] = useState(false);
   const [fieldsData, setFieldsData] = useReducer(
@@ -101,7 +103,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
   const handleAttachmentChange = (e) => {
     const files = e.target && e.target.files;
     const uploadFile = files[0];
-    const size = uploadFile && uploadFile.size || 0;
+    const size = (uploadFile && uploadFile.size) || 0;
     const fileName = uploadFile && uploadFile.name;
     if (size > MAX_ATTACHMENT_SIZE) {
       setAttachmentTooBig(true);
@@ -133,61 +135,70 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
   return (
     <Modal
       show={isOpen}
-      onHide={((event) => {
-        close(event);
-      }) as any}
+      onHide={
+        ((event) => {
+          close(event);
+        }) as any
+      }
       renderBackdrop={renderBackdrop}
       autoFocus={false}
     >
-      <section id="overlay" className="ticket-modal-section">
-        {loading && (
-          <div className="loader_overlay">
-            <Loader bg="bg_color_transparent" />
-          </div>
-        )}
-        <form onSubmit={onSubmitForm}>
-          <div className="overlay_content scroll_content">
-            <h2>{translate("create_new_ticket")}</h2>
-            <div className="inline_form">
-              {formFields.map((fieldName, index) => {
-                const fieldConfig = fieldsConfig[fieldName];
-                if (!fieldConfig) {
-                  return null;
-                }
-                return fieldConfig.tag !== "textarea" ? (
-                  <InputField
-                    fieldConfig={fieldConfig}
-                    fieldName={fieldName}
-                    onChange={
-                      fieldConfig.type === "file"
-                        ? handleAttachmentChange
-                        : handleChange
-                    }
-                    loading={attachmentLoading}
-                    key={`f_${index}`}
-                  />
-                ) : (
-                  <TextareaField
-                    fieldConfig={fieldConfig}
-                    fieldName={fieldName}
-                    onChange={handleChange}
-                    key={`f_${index}`}
-                  />
-                );
-              })}
+      <div className="sdk-widget sdk-tickets-widget">
+        <section id="overlay" className="ticket-modal-section">
+          {loading && (
+            <div className="loader_overlay">
+              <Loader bg="bg_color_transparent" />
             </div>
-            {showError && (
-              <div className="alert alert-danger box radius mt-4" role="alert">
-                {translate("creation-error")}
+          )}
+          <form className="ticket-modal-form" onSubmit={onSubmitForm}>
+            <div className="overlay_content scroll_content">
+              <h2>{translate("create_new_ticket")}</h2>
+              <div className="inline_form">
+                {formFields.map((fieldName, index) => {
+                  const fieldConfig = fieldsConfig[fieldName];
+                  if (!fieldConfig) {
+                    return null;
+                  }
+                  return fieldConfig.tag !== "textarea" ? (
+                    <InputField
+                      fieldConfig={fieldConfig}
+                      fieldName={fieldName}
+                      onChange={
+                        fieldConfig.type === "file"
+                          ? handleAttachmentChange
+                          : handleChange
+                      }
+                      loading={attachmentLoading}
+                      key={`f_${index}`}
+                    />
+                  ) : (
+                    <TextareaField
+                      fieldConfig={fieldConfig}
+                      fieldName={fieldName}
+                      onChange={handleChange}
+                      key={`f_${index}`}
+                    />
+                  );
+                })}
               </div>
-            )}
-          </div>
-          <FooterButtons
-            handleCancelClick={close}
-            disabled={isSubmitDisabled || attachmentLoading || attachmentTooBig}
-          />
-        </form>
-      </section>
+              {showError && (
+                <div
+                  className="alert alert-danger box radius mt-4"
+                  role="alert"
+                >
+                  {translate("creation-error")}
+                </div>
+              )}
+            </div>
+            <FooterButtons
+              handleCancelClick={close}
+              disabled={
+                isSubmitDisabled || attachmentLoading || attachmentTooBig
+              }
+            />
+          </form>
+        </section>
+      </div>
     </Modal>
   );
 }
