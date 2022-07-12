@@ -2,9 +2,8 @@ import * as Scrivito from "scrivito";
 import translations from "./translations";
 
 const getLanguage = () => {
-  const languages = { portalEn: "en", portalDe: "de" };
-  const siteId = Scrivito.currentSiteId() || "portalEn";
-  return siteId ? languages[siteId] : languages.portalEn;
+  const current = Scrivito.currentPage();
+  return current && current.language();
 };
 
 const getDictionary = (localizations, defaultLanguage = "en") => {
@@ -21,7 +20,7 @@ const getDictionary = (localizations, defaultLanguage = "en") => {
 const translate = (
   key: keyof typeof translations.en | keyof typeof translations.de
 ) => {
-  const lang: keyof typeof translations = getLanguage() || "en";
+  const lang: keyof typeof translations = getLanguage() as any || "en";
   const keyPresent = Object.keys(translations[lang]).includes(key);
   const langObj: typeof translations[typeof lang] = translations[lang];
   return keyPresent ? langObj[key] : key;
