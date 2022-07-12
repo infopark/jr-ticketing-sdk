@@ -139,7 +139,7 @@
     margin-bottom: 10px;
     min-width: auto;
     width: 100%;
-    @media screen and (min-width: $lg-screen) {
+    @media screen and (min-width: $xl-screen) {
       min-width: 250px;
       width: auto;
     }
@@ -147,7 +147,7 @@
 
   .inline_form .form-control-wrapper {
     width: 100%;
-    @media screen and (min-width: $lg-screen) {
+    @media screen and (min-width: $xl-screen) {
       width: 50%;
     }
   }
