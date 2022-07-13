@@ -101,4 +101,29 @@
       }
     }
   }
+  [data-title]:hover:after {
+    content: attr(data-title);
+    background-color: $dark;
+    bottom: 135%;
+    color: #fff;
+    display: block;
+    padding: 1px 8px 5px 8px;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    width: 220px;
+  }
+  [data-title]:hover:before {
+    background-color: $dark;
+    border-bottom: solid 1px $dark;
+    border-right: solid 1px $dark;
+    bottom: 110%;
+    content: "";
+    height: 10px;
+    position: absolute;
+    right: 2px;
+    transform: rotate(45deg);
+    width: 10px;
+    z-index: 99999;
+  }
 }
