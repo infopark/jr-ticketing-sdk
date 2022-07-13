@@ -3,7 +3,7 @@
     background: $white;
     border-radius: 100%;
     color: var(--bs-primary, grey);
-    font-size: 20px;
+    font-size: 20px !important;
     height: 60px;
     margin-bottom: 10px;
     text-align: center;
@@ -14,7 +14,7 @@
   .fa {
     display: inline-block;
     font: normal normal normal 14px / 1 FontAwesome;
-    font-size: 20px !important;
+    font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -154,6 +154,7 @@
 
   .form-control {
     display: block;
+    appearance: auto;
     width: 100%;
     padding: $input-padding-y $input-padding-x;
     font-size: $font-size-base;
@@ -170,6 +171,7 @@
     border: solid 1px var(--bs-primary, grey) !important;
     border-radius: 5px;
     color: #fff !important;
+    margin-bottom: 0;
     &:hover,
     &:focus,
     &:active {
@@ -189,6 +191,7 @@
     background: none !important;
     border-radius: 5px;
     color: $dark !important;
+    margin-bottom: 0;
     &:hover,
     &:focus,
     &:active {

@@ -82,4 +82,23 @@
     margin-left: auto;
     margin-right: auto;
   }
+
+  .tooltip-container {
+    position: relative;
+    .tooltip {
+      cursor: pointer;
+      display: flex;
+      justify-content: end;
+      position: absolute;
+      right: $tooltip-right;
+      top: $tooltip-top;
+      font-size: $tooltip-font-size;
+      .tooltip-icon {
+        background-color: $white;
+        &.disabled {
+          background-color: $gray-200;
+        }
+      }
+    }
+  }
 }
