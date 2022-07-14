@@ -1,5 +1,6 @@
 @import "./variables.scss";
 @import "./tickets-widgets.scss";
+@import "./ticket-list-widget.scss";
 
 .sdk-widget {
   .box {
@@ -125,5 +126,50 @@
     transform: rotate(45deg);
     width: 10px;
     z-index: 99999;
+  }
+
+  .form-control {
+    display: block;
+    appearance: auto;
+    width: 100%;
+    padding: $input-padding-y $input-padding-x;
+    font-size: $font-size-base;
+    line-height: $input-line-height;
+    color: $input-color;
+    background-color: $input-bg;
+    background-clip: padding-box;
+    border: $input-border-width solid $input-border-color;
+  }
+
+  .flex_auto {
+    width: auto;
+    @media screen and (min-width: 992px) {
+      flex: auto;
+      padding: 0 0 0 20px;
+    }
+  }
+
+  .flex_grid {
+    display: block;
+    @media screen and (min-width: 992px) {
+      display: flex;
+      > div {
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+  }
+
+  //spacing
+  .pb-2 {
+    padding-bottom: $space-2 !important;
+  }
+
+  .pr-2 {
+    padding-right: $space-2 !important;
+  }
+
+  .mr-lg-2 {
+    margin-right: $space-2 !important;
   }
 }

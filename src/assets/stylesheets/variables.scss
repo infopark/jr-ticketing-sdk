@@ -20,6 +20,9 @@ $gray-900: #212529 !default;
 $dark: #495054 !default;
 $black: #000 !default;
 
+$crm: #2b8c42;
+$brand: var(--bs-primary, grey);
+
 $input-padding-y: 0.375rem !default;
 $input-padding-x: 0.75rem !default;
 $font-size-base: 1rem !default;
@@ -32,3 +35,5 @@ $input-border-color: $gray-300 !default;
 $tooltip-right: 0.34em;
 $tooltip-top: 0.75em;
 $tooltip-font-size: 16px;
+
+$space-2: 0.5rem;
