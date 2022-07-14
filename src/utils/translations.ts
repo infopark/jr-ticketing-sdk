@@ -88,8 +88,8 @@ const translations = {
     "en-GB": "English",
     Documentation: "Documentation",
     "Useful Links": "Useful Links",
-    portalEn: "English",
-    portalDe: "Deutsch",
+    en: "English",
+    de: "Deutsch",
     "cookie-info-title": "Info on Cookies in JustRelate Portal",
     "cookie-info-text":
       "JustRelate Portal uses cookies and other technologies ('Cookies') exclusively for the proper functioning of the service, and no personal information or statistics are gathered.",
@@ -215,8 +215,8 @@ const translations = {
     "en-GB": "English",
     Documentation: "Dokumentation",
     "Useful Links": "Nützliche Links",
-    portalEn: "English",
-    portalDe: "Deutsch",
+    en: "English",
+    de: "Deutsch",
     "cookie-info-title": "Info über Cookies in JustRelate Portal",
     "cookie-info-text":
       "JustRelate Portal verwendet Cookies und andere Technologien ('Cookies') ausschließlich für das ordnungsgemäße Funktionieren des Portal-Dienstes, und es werden hiermit keine persönlichen Informationen oder Statistiken gesammelt.",

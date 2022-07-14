@@ -13,8 +13,8 @@ function LanguageRedirectWrapper() {
     const lang = getLanguage();
     const alt =
       lang &&
-      getPageLinkInLanguage(lang === "portalEn" ? "portalDe" : "portalEn");
-    const defaultAlt = lang && getPageLinkInLanguage("portalEn");
+      getPageLinkInLanguage(lang === "en" ? "de" : "en");
+    const defaultAlt = lang && getPageLinkInLanguage("en");
     const availableAlt = alt && !alt.startsWith("#SCRIVITO_UNAVAILABLE");
     const availableDefaultAlt =
       defaultAlt && !defaultAlt.startsWith("#SCRIVITO_UNAVAILABLE");
