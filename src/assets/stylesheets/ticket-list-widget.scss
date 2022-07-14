@@ -11,6 +11,13 @@
       }
     }
 
+    img {
+      border: 0 solid;
+      margin: 0;
+      outline: 0 none;
+      padding: 0;
+    }
+
     .ticket_header {
       background-color: #f7f6f4;
       padding: 0.8rem 1rem;
@@ -29,7 +36,7 @@
       }
     }
     .ticket-title {
-      font-family: "brand_font_bold";
+      font-family: var(--bs-font-sans-serif);
     }
     .ticket-status {
       -webkit-line-clamp: 2;
@@ -64,6 +71,27 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+  }
+
+  .one_line {
+    overflow: hidden;
+    padding: 11px 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .attachment-flag {
+    font-size: 100%;
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    &.badge {
+      padding: 0.1rem 0.4rem;
+    }
+    img {
+      height: 1.2rem;
+      width: auto;
     }
   }
 }

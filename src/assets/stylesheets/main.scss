@@ -143,7 +143,7 @@
 
   .flex_auto {
     width: auto;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $xl-screen) {
       flex: auto;
       padding: 0 0 0 20px;
     }
@@ -151,7 +151,7 @@
 
   .flex_grid {
     display: block;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $xl-screen) {
       display: flex;
       > div {
         padding-right: 0;
@@ -170,6 +170,12 @@
   }
 
   .mr-lg-2 {
-    margin-right: $space-2 !important;
+    @media screen and (min-width: $xl-screen) {
+      margin-right: $space-2 !important;
+    }
+  }
+
+  .relative {
+    position: relative;
   }
 }
