@@ -13,7 +13,6 @@
 
   .fa {
     display: inline-block;
-    font: normal normal normal 14px / 1 FontAwesome;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -152,31 +151,18 @@
     }
   }
 
-  .form-control {
-    display: block;
-    appearance: auto;
-    width: 100%;
-    padding: $input-padding-y $input-padding-x;
-    font-size: $font-size-base;
-    line-height: $input-line-height;
-    color: $input-color;
-    background-color: $input-bg;
-    background-clip: padding-box;
-    border: $input-border-width solid $input-border-color;
-  }
-
   /***** button primary *****/
   .btn-primary {
-    background: var(--bs-primary, grey) !important;
-    border: solid 1px var(--bs-primary, grey) !important;
+    background: $brand !important;
+    border: solid 1px $brand !important;
     border-radius: 5px;
     color: #fff !important;
     margin-bottom: 0;
     &:hover,
     &:focus,
     &:active {
-      background: var(--bs-primary, grey) !important;
-      border: solid 1px var(--bs-primary, grey) !important;
+      background: $brand !important;
+      border: solid 1px $brand !important;
       color: #fff !important;
     }
     &:not(:disabled):not(.disabled):active:focus,

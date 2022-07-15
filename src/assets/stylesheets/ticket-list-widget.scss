@@ -1,0 +1,97 @@
+.sdk-ticket-list-widget {
+  .ticket_list {
+    a {
+      text-decoration: none;
+      display: block;
+      padding: 0.8rem 1rem;
+      &:hover {
+        .box_bg_white {
+          background-color: rgba(240, 237, 233, 0.25) !important;
+        }
+      }
+    }
+
+    img {
+      border: 0 solid;
+      margin: 0;
+      outline: 0 none;
+      padding: 0;
+    }
+
+    .ticket_header {
+      background-color: #f7f6f4;
+      padding: 0.8rem 1rem;
+    }
+    .ticket-box {
+      display: block;
+      hyphens: auto;
+      padding: 0.2rem 1.5rem 0.2rem 0.9rem;
+      @media screen and (min-width: 768px) {
+        padding: 0.2rem 0.8rem;
+      }
+    }
+    .ticket-box.with-attachment-flag {
+      @media screen and (min-width: 768px) {
+        padding-right: 3.4rem;
+      }
+    }
+    .ticket-title {
+      font-family: var(--bs-font-sans-serif);
+    }
+    .ticket-status {
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .running-ticket {
+      color: $crm;
+    }
+    .waiting-ticket {
+      color: $brand;
+    }
+    .attachment-flag.badge {
+      padding: 0;
+      right: 0;
+      top: 0;
+      @media screen and (min-width: 768px) {
+        padding: 0.4rem 0;
+        position: absolute;
+        right: 0.25rem;
+      }
+      @media screen and (min-width: 1200px) {
+        right: 1rem;
+      }
+    }
+
+    .dots {
+      display: block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .one_line {
+    overflow: hidden;
+    padding: 11px 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .attachment-flag {
+    font-size: 100%;
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    &.badge {
+      padding: 0.1rem 0.4rem;
+    }
+    img {
+      height: 1.2rem;
+      width: auto;
+    }
+  }
+}

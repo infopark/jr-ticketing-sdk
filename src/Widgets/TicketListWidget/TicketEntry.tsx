@@ -31,7 +31,11 @@ function AttachmentFlag({ count }) {
   );
 }
 
-function TicketEntry({ ticket, targetLink, statusDictionary }: ticketEntryProps) {
+function TicketEntry({
+  ticket,
+  targetLink,
+  statusDictionary,
+}: ticketEntryProps) {
   const { userData } = useUserData();
   return (
     <div className="row ticket_list">
@@ -39,7 +43,7 @@ function TicketEntry({ ticket, targetLink, statusDictionary }: ticketEntryProps)
         <div className="box_bg_white radius">
           <Scrivito.LinkTag to={targetLink} className="box block">
             <span className="row">
-              <span className="col-md-3">
+              <span className="col-md-3 relative">
                 <span className="ticket-box with-attachment-flag">
                   {ticket.attachmentcount > 0 && (
                     <AttachmentFlag count={ticket.attachmentcount} />
