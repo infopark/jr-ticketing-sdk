@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback } from "react";
-import { Navigate } from "react-router-dom";
 import getUserData from "../api/getUserData";
 import useAPIError from "../utils/useAPIError";
 import { setLoggedIn, setUserUuid, removeUserUuid } from "./Auth/utils";
@@ -50,11 +49,7 @@ export function UserDataProvider(props) {
         updateUserData,
       }}
     >
-      {userData && userData.visit ? (
-        <Navigate replace to={userData.visit}></Navigate>
-      ) : (
-        props.children
-      )}
+      {props.children}
     </UserDataContext.Provider>
   );
 }

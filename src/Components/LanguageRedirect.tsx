@@ -1,11 +1,12 @@
 import React from "react";
 import * as Scrivito from "scrivito";
-import { Navigate } from "react-router-dom";
 import {
   setUserLanguageHandledFlag,
   userLanguageHandled,
 } from "./Auth/utils";
 import { useUserData } from "./UserDataContext";
+import { Router, Navigate } from "react-router-dom";
+import { portalHistory } from "../utils/portalHistory";
 
 const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   const { userData } = useUserData();
@@ -34,11 +35,15 @@ const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   }
 
   if (shouldRedirect && alternate) {
-    return <Navigate replace to={alternate}></Navigate>
+    return <Router navigator={portalHistory} location={portalHistory.location}>
+      <Navigate replace to={alternate}></Navigate>
+    </Router>
   }
 
   if (shouldRedirectToDefault && defaultAlternate) {
-    return <Navigate replace to={defaultAlternate}></Navigate>;
+    return <Router navigator={portalHistory} location={portalHistory.location}>
+      <Navigate replace to={defaultAlternate}></Navigate>
+    </Router>;
   }
 };
 
