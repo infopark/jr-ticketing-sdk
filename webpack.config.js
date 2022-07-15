@@ -50,6 +50,7 @@ module.exports = {
     "html-react-parser": "html-react-parser",
     lodash: "lodash",
     "lodash-es": "lodash-es",
+    history: "history",
     react: "react",
     "react-dom": "react-dom",
     "react-bootstrap": "react-bootstrap",

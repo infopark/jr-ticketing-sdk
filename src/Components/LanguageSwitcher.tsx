@@ -17,7 +17,7 @@ const LanguageSwitcher = () => {
     const lang = getLanguage();
     const alt =
       lang &&
-      getPageLinkInLanguage(lang === "portalEn" ? "portalDe" : "portalEn");
+      getPageLinkInLanguage(lang === "en" ? "de" : "en");
     const availableAlt = alt && !alt.startsWith("#SCRIVITO_UNAVAILABLE");
     setCurrentLanguage(lang);
     if (alt && availableAlt) {
@@ -51,19 +51,19 @@ const LanguageSwitcher = () => {
           alternate && new Scrivito.Link({ url: alternate, target: null as any });
         return (
           <Scrivito.LinkTag
-            to={(currentLanguage !== lang.siteId ? link : Scrivito.currentPage()) as any}
+            to={(currentLanguage !== lang.isoBase ? link : Scrivito.currentPage()) as any}
             target={null as any}
-            key={lang.siteId}
-            title={lang.siteId}
+            key={lang.isoBase}
+            title={lang.isoBase}
             onClick={() => persistLanguage(lang)}
           >
             <i
               className={classNames("fa mr-3", {
-                "fa-dot-circle-o": currentLanguage === lang.siteId,
-                "fa-circle-o": currentLanguage !== lang.siteId,
+                "fa-dot-circle-o": currentLanguage === lang.isoBase,
+                "fa-circle-o": currentLanguage !== lang.isoBase,
               })}
             />
-            <span>{translate(lang.siteId as any)}</span>
+            <span>{translate(lang.isoBase as any)}</span>
           </Scrivito.LinkTag>
         );
       })}
