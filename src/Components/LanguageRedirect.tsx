@@ -18,13 +18,13 @@ const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   const shouldRedirect =
     (!wasUserLanguageHandled &&
       userLanguageIsDe &&
-      initialLanguage !== "portalDe") ||
+      initialLanguage !== "de") ||
     (!wasUserLanguageHandled &&
       userLanguageIsEn &&
-      initialLanguage !== "portalEn");
+      initialLanguage !== "en");
 
   const shouldRedirectToDefault =
-    !userLanguageIsDe && !userLanguageIsEn && initialLanguage !== "portalEn";
+    !userLanguageIsDe && !userLanguageIsEn && initialLanguage !== "en";
 
   if (userData && !wasUserLanguageHandled) {
     setUserLanguageHandledFlag();

@@ -95,8 +95,8 @@ const getTicketTypeFields = (typeOptions) => {
 };
 
 const languages = [
-  { iso: "en-GB", name: "English", siteId: "portalEn" },
-  { iso: "de-DE", name: "Deutsch", siteId: "portalDe" },
+  { iso: "en-GB", name: "English", isoBase: "en" },
+  { iso: "de-DE", name: "Deutsch", isoBase: "de" },
 ];
 
 const exampleDate = new Date();
