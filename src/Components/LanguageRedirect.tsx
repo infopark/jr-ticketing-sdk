@@ -5,8 +5,6 @@ import {
   userLanguageHandled,
 } from "./Auth/utils";
 import { useUserData } from "./UserDataContext";
-import { Router, Navigate } from "react-router-dom";
-import { portalHistory } from "../utils/portalHistory";
 
 const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   const { userData } = useUserData();
@@ -35,15 +33,13 @@ const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
   }
 
   if (shouldRedirect && alternate) {
-    return <Router navigator={portalHistory} location={portalHistory.location}>
-      <Navigate replace to={alternate}></Navigate>
-    </Router>
+    window.location.href = alternate;
+    return <></>;
   }
 
   if (shouldRedirectToDefault && defaultAlternate) {
-    return <Router navigator={portalHistory} location={portalHistory.location}>
-      <Navigate replace to={defaultAlternate}></Navigate>
-    </Router>;
+    window.location.href = defaultAlternate;
+    return <></>;
   }
 };
 
