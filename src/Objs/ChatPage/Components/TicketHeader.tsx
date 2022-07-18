@@ -11,17 +11,20 @@ const TicketHeader = ({ ticket }) => {
   const statusDictionary = getDictionary(tenantLocalization);
   const status = ticket && ticket.status;
   return (
-    <div className="ticket_info">
-      <div className="row">
-        <span className="wrapper_info_content no_wrap w-100">
-          <span className="info_item extra_bold ticket-name dots">
-            {ticket && ticket.title &&
-              parse(newlinesToBreaks(stripHtmlTags(ticket && ticket.title)))}
+    <div className="sdk-chat-page">
+      <div className="ticket_info">
+        <div className="row">
+          <span className="wrapper_info_content no_wrap w-100">
+            <span className="info_item extra_bold ticket-name dots">
+              {ticket &&
+                ticket.title &&
+                parse(newlinesToBreaks(stripHtmlTags(ticket && ticket.title)))}
+            </span>
+            <span className="info_item on_progress ticket-status dots float-right float-md-none">
+              {dictTranslate(status, statusDictionary)}
+            </span>
           </span>
-          <span className="info_item on_progress ticket-status dots float-right float-md-none">
-            {dictTranslate(status, statusDictionary)}
-          </span>
-        </span>
+        </div>
       </div>
     </div>
   );
