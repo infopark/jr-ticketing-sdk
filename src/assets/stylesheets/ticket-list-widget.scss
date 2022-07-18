@@ -5,6 +5,7 @@
       display: block;
       padding: 0.8rem 1rem;
       &:hover {
+        text-decoration: none !important;
         .box_bg_white {
           background-color: rgba(240, 237, 233, 0.25) !important;
         }

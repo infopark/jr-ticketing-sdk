@@ -151,46 +151,6 @@
     }
   }
 
-  /***** button primary *****/
-  .btn-primary {
-    background: $brand !important;
-    border: solid 1px $brand !important;
-    border-radius: 5px;
-    color: #fff !important;
-    margin-bottom: 0;
-    &:hover,
-    &:focus,
-    &:active {
-      background: $brand !important;
-      border: solid 1px $brand !important;
-      color: #fff !important;
-    }
-    &:not(:disabled):not(.disabled):active:focus,
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgb(227 94 59 / 50%);
-    }
-  }
-
-  /****** button secondary ******/
-  .btn-secondary {
-    border: solid 1px $dark !important;
-    background: none !important;
-    border-radius: 5px;
-    color: $dark !important;
-    margin-bottom: 0;
-    &:hover,
-    &:focus,
-    &:active {
-      border: solid 1px $dark !important;
-      background: none !important;
-      color: $dark !important;
-    }
-    &:not(:disabled):not(.disabled):active:focus,
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgb(73 80 84 / 50%);
-    }
-  }
-
   .float_left {
     float: left !important;
   }
