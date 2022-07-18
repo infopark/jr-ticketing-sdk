@@ -22,7 +22,6 @@ import "./Widgets/TicketListWidget/TicketListWidgetEditingConfig";
 import "./Widgets/TicketsWidget/TicketsWidgetClass";
 import "./Widgets/TicketsWidget/TicketsWidgetComponent";
 import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
-import { portalHistory } from "./utils/portalHistory";
 import * as InitialContentBodyFactory from "./Bridge/InitialContentBodyFactory";
 
 export {
@@ -39,6 +38,5 @@ export {
   getLanguage,
   isInVisitedPages,
   addToVisitedPages,
-  portalHistory,
   InitialContentBodyFactory
 };
