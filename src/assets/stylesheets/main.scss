@@ -161,6 +161,14 @@
     }
   }
 
+  .flex_order_1 {
+    order: 1;
+  }
+
+  .flex_order_2 {
+    order: 2;
+  }
+
   //spacing
   .pb-2 {
     padding-bottom: $space-2 !important;

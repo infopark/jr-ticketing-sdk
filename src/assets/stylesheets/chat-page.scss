@@ -88,4 +88,48 @@
       }
     }
   }
+
+  .content_padding {
+    padding: 20px;
+  }
+
+  .profile_content .page_content {
+    margin: 50px 0 0 0;
+  }
+
+  body.helpdesk_content .page_content {
+    margin-bottom: 150px;
+    @media screen and (min-width: 768px) {
+      margin-bottom: 100px;
+    }
+    @media screen and (min-width: 992px) {
+      margin-bottom: 50px;
+    }
+  }
+
+  .wrapper_box {
+    margin-bottom: 20px;
+  }
+
+  .box_bg_white {
+    background: #fff !important;
+    border-radius: 0;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
+  /****** tables ******/
+  .item_label {
+    margin-bottom: 10px;
+    min-width: auto;
+    width: 100%;
+    @media screen and (min-width: 992px) {
+      min-width: 250px;
+      width: auto;
+    }
+  }
+
+  .table_style + .table_style {
+    margin-top: 20px;
+  }
 }
