@@ -1,0 +1,91 @@
+.sdk-chat-page {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+  .ticket_info {
+    background: #fff;
+    line-height: 50px;
+    overflow: hidden;
+    height: 50px;
+    padding: 0;
+  }
+
+  .ticket_info .content_padding {
+    padding: 0;
+  }
+
+  .ticket_info .info_item {
+    margin: 0;
+  }
+
+  .wrapper_info_content > span {
+    display: inline-block;
+    padding: 0 10px 0 10px;
+    &:last-child {
+      border-right: none;
+    }
+    small {
+      display: inline-block;
+      margin-right: 5px;
+    }
+    .more_info {
+      background: var(--dark);
+      border-left: solid 1px #eae7e3;
+      cursor: pointer;
+      color: #fff;
+      padding: 0 20px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  .wrapper_info_content {
+    padding: 0 10px;
+    .ticket-name {
+      max-width: 60%;
+      @media screen and (min-width: 992px) {
+        max-width: 80%;
+      }
+    }
+    .ticket-status {
+      max-width: 40%;
+      @media screen and (min-width: 992px) {
+        max-width: 15%;
+      }
+    }
+  }
+
+  .on_progress {
+    color: $crm;
+  }
+
+  .nav_header {
+    background: #f3f1ed;
+    overflow: hidden;
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    .content_padding {
+      padding: 0 20px;
+    }
+    ul {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+      overflow: hidden;
+      li {
+        cursor: pointer;
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        margin-right: 20px;
+      }
+      li.active {
+        border-bottom: solid 4px $brand;
+      }
+    }
+  }
+}
