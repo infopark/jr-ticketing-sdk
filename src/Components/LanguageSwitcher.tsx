@@ -13,6 +13,10 @@ const LanguageSwitcher = () => {
   const currentLanguage = getLanguage();
   const versions = getLanguageVersions();
 
+  if (versions.length <= 1) {
+    return null;
+  }
+
   const persistLanguage = async (lang) => {
     if (userData.language === lang) {
       return;
