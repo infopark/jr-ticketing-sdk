@@ -48,7 +48,7 @@
     top: 12vh;
     width: 90vw;
     z-index: 10;
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       left: 10vw;
       width: 80vw;
     }
@@ -75,7 +75,7 @@
       &:first-child {
         margin-bottom: 1rem;
       }
-      @media screen and (min-width: $lg-screen) {
+      @media screen and (min-width: $breakpoint-md) {
         margin-right: 0.5rem;
         width: auto;
         &:first-child {
@@ -101,7 +101,7 @@
     position: absolute;
     top: 0;
     width: 100%;
-    @media screen and (min-width: $lg-screen) {
+    @media screen and (min-width: $breakpoint-md) {
       height: 75vh;
     }
     h2 {
@@ -138,23 +138,9 @@
     margin-bottom: 10px;
     min-width: auto;
     width: 100%;
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       min-width: 250px;
       width: auto;
     }
-  }
-
-  .inline_form .form-control-wrapper {
-    width: 100%;
-    @media screen and (min-width: $xl-screen) {
-      width: 50%;
-    }
-  }
-
-  .float_left {
-    float: left !important;
-  }
-  .float_right {
-    float: right !important;
   }
 }

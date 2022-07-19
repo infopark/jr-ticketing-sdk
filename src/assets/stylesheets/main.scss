@@ -142,9 +142,16 @@
     border: $input-border-width solid $input-border-color;
   }
 
+  .inline_form .form-control-wrapper {
+    width: 100%;
+    @media screen and (min-width: $breakpoint-lg) {
+      width: 50%;
+    }
+  }
+
   .flex_auto {
     width: auto;
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       flex: auto;
       padding: 0 0 0 20px;
     }
@@ -152,7 +159,7 @@
 
   .flex_grid {
     display: block;
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       display: flex;
       > div {
         padding-right: 0;
@@ -169,6 +176,28 @@
     order: 2;
   }
 
+  .float_left {
+    float: left !important;
+  }
+  .float_right {
+    float: right !important;
+  }
+
+  .date_bg {
+    background: $brand-bg;
+    padding: 10px;
+    position: relative;
+    z-index: 2;
+    @media screen and (min-width: $breakpoint-lg) {
+      padding: 20px;
+    }
+  }
+
+  .max_width_element {
+    margin: auto;
+    max-width: $max-width;
+  }
+
   //spacing
   .pb-2 {
     padding-bottom: $space-2 !important;
@@ -179,7 +208,7 @@
   }
 
   .mr-lg-2 {
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       margin-right: $space-2 !important;
     }
   }
