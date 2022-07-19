@@ -22,12 +22,10 @@ const getPageLinkInLanguage = (language) => {
   if (!version) {
     return null;
   }
-  return Scrivito.urlFor(version, {
-    query: window.location.search,
-  });
+  return getLinkForVersion(version);
 };
 
-const getLanguageVersions = () => {
+const getLanguageVersions: () => Scrivito.Obj<any>[] = () => {
   const current = Scrivito.currentPage();
   if (!current) {
     return [];
@@ -40,8 +38,17 @@ const getLanguageVersion = (language) => {
   return find(versions, version => version.language() === language);
 }
 
+const getLinkForVersion = (version) =>{
+  return Scrivito.urlFor(version, {
+    query: window.location.search,
+  });
+}
+
 export {
   getPage,
   getLanguage,
   getPageLinkInLanguage,
+  getLanguageVersions,
+  getLanguageVersion,
+  getLinkForVersion
 };

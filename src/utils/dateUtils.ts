@@ -9,7 +9,7 @@ import {
 import { getLanguage } from "./translate";
 
 const localeMap = {
-  en: enUS,
+  en: enGB,
   "en-US": enUS,
   "en-AU": enAU,
   "en-GB": enGB,

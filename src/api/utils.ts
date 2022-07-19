@@ -95,8 +95,8 @@ const getTicketTypeFields = (typeOptions) => {
 };
 
 const languages = [
-  { iso: "en-GB", name: "English", isoBase: "en" },
-  { iso: "de-DE", name: "Deutsch", isoBase: "de" },
+  { iso: "en-GB", name: "English" },
+  { iso: "de-DE", name: "Deutsch" },
 ];
 
 const exampleDate = new Date();
@@ -104,7 +104,7 @@ exampleDate.setHours(14);
 exampleDate.setMinutes(3);
 exampleDate.setSeconds(0);
 exampleDate.setMilliseconds(0);
-const timeLocales = ["en", "en-AU", "en-GB", "de-DE", "custom0"].map((iso) => ({
+const timeLocales = ["en-US", "en-AU", "en-GB", "de-DE", "custom0"].map((iso) => ({
   iso,
   name: parseDate(exampleDate, DEFAULT_DATE_TIME_FORMAT, iso),
 }));
