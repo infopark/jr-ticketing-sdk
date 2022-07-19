@@ -5,6 +5,8 @@ import {
   inputMinSize,
   attachmentSize,
 } from "../utils/inputValidations";
+import { getLanguageVersions } from "../utils/page";
+import { translate } from "../utils/translate";
 
 const formReducer = (state, event) => {
   // clear fields array after cancel form
@@ -94,11 +96,6 @@ const getTicketTypeFields = (typeOptions) => {
   return availableFieldsConfig;
 };
 
-const languages = [
-  { iso: "en-GB", name: "English" },
-  { iso: "de-DE", name: "Deutsch" },
-];
-
 const exampleDate = new Date();
 exampleDate.setHours(14);
 exampleDate.setMinutes(3);
@@ -109,7 +106,7 @@ const timeLocales = ["en-US", "en-AU", "en-GB", "de-DE", "custom0"].map((iso) =>
   name: parseDate(exampleDate, DEFAULT_DATE_TIME_FORMAT, iso),
 }));
 
-const editableUserFields = [
+const getEditableUserFields = () => [
   { label: "First name", name: "firstname", editable: true },
   { label: "Last name", name: "lastname", editable: true },
   { label: "Position", name: "position", editable: true },
@@ -120,7 +117,10 @@ const editableUserFields = [
     label: "Language",
     name: "language",
     editable: true,
-    options: languages.map((lang) => ({ value: lang.iso, name: lang.name })),
+    options: getLanguageVersions().map((version) => ({
+      value: version.language(),
+      name: translate(version.language() as any)
+    })),
     type: "radio",
   },
   {
@@ -135,4 +135,4 @@ const editableUserFields = [
   },
 ];
 
-export { getTicketTypeFields, formReducer, editableUserFields, languages };
+export { getTicketTypeFields, formReducer, getEditableUserFields };
