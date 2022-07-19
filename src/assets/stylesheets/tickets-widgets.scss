@@ -48,7 +48,7 @@
     top: 12vh;
     width: 90vw;
     z-index: 10;
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       left: 10vw;
       width: 80vw;
     }
@@ -75,7 +75,7 @@
       &:first-child {
         margin-bottom: 1rem;
       }
-      @media screen and (min-width: $lg-screen) {
+      @media screen and (min-width: $breakpoint-md) {
         margin-right: 0.5rem;
         width: auto;
         &:first-child {
@@ -101,7 +101,7 @@
     position: absolute;
     top: 0;
     width: 100%;
-    @media screen and (min-width: $lg-screen) {
+    @media screen and (min-width: $breakpoint-md) {
       height: 75vh;
     }
     h2 {
@@ -138,63 +138,9 @@
     margin-bottom: 10px;
     min-width: auto;
     width: 100%;
-    @media screen and (min-width: $xl-screen) {
+    @media screen and (min-width: $breakpoint-lg) {
       min-width: 250px;
       width: auto;
     }
-  }
-
-  .inline_form .form-control-wrapper {
-    width: 100%;
-    @media screen and (min-width: $xl-screen) {
-      width: 50%;
-    }
-  }
-
-  /***** button primary *****/
-  .btn-primary {
-    background: $brand !important;
-    border: solid 1px $brand !important;
-    border-radius: 5px;
-    color: #fff !important;
-    margin-bottom: 0;
-    &:hover,
-    &:focus,
-    &:active {
-      background: $brand !important;
-      border: solid 1px $brand !important;
-      color: #fff !important;
-    }
-    &:not(:disabled):not(.disabled):active:focus,
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgb(227 94 59 / 50%);
-    }
-  }
-
-  /****** button secondary ******/
-  .btn-secondary {
-    border: solid 1px $dark !important;
-    background: none !important;
-    border-radius: 5px;
-    color: $dark !important;
-    margin-bottom: 0;
-    &:hover,
-    &:focus,
-    &:active {
-      border: solid 1px $dark !important;
-      background: none !important;
-      color: $dark !important;
-    }
-    &:not(:disabled):not(.disabled):active:focus,
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgb(73 80 84 / 50%);
-    }
-  }
-
-  .float_left {
-    float: left !important;
-  }
-  .float_right {
-    float: right !important;
   }
 }

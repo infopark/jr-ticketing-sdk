@@ -43,7 +43,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   ).first();
 
   return (
-    <Scrivito.WidgetTag className="row equal sdk-widget sdk-tickets-widget">
+    <Scrivito.WidgetTag className="row equal sdk sdk-tickets-widget">
       <CreateNewTicket
         className={boxClassName}
         chatPage={chatPage}

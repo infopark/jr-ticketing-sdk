@@ -12,7 +12,9 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState("" as any);
   const [textareaHeight, setTextareaHeight] = useState<number | null>(null);
-  const [attachmentFileName, setAttachmentFileName] = useState<string | null>(null);
+  const [attachmentFileName, setAttachmentFileName] = useState<string | null>(
+    null
+  );
   const [attachmentLoading, setAttachmentLoading] = useState(false);
 
   const messageOrAttachment = message || file;
@@ -93,59 +95,61 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   };
 
   return (
-    <section className="message_box">
-      {file && (
-        <div className="attachment_file">
-          <div className={classNames("dots", { loading: attachmentLoading })}>
-            {file.name}
-            {attachmentLoading && " (processing)"}
-            {attachmentLoading && <div className="bg" />}
+    <div className="sdk sdk-chat-page">
+      <section className="message_box">
+        {file && (
+          <div className="attachment_file">
+            <div className={classNames("dots", { loading: attachmentLoading })}>
+              {file.name}
+              {attachmentLoading && " (processing)"}
+              {attachmentLoading && <div className="bg" />}
+            </div>
+            <div className="delete_file pointer" onClick={() => setFile("")}>
+              x
+            </div>
           </div>
-          <div className="delete_file pointer" onClick={() => setFile("")}>
-            x
-          </div>
-        </div>
-      )}
-      <div className="flex_grid">
-        <div className="textfield">
-          <textarea
-            className="form-control dialog_text_area resize-ta"
-            placeholder={translate("your message ...")}
-            value={message}
-            onChange={handleChange}
-            onKeyUp={handleKeys}
-            style={{ height: textareaHeight || "45px" }}
-            disabled={isClosed}
-          />
-        </div>
-        <div className="textfield_btn">
-          <label
-            htmlFor="fileUpload"
-            className={`btn btn-secondary with-btn-lnf${
-              isClosed ? " disabled" : ""
-            }`}
-          >
-            {translate("attach file")}
-            <input
-              type="file"
-              id="fileUpload"
-              name="fileUpload"
-              onChange={(e) => handleFileChange(e)}
-              hidden
+        )}
+        <div className="flex_grid">
+          <div className="textfield">
+            <textarea
+              className="form-control dialog_text_area resize-ta"
+              placeholder={translate("your message ...")}
+              value={message}
+              onChange={handleChange}
+              onKeyUp={handleKeys}
+              style={{ height: textareaHeight || "45px" }}
               disabled={isClosed}
             />
-          </label>
-          <button
-            className="btn btn-primary btn_outline float_right"
-            onClick={() => handleSendMessage(message, ticketId, userId)}
-            disabled={isClosed || attachmentLoading || !messageOrAttachment}
-            type="button"
-          >
-            {translate("post message")}
-          </button>
+          </div>
+          <div className="textfield_btn">
+            <label
+              htmlFor="fileUpload"
+              className={`btn btn-secondary with-btn-lnf${
+                isClosed ? " disabled" : ""
+              }`}
+            >
+              {translate("attach file")}
+              <input
+                type="file"
+                id="fileUpload"
+                name="fileUpload"
+                onChange={(e) => handleFileChange(e)}
+                hidden
+                disabled={isClosed}
+              />
+            </label>
+            <button
+              className="btn btn-primary btn_outline float_right"
+              onClick={() => handleSendMessage(message, ticketId, userId)}
+              disabled={isClosed || attachmentLoading || !messageOrAttachment}
+              type="button"
+            >
+              {translate("post message")}
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 export default MessageArea;
