@@ -1,3 +1,4 @@
+import { startsWith, split } from "lodash";
 import * as Scrivito from "scrivito";
 import translations from "./translations";
 
@@ -14,13 +15,20 @@ const getDictionary = (localizations, defaultLanguage = "en") => {
   if (!lang) {
     return {};
   }
-  return localizations[lang] || localizations[defaultLanguage] || {};
+  return localizations[get2LetterLanguage(lang)] || localizations[defaultLanguage] || {};
 };
+
+const get2LetterLanguage = (lang: string) => {
+  if (!lang) {
+    return lang;
+  }
+  return split(lang, /[-_]/g)[0];
+}
 
 const translate = (
   key: keyof typeof translations.en | keyof typeof translations.de
 ) => {
-  const lang: keyof typeof translations = getLanguage() as any || "en";
+  const lang: keyof typeof translations = startsWith(getLanguage()!, "de") ? "de" : "en";
   const keyPresent = Object.keys(translations[lang]).includes(key);
   const langObj: typeof translations[typeof lang] = translations[lang];
   return keyPresent ? langObj[key] : key;
