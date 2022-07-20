@@ -133,14 +133,4 @@
   .inline_form .item_label {
     margin-top: 9px;
   }
-
-  .item_label {
-    margin-bottom: 10px;
-    min-width: auto;
-    width: 100%;
-    @media screen and (min-width: $breakpoint-lg) {
-      min-width: 250px;
-      width: auto;
-    }
-  }
 }

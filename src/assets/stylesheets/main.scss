@@ -2,6 +2,7 @@
 @import "./tickets-widgets.scss";
 @import "./ticket-list-widget.scss";
 @import "./chat-page.scss";
+@import "./profile.scss";
 
 .sdk {
   .box {
@@ -80,6 +81,15 @@
     line-height: $h1-line-height;
   }
 
+  a,
+  a:hover,
+  a:focus,
+  a.active,
+  .link {
+    color: $brand;
+    text-decoration: none;
+  }
+
   .m_auto {
     margin-left: auto;
     margin-right: auto;
@@ -149,6 +159,86 @@
     }
   }
 
+  .ticket_info {
+    background: #fff;
+    line-height: 50px;
+    overflow: hidden;
+    height: 50px;
+    padding: 0;
+  }
+
+  .wrapper_info_content > span {
+    display: inline-block;
+    padding: 0 10px 0 10px;
+    &:last-child {
+      border-right: none;
+    }
+    small {
+      display: inline-block;
+      margin-right: 5px;
+    }
+    .more_info {
+      background: var(--dark);
+      border-left: solid 1px #eae7e3;
+      cursor: pointer;
+      color: #fff;
+      padding: 0 20px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  .wrapper_info_content {
+    padding: 0 10px;
+    .ticket-name {
+      max-width: 60%;
+      @media screen and (min-width: 992px) {
+        max-width: 80%;
+      }
+    }
+    .ticket-status {
+      max-width: 40%;
+      @media screen and (min-width: 992px) {
+        max-width: 15%;
+      }
+    }
+  }
+
+  .item_label {
+    margin-bottom: 10px;
+    min-width: auto;
+    width: 100%;
+    @media screen and (min-width: $breakpoint-lg) {
+      min-width: 250px;
+      width: auto;
+    }
+  }
+
+  .text_content,
+  .item_label {
+    .avatar {
+      max-width: 250px;
+    }
+  }
+
+  .avatar_edit_btn {
+    min-width: 250px;
+  }
+
+  .avatar_loading {
+    position: relative;
+    opacity: 0.5;
+  }
+
+  .no_wrap {
+    white-space: nowrap;
+  }
+
+  .relative {
+    position: relative;
+  }
+
   .flex_auto {
     width: auto;
     @media screen and (min-width: $breakpoint-lg) {
@@ -213,11 +303,29 @@
     }
   }
 
-  .relative {
-    position: relative;
+  .ml-4 {
+    margin-left: $space-4 !important;
+  }
+
+  .mb-4,
+  .my-4 {
+    margin-bottom: $space-4 !important;
+  }
+
+  .w-100 {
+    width: 100% !important;
+  }
+
+  .reset-mb {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
   }
 
   /***** button primary *****/
+  .btn {
+    padding: 8px 20px;
+  }
+
   .btn-primary {
     background: $brand !important;
     border: solid 1px $brand !important;
