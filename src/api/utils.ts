@@ -1,5 +1,5 @@
-import { parseDate } from "../utils/dateUtils";
-import { DEFAULT_DATE_TIME_FORMAT, MAX_ATTACHMENT_SIZE } from "../utils/constants";
+import { getTimeLocales } from "../utils/dateUtils";
+import { MAX_ATTACHMENT_SIZE } from "../utils/constants";
 import {
   inputMaxSize,
   inputMinSize,
@@ -96,16 +96,6 @@ const getTicketTypeFields = (typeOptions) => {
   return availableFieldsConfig;
 };
 
-const exampleDate = new Date();
-exampleDate.setHours(14);
-exampleDate.setMinutes(3);
-exampleDate.setSeconds(0);
-exampleDate.setMilliseconds(0);
-const timeLocales = ["en-US", "en-AU", "en-GB", "de-DE", "custom0"].map((iso) => ({
-  iso,
-  name: parseDate(exampleDate, DEFAULT_DATE_TIME_FORMAT, iso),
-}));
-
 const getEditableUserFields = () => [
   { label: "First name", name: "firstname", editable: true },
   { label: "Last name", name: "lastname", editable: true },
@@ -127,7 +117,7 @@ const getEditableUserFields = () => [
     label: "Time locale",
     name: "timelocale",
     editable: true,
-    options: timeLocales.map((timeLocale) => ({
+    options: getTimeLocales().map((timeLocale) => ({
       value: timeLocale.iso,
       name: timeLocale.name,
     })),
