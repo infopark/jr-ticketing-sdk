@@ -6,7 +6,7 @@ import { translate } from "../../utils/translate";
 import { CDN_BASE_PATH } from "../../utils/constants";
 import { callApiPost } from "../../api/portalApiCalls";
 import getUserData from "../../api/getUserData";
-import { formReducer, editableUserFields } from "../../api/utils";
+import { formReducer, getEditableUserFields } from "../../api/utils";
 import { removeUserLanguageHandledFlag } from "../../Components/Auth/utils";
 import ScrollHeader from "./ScrollHeader";
 import EditProfileOverlay from "./EditProfileOverlay";
@@ -140,6 +140,8 @@ Scrivito.provideComponent("ProfilePage", () => {
       removeUserLanguageHandledFlag();
     }
   };
+
+  const editableUserFields = getEditableUserFields();
 
   if (!userData) {
     return null;

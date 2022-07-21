@@ -1,10 +1,12 @@
-import { parseDate } from "../utils/dateUtils";
-import { DEFAULT_DATE_TIME_FORMAT, MAX_ATTACHMENT_SIZE } from "../utils/constants";
+import { getTimeLocales } from "../utils/dateUtils";
+import { MAX_ATTACHMENT_SIZE } from "../utils/constants";
 import {
   inputMaxSize,
   inputMinSize,
   attachmentSize,
 } from "../utils/inputValidations";
+import { getLanguageVersions } from "../utils/page";
+import { translate } from "../utils/translate";
 
 const formReducer = (state, event) => {
   // clear fields array after cancel form
@@ -94,22 +96,7 @@ const getTicketTypeFields = (typeOptions) => {
   return availableFieldsConfig;
 };
 
-const languages = [
-  { iso: "en-GB", name: "English", isoBase: "en" },
-  { iso: "de-DE", name: "Deutsch", isoBase: "de" },
-];
-
-const exampleDate = new Date();
-exampleDate.setHours(14);
-exampleDate.setMinutes(3);
-exampleDate.setSeconds(0);
-exampleDate.setMilliseconds(0);
-const timeLocales = ["en", "en-AU", "en-GB", "de-DE", "custom0"].map((iso) => ({
-  iso,
-  name: parseDate(exampleDate, DEFAULT_DATE_TIME_FORMAT, iso),
-}));
-
-const editableUserFields = [
+const getEditableUserFields = () => [
   { label: "First name", name: "firstname", editable: true },
   { label: "Last name", name: "lastname", editable: true },
   { label: "Position", name: "position", editable: true },
@@ -120,14 +107,17 @@ const editableUserFields = [
     label: "Language",
     name: "language",
     editable: true,
-    options: languages.map((lang) => ({ value: lang.iso, name: lang.name })),
+    options: getLanguageVersions().map((version) => ({
+      value: version.language(),
+      name: translate(version.language() as any)
+    })),
     type: "radio",
   },
   {
     label: "Time locale",
     name: "timelocale",
     editable: true,
-    options: timeLocales.map((timeLocale) => ({
+    options: getTimeLocales().map((timeLocale) => ({
       value: timeLocale.iso,
       name: timeLocale.name,
     })),
@@ -135,4 +125,4 @@ const editableUserFields = [
   },
 ];
 
-export { getTicketTypeFields, formReducer, editableUserFields, languages };
+export { getTicketTypeFields, formReducer, getEditableUserFields };

@@ -9,7 +9,16 @@ import {
 import { getLanguage } from "./translate";
 
 const localeMap = {
-  en: enUS,
+  en: "en-GB",
+  "en-US": "en-US",
+  "en-AU": "en-AU",
+  "en-GB": "en-GB",
+  de: "de-DE",
+  "de-DE": "de-DE",
+};
+
+const localeObjMap = {
+  en: enGB,
   "en-US": enUS,
   "en-AU": enAU,
   "en-GB": enGB,
@@ -24,6 +33,31 @@ const formatsMap = {
     [DEFAULT_TIME_FORMAT]: "HH:mm",
   },
 };
+
+const getTimeLocales = () => {
+  const exampleDate = new Date();
+  exampleDate.setHours(14);
+  exampleDate.setMinutes(3);
+  exampleDate.setSeconds(0);
+  exampleDate.setMilliseconds(0);
+  const timeLocales = ["en-US", "en-AU", "en-GB", "de-DE", "custom0"].map((iso) => ({
+    iso,
+    name: parseDate(exampleDate, DEFAULT_DATE_TIME_FORMAT, iso),
+  }));
+  return timeLocales;
+}
+
+const mapLocale = (locale: string, fallback = "en-GB") => {
+  if (startsWith(locale, "custom")) {
+    return locale;
+  }
+  const result: string = localeMap[locale];
+  if (result) {
+    return result;
+  } else {
+    return fallback;
+  }
+}
 
 const getDateObject = (date) =>
   !(date instanceof Date) ? parseISO(date) : date;
@@ -50,7 +84,7 @@ const getLocale = (locale) => {
 };
 const getNonEmptyLocale = (locale) =>
   (!startsWith(locale, "custom") ? locale : undefined) || getLanguage();
-const getLocaleObject = (locale) => localeMap[locale] || enGB;
+const getLocaleObject = (locale) => localeObjMap[locale] || enGB;
 
 const parseDate = (date, format = DEFAULT_DATE_FORMAT, locale) => {
   const dateObject = getDateObject(date);
@@ -62,4 +96,4 @@ const parseDate = (date, format = DEFAULT_DATE_FORMAT, locale) => {
   return parsedDate;
 };
 
-export { parseDate };
+export { parseDate, getTimeLocales, mapLocale };
