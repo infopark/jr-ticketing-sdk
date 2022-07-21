@@ -1,46 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Scrivito from "scrivito";
-import {
-  setUserLanguageHandledFlag,
-  userLanguageHandled,
-} from "./Auth/utils";
+import { getLanguage, getLanguageVersionForUser, getLinkForVersion } from "../utils/page";
+import { setUserLanguageHandledFlag, userLanguageHandled } from "./Auth/utils";
 import { useUserData } from "./UserDataContext";
 
-const LanguageRedirect = ({ initialLanguage, alternate, defaultAlternate }) => {
+export interface LanguageRedirectParams {
+  initialLanguage: string | null;
+  targetLanguage?: string | null;
+  targetPath?: string | null;
+}
+
+function LanguageRedirectWrapper() {
   const { userData } = useUserData();
-  const userLanguage = userData && userData.language;
-  const userLanguageIsDe = userLanguage && userLanguage.startsWith("de") || false;
-  const userLanguageIsEn = userLanguage && userLanguage.startsWith("en") || false;
-  const wasUserLanguageHandled = userLanguageHandled();
+  const [redirectParams, setRedirectParams] = useState<LanguageRedirectParams|null>(null);
 
-  const shouldRedirect =
-    (!wasUserLanguageHandled &&
-      userLanguageIsDe &&
-      initialLanguage !== "de") ||
-    (!wasUserLanguageHandled &&
-      userLanguageIsEn &&
-      initialLanguage !== "en");
+  useEffect(() => {
+    Scrivito.load(() => {
+      const initialLanguage = getLanguage();
+      const version = getLanguageVersionForUser(userData && userData.language);
+      if (!version) {
+        return null;
+      }
+      const targetLanguage = version.language();
+      const targetPath = stripOrigin(getLinkForVersion(version));
+      return {
+        initialLanguage,
+        targetLanguage,
+        targetPath
+      };
+    }).then((loadedValues) => {
+      setRedirectParams(loadedValues);
+    });
+  }, [userData])
 
-  const shouldRedirectToDefault =
-    !userLanguageIsDe && !userLanguageIsEn && initialLanguage !== "en";
-
-  if (userData && !wasUserLanguageHandled) {
-    setUserLanguageHandledFlag();
-  }
-
-  if (wasUserLanguageHandled || !userLanguage || !alternate) {
+  if (!redirectParams || !userData || userLanguageHandled()) {
     return null;
   }
 
-  if (shouldRedirect && alternate) {
-    window.location.href = alternate;
-    return <></>;
+  setUserLanguageHandledFlag();
+
+  if (redirectParams.initialLanguage === redirectParams.targetLanguage) {
+    return null
   }
 
-  if (shouldRedirectToDefault && defaultAlternate) {
-    window.location.href = defaultAlternate;
-    return <></>;
-  }
-};
+  window.location.href = redirectParams.targetPath!;
 
-export default Scrivito.connect(LanguageRedirect as any) as any;
+  return <></>;
+}
+
+function stripOrigin(url: string): string {
+  if (!url) {
+    return url;
+  }
+  return url.replace(window.location.origin, '');
+}
+
+export default Scrivito.connect(LanguageRedirectWrapper);

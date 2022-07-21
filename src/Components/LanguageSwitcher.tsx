@@ -2,39 +2,29 @@ import React, { useState } from "react";
 import * as Scrivito from "scrivito";
 import classNames from "classnames";
 import { useUserData } from "./UserDataContext";
-import { languages } from "../api/utils";
 import { callApiPost } from "../api/portalApiCalls";
 import getUserData from "../api/getUserData";
 import { translate } from "../utils/translate";
-import { getPageLinkInLanguage, getLanguage } from "../utils/page";
+import { getLanguage, getLanguageVersions, getLinkForVersion } from "../utils/page";
+import { mapLocale } from "../utils/dateUtils";
 
 const LanguageSwitcher = () => {
   const { userData, updateUserData } = useUserData();
-  const [currentLanguage, setCurrentLanguage] = useState<string|null>(null);
-  const [alternate, setAlternate] = useState<string|null>(null);
 
-  Scrivito.load(() => {
-    const lang = getLanguage();
-    const alt =
-      lang &&
-      getPageLinkInLanguage(lang === "en" ? "de" : "en");
-    const availableAlt = alt && !alt.startsWith("#SCRIVITO_UNAVAILABLE");
-    setCurrentLanguage(lang);
-    if (alt && availableAlt) {
-      setAlternate(alt);
-    }
-  });
+  const currentLanguage = getLanguage();
+  const versions = getLanguageVersions();
 
-  if (!alternate) {
+  if (versions.length <= 1) {
     return null;
   }
+
   const persistLanguage = async (lang) => {
-    if (userData.language === lang.iso) {
+    if (userData.language === lang) {
       return;
     }
     const response = await callApiPost(`update-user/${userData.userid}`, {
-      language: lang.iso,
-      timelocale: lang.iso,
+      language: lang,
+      timelocale: mapLocale(lang),
     });
     if (response) {
       if (!response.failedRequest) {
@@ -46,24 +36,24 @@ const LanguageSwitcher = () => {
   return (
     <>
       <hr />
-      {languages.map((lang) => {
-        const link =
-          alternate && new Scrivito.Link({ url: alternate, target: null as any });
+      {versions.map((version) => {
+        const lang = version.language();
+        const link = new Scrivito.Link({ url: getLinkForVersion(version), target: null as any });
         return (
           <Scrivito.LinkTag
-            to={(currentLanguage !== lang.isoBase ? link : Scrivito.currentPage()) as any}
+            to={(currentLanguage !== lang ? link : Scrivito.currentPage()) as any}
             target={null as any}
-            key={lang.isoBase}
-            title={lang.isoBase}
+            key={lang}
+            title={lang}
             onClick={() => persistLanguage(lang)}
           >
             <i
               className={classNames("fa mr-3", {
-                "fa-dot-circle-o": currentLanguage === lang.isoBase,
-                "fa-circle-o": currentLanguage !== lang.isoBase,
+                "fa-dot-circle-o": currentLanguage === lang,
+                "fa-circle-o": currentLanguage !== lang,
               })}
             />
-            <span>{translate(lang.isoBase as any)}</span>
+            <span>{translate(lang as any)}</span>
           </Scrivito.LinkTag>
         );
       })}
