@@ -6,6 +6,7 @@ import { callApiPost } from "../api/portalApiCalls";
 import getUserData from "../api/getUserData";
 import { translate } from "../utils/translate";
 import { getLanguage, getLanguageVersions, getLinkForVersion } from "../utils/page";
+import { mapLocale } from "../utils/dateUtils";
 
 const LanguageSwitcher = () => {
   const { userData, updateUserData } = useUserData();
@@ -23,7 +24,7 @@ const LanguageSwitcher = () => {
     }
     const response = await callApiPost(`update-user/${userData.userid}`, {
       language: lang,
-      timelocale: lang,
+      timelocale: mapLocale(lang),
     });
     if (response) {
       if (!response.failedRequest) {
