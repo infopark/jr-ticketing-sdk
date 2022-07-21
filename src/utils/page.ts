@@ -1,5 +1,6 @@
 import * as Scrivito from "scrivito";
 import { find } from "lodash";
+import { get2LetterLanguage } from "./translate";
 
 const getPage = (className, callback, language) => {
   Scrivito.load(() => {
@@ -38,10 +39,39 @@ const getLanguageVersion = (language) => {
   return find(versions, version => version.language() === language);
 }
 
-const getLinkForVersion = (version) =>{
+const getLinkForVersion = (version) => {
   return Scrivito.urlFor(version, {
     query: window.location.search,
   });
+}
+
+const getLanguageVersionForUser = (userLanguage: string, defaultLanguage = "en"): Scrivito.Obj<any> | undefined => {
+  const versions = getLanguageVersions();
+  let version: Scrivito.Obj<any> | undefined;
+
+  if (userLanguage) {
+    if (!version) {
+      version = find(versions, version => version.language() === userLanguage);
+    }
+    if (!version) {
+      version = find(versions, version => get2LetterLanguage(version.language()) === get2LetterLanguage(userLanguage));
+    }
+  }
+
+  if (defaultLanguage) {
+    if (!version) {
+      version = find(versions, version => version.language() === defaultLanguage);
+    }
+    if (!version) {
+      version = find(versions, version => get2LetterLanguage(version.language()) === get2LetterLanguage(defaultLanguage));
+    }
+  }
+
+  if (!version) {
+    version = versions[0];
+  }
+
+  return version;
 }
 
 export {
@@ -50,5 +80,6 @@ export {
   getPageLinkInLanguage,
   getLanguageVersions,
   getLanguageVersion,
-  getLinkForVersion
+  getLinkForVersion,
+  getLanguageVersionForUser,
 };

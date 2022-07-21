@@ -1,58 +1,51 @@
 import React, { useEffect, useState } from "react";
 import * as Scrivito from "scrivito";
-import { getPageLinkInLanguage, getLanguage } from "../utils/page";
-import LanguageRedirect from "./LanguageRedirect";
+import { getLanguage, getLanguageVersionForUser, getLinkForVersion } from "../utils/page";
+import { setUserLanguageHandledFlag, userLanguageHandled } from "./Auth/utils";
+import { useUserData } from "./UserDataContext";
 
-export interface LanguageRedirectPaths {
+export interface LanguageRedirectParams {
   initialLanguage: string | null;
-  alternatePath?: string | null;
-  defaultPath?: string | null;
+  targetLanguage?: string | null;
+  targetPath?: string | null;
 }
 
 function LanguageRedirectWrapper() {
-  const [readyForRedirect, setReadyForRedirect] = useState(false);
-  const [language, setLanguage] = useState<LanguageRedirectPaths|null>(null);
+  const { userData } = useUserData();
+  const [redirectParams, setRedirectParams] = useState<LanguageRedirectParams|null>(null);
 
   useEffect(() => {
-    Scrivito.load(() : LanguageRedirectPaths => {
-      const lang = getLanguage();
-      const alt =
-        lang &&
-        getPageLinkInLanguage(lang === "en" ? "de" : "en");
-      const defaultAlt = lang && getPageLinkInLanguage("en");
-      const availableAlt = alt && !alt.startsWith("#SCRIVITO_UNAVAILABLE");
-      const availableDefaultAlt =
-        defaultAlt && !defaultAlt.startsWith("#SCRIVITO_UNAVAILABLE");
-      
-      if (alt && defaultAlt && availableAlt && availableDefaultAlt) {
-        return {
-          initialLanguage: lang,
-          alternatePath: stripOrigin(alt),
-          defaultPath: stripOrigin(defaultAlt)
-        };
+    Scrivito.load(() => {
+      const initialLanguage = getLanguage();
+      const version = getLanguageVersionForUser(userData && userData.language);
+      if (!version) {
+        return null;
       }
-
-      return {initialLanguage: lang};
-    }).then((lang: LanguageRedirectPaths) => {
-      setLanguage(lang);
+      const targetLanguage = version.language();
+      const targetPath = stripOrigin(getLinkForVersion(version));
+      return {
+        initialLanguage,
+        targetLanguage,
+        targetPath
+      };
+    }).then((loadedValues) => {
+      setRedirectParams(loadedValues);
     });
-  }, [])
-  
-  useEffect(() => {
-    setReadyForRedirect(language != null);
-  }, [language])
+  }, [userData])
 
-  return (
-    <>
-      {readyForRedirect && (
-        <LanguageRedirect
-          initialLanguage={language && language.initialLanguage}
-          alternate={language && language.alternatePath}
-          defaultAlternate={language && language.defaultPath}
-        />
-      )}
-    </>
-  );
+  if (!redirectParams || !userData || userLanguageHandled()) {
+    return null;
+  }
+
+  setUserLanguageHandledFlag();
+
+  if (redirectParams.initialLanguage === redirectParams.targetLanguage) {
+    return null
+  }
+
+  window.location.href = redirectParams.targetPath!;
+
+  return <></>;
 }
 
 function stripOrigin(url: string): string {
