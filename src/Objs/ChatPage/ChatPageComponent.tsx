@@ -177,6 +177,15 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     [removeRememberedScrollPositions]
   );
 
+  useEffect(() => {
+    saveScrollPosition();
+    window.addEventListener('scroll', saveScrollPosition);
+    return () => {
+      window.removeEventListener('scroll', saveScrollPosition);
+      window.sessionStorage.removeItem("scroll-position");
+    };
+  }, []);
+
   const rememberScrollPosition = () => {
     const scrollPosition = window.sessionStorage.getItem("scroll-position");
     window.sessionStorage.setItem(
@@ -276,4 +285,9 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 function wasTicketCreatedLessThanMsAgo(ticket, diffMs) {
   const d = new Date(ticket && ticket.creationdate);
   return Date.now() - d.getTime() < diffMs;
+}
+
+function saveScrollPosition() {
+  const { pageYOffset } = window;
+  window.sessionStorage.setItem("scroll-position", `${pageYOffset}`);
 }
