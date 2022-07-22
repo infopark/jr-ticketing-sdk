@@ -25,7 +25,9 @@ function EditProfileOverlay({
   show,
   avatarLoading,
 }) {
-  const renderBackdrop = (props) => <div className="mute_bg_2" {...props} />;
+  const renderBackdrop = (props) => (
+    <div className="sdk_mute_bg_2" {...props} />
+  );
   return (
     <Modal
       show={show}
@@ -33,42 +35,44 @@ function EditProfileOverlay({
       renderBackdrop={renderBackdrop}
       autoFocus={false}
     >
-      <section id="overlay">
-        {loading && (
-          <div className="loader_overlay">
-            <Loader bg="bg_color_transparent" />
-          </div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <div className="overlay_content scroll_content">
-            <h2>{translate("profile")}</h2>
-            <div className="inline_form">
-              <EditAvatarImage
-                newAvatar={newAvatar}
-                userAvatarSrc={userAvatarSrc}
-                handleAvatarChange={handleAvatarChange}
-                loading={avatarLoading}
-              />
-              {userDataFields.map((field, index) => (
-                <EditUserDataRow
-                  user={user}
-                  onInputChange={handleInputChange}
-                  label={translate(field.label)}
-                  fieldName={field.name}
-                  key={`edit_user_data_${index}`}
-                  editable={field.editable}
-                  options={field.options}
-                  type={field.type}
-                />
-              ))}
+      <div className="sdk">
+        <section id="overlay">
+          {loading && (
+            <div className="loader_overlay">
+              <Loader bg="bg_color_transparent" />
             </div>
-          </div>
-          <FooterButtons
-            handleCancelEditClick={handleCancelEditClick}
-            disabled={!fieldsArray.length && !avatarChanged}
-          />
-        </form>
-      </section>
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className="overlay_content scroll_content">
+              <h2>{translate("profile")}</h2>
+              <div className="inline_form">
+                <EditAvatarImage
+                  newAvatar={newAvatar}
+                  userAvatarSrc={userAvatarSrc}
+                  handleAvatarChange={handleAvatarChange}
+                  loading={avatarLoading}
+                />
+                {userDataFields.map((field, index) => (
+                  <EditUserDataRow
+                    user={user}
+                    onInputChange={handleInputChange}
+                    label={translate(field.label)}
+                    fieldName={field.name}
+                    key={`edit_user_data_${index}`}
+                    editable={field.editable}
+                    options={field.options}
+                    type={field.type}
+                  />
+                ))}
+              </div>
+            </div>
+            <FooterButtons
+              handleCancelEditClick={handleCancelEditClick}
+              disabled={!fieldsArray.length && !avatarChanged}
+            />
+          </form>
+        </section>
+      </div>
     </Modal>
   );
 }

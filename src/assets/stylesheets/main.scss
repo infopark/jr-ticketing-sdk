@@ -2,6 +2,7 @@
 @import "./tickets-widgets.scss";
 @import "./ticket-list-widget.scss";
 @import "./chat-page.scss";
+@import "./overlay.scss";
 
 .sdk {
   .box {
@@ -272,6 +273,14 @@
     float: right !important;
   }
 
+  .d-inline-block {
+    display: inline-block !important;
+  }
+
+  .d-none {
+    display: none !important;
+  }
+
   .date_bg {
     background: $brand-bg;
     padding: 10px;
@@ -309,6 +318,16 @@
   .mb-4,
   .my-4 {
     margin-bottom: $space-4 !important;
+  }
+
+  .mr-3,
+  .mx-3 {
+    margin-right: $space-3 !important;
+  }
+
+  .mr-2,
+  .mx-2 {
+    margin-right: $space-2 !important;
   }
 
   .w-100 {
@@ -363,4 +382,33 @@
       box-shadow: 0 0 0 0.2rem rgb(73 80 84 / 50%);
     }
   }
+
+  .btn .fa {
+    display: inline-block;
+    color: $dark;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .fa-circle-o:before,
+  label.btn .fa:before {
+    content: "\f10c";
+  }
+
+  .fa-dot-circle-o:before,
+  [type="radio"]:checked + label.btn .fa:before {
+    content: "\f192";
+  }
+}
+
+.sdk_mute_bg_2 {
+  background: rgba(73, 80, 84, 0.8);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 10;
 }

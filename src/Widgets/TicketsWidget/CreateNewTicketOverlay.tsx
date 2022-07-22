@@ -30,7 +30,9 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
     getInitialFieldsData(getTicketTypesAsOptions())
   );
 
-  const renderBackdrop = (props) => <div className="mute_bg_2" {...props} />;
+  const renderBackdrop = (props) => (
+    <div className="sdk_mute_bg_2" {...props} />
+  );
 
   const handleChange = ({ target: { name, value } }) => {
     setFieldsData({

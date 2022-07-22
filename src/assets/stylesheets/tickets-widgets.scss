@@ -11,123 +11,12 @@
     width: 60px;
   }
 
-  .fa {
-    display: inline-block;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
   .ticket-number-box .ticket-number-box-count {
     padding: 7px 0;
   }
 
-  section#overlay {
-    form {
-      display: flex;
-      flex-direction: column;
-      .overlay_content {
-        position: unset;
-        flex-shrink: 1;
-      }
-      #overlay_footer {
-        position: unset;
-      }
-    }
-  }
-
-  /****** overlays ******/
-  #overlay {
-    background: #fff;
-    border-radius: 8px;
-    height: 85vh;
-    left: 5vw;
-    overflow: hidden;
-    position: fixed;
-    top: 12vh;
-    width: 90vw;
-    z-index: 10;
-    @media screen and (min-width: $breakpoint-lg) {
-      left: 10vw;
-      width: 80vw;
-    }
-  }
-
-  #overlay_footer {
-    bottom: 0;
-    left: 0;
-    padding: 14px 20px;
-    position: absolute;
-    width: 100%;
-
-    .attachment_file {
-      background: var(--brand-bg);
-      height: 30px;
-      left: 0;
-      margin: 0;
-      position: absolute;
-      top: -31px;
-      width: 100%;
-    }
-    .btn {
-      width: 100%;
-      &:first-child {
-        margin-bottom: 1rem;
-      }
-      @media screen and (min-width: $breakpoint-md) {
-        margin-right: 0.5rem;
-        width: auto;
-        &:first-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
-  #overlay.ticket-modal-section {
-    height: auto;
-    .overlay_content {
-      height: auto;
-    }
-  }
-
-  .overlay_content {
-    border-top: solid 1px #eae7e3;
-    border-bottom: solid 1px #eae7e3;
-    padding: 20px 20px 50px 20px;
-    height: 65vh;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    @media screen and (min-width: $breakpoint-md) {
-      height: 75vh;
-    }
-    h2 {
-      border-bottom: solid 1px #eae7e3;
-      padding-bottom: 20px;
-    }
-    h3 {
-      margin-top: 50px;
-    }
-  }
-
-  #overlay.ticket-modal-section {
-    height: auto;
-    .overlay_content {
-      height: auto;
-    }
-  }
-
   .ticket-modal-form {
     max-height: 80vh;
-  }
-
-  /****** scroll in div (touch) ******/
-  .scroll_content {
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
   }
 
   .inline_form .item_label {
