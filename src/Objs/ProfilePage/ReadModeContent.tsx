@@ -1,5 +1,5 @@
 import React from "react";
-import { translate } from "../../utils/translate";
+import { isoToLanguageName, translate } from "../../utils/translate";
 import { find } from "lodash";
 
 import AvatarImage from "./AvatarImage";
@@ -36,7 +36,7 @@ const getValue = (field, user) => {
         field.options,
         (option) => option.value === rawValue
       );
-      const value = chosenOption ? translate(chosenOption.name) : rawValue;
+      const value = chosenOption ? chosenOption.name : rawValue;
       return value;
     }
     case "language": {
@@ -44,7 +44,7 @@ const getValue = (field, user) => {
         field.options,
         (option) => option.value === user[field.name]
       );
-      const value = chosenOption ? translate(chosenOption.name) : translate(user[field.name]);
+      const value = chosenOption ? chosenOption.name : isoToLanguageName(user[field.name]);
       return value;
     }
     default: {

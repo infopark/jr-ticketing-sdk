@@ -6,7 +6,7 @@ import {
   attachmentSize,
 } from "../utils/inputValidations";
 import { getLanguageVersions } from "../utils/page";
-import { translate } from "../utils/translate";
+import { isoToLanguageName, translate } from "../utils/translate";
 
 const formReducer = (state, event) => {
   // clear fields array after cancel form
@@ -109,7 +109,7 @@ const getEditableUserFields = () => [
     editable: true,
     options: getLanguageVersions().map((version) => ({
       value: version.language(),
-      name: translate(version.language() as any)
+      name: isoToLanguageName(version.language()!)
     })),
     type: "radio",
   },
