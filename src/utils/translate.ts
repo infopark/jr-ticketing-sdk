@@ -15,14 +15,20 @@ const getDictionary = (localizations, defaultLanguage = "en") => {
   if (!lang) {
     return {};
   }
-  return localizations[get2LetterLanguage(lang)!] || localizations[defaultLanguage] || {};
+  return localizations[get2LetterLanguage(lang)] || localizations[defaultLanguage] || {};
 };
 
 const get2LetterLanguage = (lang: string | null | undefined) => {
-  if (!lang) {
-    return lang;
-  }
   return toLower(split(lang, /[-_]/g)[0]);
+}
+
+const isoToLanguageName = (iso: string) => {
+  try {
+    const name = new Intl.DisplayNames([iso], {type: 'language'}).of(get2LetterLanguage(iso));
+    return name ? name : iso;
+  } catch {
+    return iso;
+  }
 }
 
 const translate = (
@@ -42,4 +48,11 @@ const dictTranslate = (key: string, dict: any) => {
   return result;
 };
 
-export { translate, getLanguage, getDictionary, dictTranslate, get2LetterLanguage };
+export {
+  translate,
+  getLanguage,
+  getDictionary,
+  dictTranslate,
+  get2LetterLanguage,
+  isoToLanguageName
+};
