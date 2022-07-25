@@ -1,0 +1,11 @@
+.sdk {
+  .fa-circle-o:before,
+  label.btn .fa:before {
+    content: "\f10c";
+  }
+
+  .fa-dot-circle-o:before,
+  [type="radio"]:checked + label.btn .fa:before {
+    content: "\f192";
+  }
+}

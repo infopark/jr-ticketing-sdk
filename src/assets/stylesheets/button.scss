@@ -1,0 +1,46 @@
+.sdk {
+  /***** button primary *****/
+  .btn {
+    padding: 8px 20px;
+  }
+
+  .btn-primary {
+    background: $brand !important;
+    border: solid 1px $brand !important;
+    border-radius: 5px;
+    color: #fff !important;
+    margin-bottom: 0;
+    &:hover,
+    &:focus,
+    &:active {
+      background: $brand !important;
+      border: solid 1px $brand !important;
+      color: #fff !important;
+    }
+  }
+
+  /****** button secondary ******/
+  .btn-secondary {
+    border: solid 1px $dark !important;
+    background: none !important;
+    border-radius: 5px;
+    color: $dark !important;
+    margin-bottom: 0;
+    &:hover,
+    &:focus,
+    &:active {
+      border: solid 1px $dark !important;
+      background: none !important;
+      color: $dark !important;
+    }
+  }
+
+  .btn .fa {
+    display: inline-block;
+    color: $dark;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
