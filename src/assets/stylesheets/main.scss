@@ -3,6 +3,10 @@
 @import "./ticket-list-widget.scss";
 @import "./chat-page.scss";
 @import "./overlay.scss";
+@import "./profil.scss";
+@import "./button.scss";
+@import "./icons.scss";
+@import "./spacing.scss";
 
 .sdk {
   .box {
@@ -289,117 +293,6 @@
     @media screen and (min-width: $breakpoint-lg) {
       padding: 20px;
     }
-  }
-
-  .max_width_element {
-    margin: auto;
-    max-width: $max-width;
-  }
-
-  //spacing
-  .pb-2 {
-    padding-bottom: $space-2 !important;
-  }
-
-  .pr-2 {
-    padding-right: $space-2 !important;
-  }
-
-  .mr-lg-2 {
-    @media screen and (min-width: $breakpoint-lg) {
-      margin-right: $space-2 !important;
-    }
-  }
-
-  .ml-4 {
-    margin-left: $space-4 !important;
-  }
-
-  .mb-4,
-  .my-4 {
-    margin-bottom: $space-4 !important;
-  }
-
-  .mr-3,
-  .mx-3 {
-    margin-right: $space-3 !important;
-  }
-
-  .mr-2,
-  .mx-2 {
-    margin-right: $space-2 !important;
-  }
-
-  .w-100 {
-    width: 100% !important;
-  }
-
-  .reset-mb {
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-  }
-
-  /***** button primary *****/
-  .btn {
-    padding: 8px 20px;
-  }
-
-  .btn-primary {
-    background: $brand !important;
-    border: solid 1px $brand !important;
-    border-radius: 5px;
-    color: #fff !important;
-    margin-bottom: 0;
-    &:hover,
-    &:focus,
-    &:active {
-      background: $brand !important;
-      border: solid 1px $brand !important;
-      color: #fff !important;
-    }
-    &:not(:disabled):not(.disabled):active:focus,
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgb(227 94 59 / 50%);
-    }
-  }
-
-  /****** button secondary ******/
-  .btn-secondary {
-    border: solid 1px $dark !important;
-    background: none !important;
-    border-radius: 5px;
-    color: $dark !important;
-    margin-bottom: 0;
-    &:hover,
-    &:focus,
-    &:active {
-      border: solid 1px $dark !important;
-      background: none !important;
-      color: $dark !important;
-    }
-    &:not(:disabled):not(.disabled):active:focus,
-    &:focus {
-      box-shadow: 0 0 0 0.2rem rgb(73 80 84 / 50%);
-    }
-  }
-
-  .btn .fa {
-    display: inline-block;
-    color: $dark;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .fa-circle-o:before,
-  label.btn .fa:before {
-    content: "\f10c";
-  }
-
-  .fa-dot-circle-o:before,
-  [type="radio"]:checked + label.btn .fa:before {
-    content: "\f192";
   }
 }
 
