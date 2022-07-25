@@ -26,7 +26,7 @@ const isoToLanguageName = (iso: string) => {
   try {
     const name = new Intl.DisplayNames([iso], {type: 'language'}).of(get2LetterLanguage(iso));
     return name ? name : iso;
-  } catch {
+  } catch (err) {
     return iso;
   }
 }
