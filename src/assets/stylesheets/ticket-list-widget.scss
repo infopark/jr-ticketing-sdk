@@ -95,4 +95,16 @@
       width: auto;
     }
   }
+
+  .scroll_header {
+    border-left: solid 1px #eae7e3;
+    border-bottom: solid 1px #eae7e3;
+    position: fixed;
+    top: 70px;
+    width: 100%;
+    z-index: 3;
+    @media screen and (min-width: $breakpoint-lg) {
+      top: 60px;
+    }
+  }
 }

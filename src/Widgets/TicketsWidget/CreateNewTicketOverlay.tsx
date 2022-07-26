@@ -148,7 +148,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
       <div className="sdk sdk-tickets-widget">
         <section id="overlay" className="ticket-modal-section">
           {loading && (
-            <div className="loader_overlay">
+            <div className="sdk loader_overlay">
               <Loader bg="bg_color_transparent" />
             </div>
           )}
