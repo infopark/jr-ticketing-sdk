@@ -54,10 +54,10 @@
 
   body.helpdesk_content .page_content {
     margin-bottom: 150px;
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: $breakpoint-md) {
       margin-bottom: 100px;
     }
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       margin-bottom: 50px;
     }
   }
@@ -78,7 +78,7 @@
     margin-bottom: 10px;
     min-width: auto;
     width: 100%;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       min-width: 250px;
       width: auto;
     }
@@ -94,7 +94,7 @@
     margin: auto;
     padding-bottom: 10px;
     width: 100%;
-    @media screen and (min-width: 922px) {
+    @media screen and (min-width: $breakpoint-lg) {
       width: calc(100% - 230px);
     }
   }
@@ -110,7 +110,7 @@
     min-height: 100px;
     overflow: hidden;
     position: relative;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       margin-top: 0;
     }
   }
@@ -118,10 +118,10 @@
   .com_content {
     min-height: 120px;
     width: calc(100% - 50px);
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: $breakpoint-md) {
       width: calc(100% - 70px);
     }
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       width: calc(100% - 220px);
     }
     h4 {
@@ -133,7 +133,7 @@
   .left_com .com_content {
     float: right;
     margin-right: 0;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       margin-right: 110px;
     }
   }
@@ -146,7 +146,7 @@
   .right_com .com_content {
     float: left;
     margin-left: 0;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       margin-left: 110px;
     }
   }
@@ -159,10 +159,12 @@
   .com_date {
     color: #888;
     font-size: 18px;
+    margin-top: 2rem;
     margin-bottom: 1.5rem;
     padding: 30px 0 30px 0;
     position: relative;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
+      margin-top: 0;
       padding: 50px 0 50px 0;
     }
   }
@@ -182,7 +184,7 @@
     padding: 10px;
     position: relative;
     z-index: 2;
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       padding: 20px;
     }
   }
@@ -190,20 +192,20 @@
   .com_tree .person_list_img {
     bottom: auto;
     width: 40px;
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: $breakpoint-md) {
       width: 60px;
     }
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $breakpoint-lg) {
       width: 90px;
     }
     .wrapper_img_profil {
       height: 40px;
       width: 40px;
-      @media screen and (min-width: 768px) {
+      @media screen and (min-width: $breakpoint-md) {
         height: 60px;
         width: 60px;
       }
-      @media screen and (min-width: 992px) {
+      @media screen and (min-width: $breakpoint-lg) {
         height: 90px;
         width: 90px;
       }
@@ -344,10 +346,10 @@
     .textfield_btn {
       margin-top: 20px;
       order: 2;
-      @media screen and (min-width: 768px) {
+      @media screen and (min-width: $breakpoint-md) {
         display: flex;
       }
-      @media screen and (min-width: 992px) {
+      @media screen and (min-width: $breakpoint-lg) {
         display: block;
         margin-top: 0;
       }
@@ -356,15 +358,15 @@
         width: 100%;
         &:first-child {
           margin-bottom: 1rem;
-          @media screen and (min-width: 768px) {
+          @media screen and (min-width: $breakpoint-md) {
             margin-bottom: 0;
             margin-right: 1rem;
           }
-          @media screen and (min-width: 992px) {
+          @media screen and (min-width: $breakpoint-lg) {
             margin-left: 10px;
           }
         }
-        @media screen and (min-width: 992px) {
+        @media screen and (min-width: $breakpoint-lg) {
           width: auto;
         }
       }
