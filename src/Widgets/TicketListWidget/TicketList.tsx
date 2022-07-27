@@ -20,7 +20,7 @@ function TicketList({
 }) {
   if (loading) {
     return (
-      <div className="loader_overlay">
+      <div className="sdk loader_overlay">
         <Loader bg="bg_color_transparent" />
       </div>
     );

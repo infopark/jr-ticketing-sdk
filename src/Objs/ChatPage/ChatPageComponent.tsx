@@ -180,9 +180,9 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 
   useEffect(() => {
     saveScrollPosition();
-    window.addEventListener('scroll', saveScrollPosition);
+    window.addEventListener("scroll", saveScrollPosition);
     return () => {
-      window.removeEventListener('scroll', saveScrollPosition);
+      window.removeEventListener("scroll", saveScrollPosition);
       window.sessionStorage.removeItem("scroll-position");
     };
   }, []);
@@ -228,7 +228,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 
   if (isNil(activeTicket)) {
     return (
-      <div className="white-bg-loader">
+      <div className="sdk white-bg-loader">
         <Loader />
       </div>
     );

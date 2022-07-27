@@ -7,6 +7,7 @@
 @import "./button.scss";
 @import "./icons.scss";
 @import "./spacing.scss";
+@import "./loader.scss";
 
 .sdk {
   .box {
@@ -293,6 +294,11 @@
     @media screen and (min-width: $breakpoint-lg) {
       padding: 20px;
     }
+  }
+
+  /****** animatin ******/
+  .animate {
+    transition: 0.3s cubic-bezier(0.1, 0.02, 0.2, 1) !important;
   }
 }
 
