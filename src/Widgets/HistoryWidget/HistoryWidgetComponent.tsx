@@ -10,7 +10,7 @@ Scrivito.provideComponent("HistoryWidget", (({ widget }) => {
   const visitedPages = JSON.parse(visitedPagesString as any);
   const headline = visitedPages.length ? "headline" : "initialHeadline";
   return (
-    <Scrivito.WidgetTag className="row">
+    <Scrivito.WidgetTag className="row sdk">
       <div className="col-lg-12 box space_box">
         <div className="box_bg_white">
           <header className="box_header">
@@ -22,7 +22,8 @@ Scrivito.provideComponent("HistoryWidget", (({ widget }) => {
           </header>
           <ul className="icon_list">
             {visitedPages.length
-              ? visitedPages && visitedPages.map((obj, index) => {
+              ? visitedPages &&
+                visitedPages.map((obj, index) => {
                   const { url, title, pageType, query } = obj;
                   const link = new Scrivito.Link({
                     url,
@@ -41,7 +42,8 @@ Scrivito.provideComponent("HistoryWidget", (({ widget }) => {
                     />
                   );
                 })
-              : links && links.map((link, index) => (
+              : links &&
+                links.map((link, index) => (
                   <HistoryListEntry
                     key={`hk_${index}`}
                     link={link}

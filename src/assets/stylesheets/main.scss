@@ -8,11 +8,28 @@
 @import "./icons.scss";
 @import "./spacing.scss";
 @import "./loader.scss";
+@import "./img.scss";
 
 .sdk {
   .box {
     padding: $box-padding;
     position: relative;
+  }
+
+  .box_header {
+    background: #f7f6f4;
+    min-height: 50px;
+    padding: 20px;
+
+    h3 {
+      font-size: 16px;
+      margin: 0 0 10px 0;
+      line-height: 26px;
+      @media screen and (min-width: 992px) {
+        line-height: 24px;
+        margin: 0;
+      }
+    }
   }
 
   a.box {
