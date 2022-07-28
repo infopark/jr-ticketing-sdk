@@ -69,7 +69,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   );
 
   return (
-    <Scrivito.WidgetTag className="ticket-list-widget sdk sdk-ticket-list-widget">
+    <Scrivito.WidgetTag className="ticket-list-widget sdk">
       <TicketListBoxHeader
         widget={widget}
         handleSort={handleSort}
