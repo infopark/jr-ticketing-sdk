@@ -5,8 +5,8 @@ function TicketNumberBox({ number, link, className, todoBox, text }) {
   return (
     <div className={`${className} box space_box text_center ticket-number-box`}>
       <div className="box_bg_white equal_target h-100">
-        <Scrivito.LinkTag to={link} className="box block equal_target">
-          <span className="h1 brand_color block ticket-number-box-count">
+        <Scrivito.LinkTag to={link} className="box d-block equal_target">
+          <span className="h1 brand_color d-block ticket-number-box-count">
             {number}
           </span>
           <span className="block">{text}</span>

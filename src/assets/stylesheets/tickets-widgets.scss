@@ -1,0 +1,25 @@
+.sdk {
+  .custom_plus {
+    background: $white;
+    border-radius: 100%;
+    color: var(--bs-primary, grey);
+    font-size: 20px !important;
+    height: 60px;
+    margin-bottom: 10px;
+    text-align: center;
+    padding-top: 20px;
+    width: 60px;
+  }
+
+  .ticket-number-box .ticket-number-box-count {
+    padding: 7px 0;
+  }
+
+  .ticket-modal-form {
+    max-height: 80vh;
+  }
+
+  .inline_form .item_label {
+    margin-top: 9px;
+  }
+}

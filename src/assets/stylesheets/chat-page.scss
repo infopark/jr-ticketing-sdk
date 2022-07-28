@@ -1,0 +1,374 @@
+.sdk {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .ticket_info .content_padding {
+    padding: 0;
+  }
+
+  .ticket_info .info_item {
+    margin: 0;
+  }
+
+  .on_progress {
+    color: $crm;
+  }
+
+  .nav_header {
+    background: #f3f1ed;
+    overflow: hidden;
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    .content_padding {
+      padding: 0 20px;
+    }
+    ul {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+      overflow: hidden;
+      li {
+        cursor: pointer;
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        margin-right: 20px;
+      }
+      li.active {
+        border-bottom: solid 4px $brand;
+      }
+    }
+  }
+
+  .content_padding {
+    padding: 20px;
+  }
+
+  .profile_content .page_content {
+    margin: 50px 0 0 0;
+  }
+
+  body.helpdesk_content .page_content {
+    margin-bottom: 150px;
+    @media screen and (min-width: $breakpoint-md) {
+      margin-bottom: 100px;
+    }
+    @media screen and (min-width: $breakpoint-lg) {
+      margin-bottom: 50px;
+    }
+  }
+
+  .wrapper_box {
+    margin-bottom: 20px;
+  }
+
+  .box_bg_white {
+    background: #fff !important;
+    border-radius: 0;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
+  /****** tables ******/
+  .item_label {
+    margin-bottom: 10px;
+    min-width: auto;
+    width: 100%;
+    @media screen and (min-width: $breakpoint-lg) {
+      min-width: 250px;
+      width: auto;
+    }
+  }
+
+  .table_style + .table_style {
+    margin-top: 20px;
+  }
+
+  /**** com tree ****/
+  .description_box {
+    border-bottom: solid 2px #fff;
+    margin: auto;
+    padding-bottom: 10px;
+    width: 100%;
+    @media screen and (min-width: $breakpoint-lg) {
+      width: calc(100% - 230px);
+    }
+  }
+
+  .com_tree {
+    overflow: hidden;
+  }
+
+  .left_com,
+  .right_com {
+    margin-bottom: 1.5rem;
+    margin-top: 15px;
+    min-height: 100px;
+    overflow: hidden;
+    position: relative;
+    @media screen and (min-width: $breakpoint-lg) {
+      margin-top: 0;
+    }
+  }
+
+  .com_content {
+    min-height: 120px;
+    width: calc(100% - 50px);
+    @media screen and (min-width: $breakpoint-md) {
+      width: calc(100% - 70px);
+    }
+    @media screen and (min-width: $breakpoint-lg) {
+      width: calc(100% - 220px);
+    }
+    h4 {
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .left_com .com_content {
+    float: right;
+    margin-right: 0;
+    @media screen and (min-width: $breakpoint-lg) {
+      margin-right: 110px;
+    }
+  }
+
+  .left_com .person_list_img {
+    left: 0;
+    right: auto;
+  }
+
+  .right_com .com_content {
+    float: left;
+    margin-left: 0;
+    @media screen and (min-width: $breakpoint-lg) {
+      margin-left: 110px;
+    }
+  }
+
+  .right_com .person_list_img {
+    left: auto;
+    right: 0;
+  }
+
+  .com_date {
+    color: #888;
+    font-size: 18px;
+    margin-top: 5rem;
+    margin-bottom: 1.5rem;
+    padding: 30px 0 30px 0;
+    position: relative;
+    @media screen and (min-width: $breakpoint-lg) {
+      padding: 50px 0 50px 0;
+    }
+  }
+
+  .time_line {
+    border-right: solid 1px #bbb;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 50%;
+    z-index: 1;
+  }
+
+  .date_bg {
+    background: var(--brand-bg);
+    padding: 10px;
+    position: relative;
+    z-index: 2;
+    @media screen and (min-width: $breakpoint-lg) {
+      padding: 20px;
+    }
+  }
+
+  .com_tree .person_list_img {
+    bottom: auto;
+    width: 40px;
+    @media screen and (min-width: $breakpoint-md) {
+      width: 60px;
+    }
+    @media screen and (min-width: $breakpoint-lg) {
+      width: 90px;
+    }
+    .wrapper_img_profil {
+      height: 40px;
+      width: 40px;
+      @media screen and (min-width: $breakpoint-md) {
+        height: 60px;
+        width: 60px;
+      }
+      @media screen and (min-width: $breakpoint-lg) {
+        height: 90px;
+        width: 90px;
+      }
+    }
+  }
+
+  .time_stamp {
+    color: #888;
+    white-space: nowrap;
+  }
+
+  .com_content {
+    img {
+      display: block;
+      margin: 25px auto;
+      max-width: 100%;
+    }
+    img.nav_img {
+      left: 10px;
+      margin: 0;
+      margin-bottom: 0;
+      position: absolute;
+      top: 16px;
+    }
+  }
+
+  .attachment_section {
+    background: rgba(255, 255, 255, 0.7);
+    line-height: 41px;
+    margin-top: 10px;
+    overflow: hidden;
+    padding: 10px 10px 10px 50px;
+    position: relative;
+  }
+
+  .collapsebox_content {
+    background: rgba(255, 255, 255, 0.7);
+    display: none;
+    padding: 0 10px 10px 10px;
+  }
+
+  .collapsebox_content img {
+    margin: 0;
+  }
+
+  /* code */
+  .code-sample {
+    margin: 15px 0;
+  }
+
+  .btn.attachment-delete {
+    margin-left: 0.5em;
+
+    &.image {
+      margin-right: 0.5em;
+      margin-bottom: 0.5em;
+    }
+  }
+
+  a.btn.image {
+    margin-bottom: 0.5em;
+  }
+
+  .com_content img.attachment_img {
+    max-width: 360px;
+    margin: 25px 0 0 !important;
+  }
+
+  /****** profile image list *****/
+  .person_list {
+    list-style: none;
+    li {
+      position: relative;
+      padding: 13px 15px 10px 80px;
+      height: 75px;
+      border-top: solid 2px $gray-300;
+
+      a {
+        color: $dark;
+      }
+    }
+  }
+
+  .person_list_img {
+    position: absolute;
+    left: 15px;
+    width: 100px;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .person_list_img {
+    img {
+      width: 100%;
+    }
+  }
+
+  .wrapper_img_profil {
+    display: block;
+    height: 100px;
+    position: relative;
+    width: 100px;
+  }
+
+  .img_cover {
+    background: $img-cover-color;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    position: absolute;
+    width: 100%;
+  }
+
+  .message_box {
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    background: $white;
+    border-left: solid 1px #eae7e3;
+    bottom: 0px;
+    height: auto;
+    left: 0;
+    padding: 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+    transition-property: all;
+    transition-duration: 200ms;
+  }
+
+  .textfield {
+    flex: auto;
+    order: 1;
+    padding-right: 20px;
+    width: auto;
+  }
+
+  .message_box {
+    .textfield_btn {
+      margin-top: 20px;
+      order: 2;
+      @media screen and (min-width: $breakpoint-md) {
+        display: flex;
+      }
+      @media screen and (min-width: $breakpoint-lg) {
+        display: block;
+        margin-top: 0;
+      }
+      .btn {
+        margin-left: 0;
+        width: 100%;
+        &:first-child {
+          margin-bottom: 1rem;
+          @media screen and (min-width: $breakpoint-md) {
+            margin-bottom: 0;
+            margin-right: 1rem;
+          }
+          @media screen and (min-width: $breakpoint-lg) {
+            margin-left: 10px;
+          }
+        }
+        @media screen and (min-width: $breakpoint-lg) {
+          width: auto;
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,10 @@ import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 import { isImageFormat } from "../../../utils/isImage";
 import Loader from "../../../Components/Loader";
-import { DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT } from "../../../utils/constants";
+import {
+  DEFAULT_DATE_FORMAT,
+  DEFAULT_TIME_FORMAT,
+} from "../../../utils/constants";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { useUserData } from "../../../Components/UserDataContext";
 import { translate } from "../../../utils/translate";
@@ -32,7 +35,8 @@ const CommunicationTree = ({
   const { userData } = useUserData();
   const messagesEndRef = useRef(null as any);
   const scrollToBottom = () => {
-    messagesEndRef.current && messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    messagesEndRef.current &&
+      messagesEndRef.current.scrollIntoView({ behavior: "auto" });
   };
 
   const isAttachmentsMode = mode === "attachments";
@@ -78,7 +82,11 @@ const CommunicationDayTree = ({
 }) => {
   const { userData } = useUserData();
   const days = groupBy(communications, (message) =>
-    parseDate(message.creationdate, DEFAULT_DATE_FORMAT, userData && userData.timelocale)
+    parseDate(
+      message.creationdate,
+      DEFAULT_DATE_FORMAT,
+      userData && userData.timelocale
+    )
   );
   const loggedUserId = loggedUserData.userid;
 
@@ -326,7 +334,7 @@ const Placeholder = ({ show }) => {
         <img src={avatarSrc} alt="User avatar" className="img_cover" />
       </span>
       <div className="com_content">
-        <div className="box_bg_white box">
+        <div className="sdk box_bg_white box">
           <Loader comp="chat" />
         </div>
       </div>

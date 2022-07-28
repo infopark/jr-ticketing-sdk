@@ -1,7 +1,11 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./src/index.ts",
+  entry: {
+    index: "./src/index.ts",
+    cssBundle: "./src/assets/stylesheets/main.scss",
+  },
   module: {
     rules: [
       {
@@ -20,10 +24,22 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.s?css$/,
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          "css-loader",
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.(eot|ttf|woff|woff2)$/,
+        type: "asset/resource",
+      },
     ],
   },
   resolve: {
-    extensions: [".ts", ".js", ".tsx"],
+    extensions: [".ts", ".js", ".tsx", ".scss"],
   },
   externals: {
     "@honeybadger-io/js": "@honeybadger-io/js",
@@ -40,10 +56,15 @@ module.exports = {
     "react-overlays": "react-overlays",
     "sanitize-html": "sanitize-html",
     scrivito: "scrivito",
-    "uuid": "uuid",
+    uuid: "uuid",
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+    }),
+  ],
   output: {
-    filename: "index.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
     publicPath: path.resolve(__dirname, "dist"),
     libraryTarget: "umd",

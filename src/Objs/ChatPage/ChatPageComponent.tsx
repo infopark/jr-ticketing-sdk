@@ -44,7 +44,8 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
           JSON.stringify({
             action: "registerTicketId",
             ticketId: ticketid,
-            instanceId: process.env.API_INSTANCE_ID || "00000000000000000000000000000000",
+            instanceId:
+              process.env.API_INSTANCE_ID || "00000000000000000000000000000000",
           })
         );
       };
@@ -179,9 +180,9 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 
   useEffect(() => {
     saveScrollPosition();
-    window.addEventListener('scroll', saveScrollPosition);
+    window.addEventListener("scroll", saveScrollPosition);
     return () => {
-      window.removeEventListener('scroll', saveScrollPosition);
+      window.removeEventListener("scroll", saveScrollPosition);
       window.sessionStorage.removeItem("scroll-position");
     };
   }, []);
@@ -227,7 +228,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 
   if (isNil(activeTicket)) {
     return (
-      <div className="white-bg-loader">
+      <div className="sdk white-bg-loader">
         <Loader />
       </div>
     );
@@ -246,7 +247,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 
   return (
     <>
-      <div className="col-lg-12">
+      <div className="col-lg-12 sdk sdk-chat-page">
         <CombinedTicketNav
           ticket={activeTicket}
           mode={mode}
