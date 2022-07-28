@@ -145,7 +145,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
       renderBackdrop={renderBackdrop}
       autoFocus={false}
     >
-      <div className="sdk sdk-tickets-widget">
+      <div className="sdk">
         <section id="overlay" className="ticket-modal-section">
           {loading && (
             <div className="sdk loader_overlay">
