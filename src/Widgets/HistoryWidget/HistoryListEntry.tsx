@@ -9,7 +9,6 @@ import { callApiPost } from "../../api/portalApiCalls";
 
 const HistoryListEntry = ({ link, title, pageType, query }) => {
   const [ticketName, setTicketName] = useState(null);
-
   const setTicketData = useCallback((ticketUpdate) => {
     async function setTicketFromId({ ticketId, canceled }) {
       try {
@@ -69,26 +68,34 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
       icon: documentationIcon,
       name: translate("Documentation"),
     },
+    Page: {
+      icon: academyIcon,
+      name: "Page",
+    },
+    Homepage: {
+      icon: documentationIcon,
+      name: "Homepage",
+    },
+    default: {
+      icon: documentationIcon,
+      name: "unknown page type",
+    },
   };
+  const pageTypeIcon =
+    pageType && typeMapping[pageType]
+      ? typeMapping[pageType].icon
+      : typeMapping.default.icon;
+  const pageTypeName =
+    pageType && typeMapping[pageType]
+      ? typeMapping[pageType].name
+      : typeMapping.default.name;
   return (
     <li>
       <Scrivito.LinkTag to={link}>
-        <img
-          src={
-            pageType
-              ? typeMapping[pageType] && typeMapping[pageType].icon
-              : typeMapping.TrainingPage.icon
-          }
-          alt="chapter icon"
-          className="nav_img"
-        />
+        <img src={pageTypeIcon} alt="chapter icon" className="nav_img" />
         <i className="fa fa-angle-right" aria-hidden="true"></i>
         <span className="dots">{title || ticketName}</span>
-        <small className="block dots">
-          {pageType
-            ? typeMapping[pageType] && typeMapping[pageType].name
-            : typeMapping.TrainingPage.name}
-        </small>
+        <small className="block dots">{pageTypeName}</small>
       </Scrivito.LinkTag>
     </li>
   );

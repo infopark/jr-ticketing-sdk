@@ -4,17 +4,7 @@ const HistoryWidget = Scrivito.provideWidgetClass("HistoryWidget", {
   attributes: {
     headline: "string",
     initialHeadline: "string",
-    links: [
-      "referencelist",
-      {
-        only: [
-          "TrainingPage",
-          "TrainingHomePage",
-          "DocumentationHomePage",
-          "DocumentationPage",
-        ],
-      },
-    ],
+    links: "referencelist",
   },
   extractTextAttributes: ["headline"],
 });
