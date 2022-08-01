@@ -3,7 +3,11 @@ import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
-import { translate, getDictionary, dictTranslate } from "../../../utils/translate";
+import {
+  translate,
+  getDictionary,
+  dictTranslate,
+} from "../../../utils/translate";
 import { callApiPost } from "../../../api/portalApiCalls";
 import { useUserData } from "../../../Components/UserDataContext";
 import PageContentWrapper from "./PageContentWrapper";
@@ -41,6 +45,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
   return (
     <PageContentWrapper>
       <InnerPageContentWrapper additionalBoxClass="box_bg_white">
+        {/* extract this into a separate component and make it as a default  */}
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
             {translate("Ticket title")}
@@ -88,7 +93,11 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             {translate("Creation date")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {parseDate(creationdate, DEFAULT_DATE_FORMAT, userData && userData.timelocale)}
+            {parseDate(
+              creationdate,
+              DEFAULT_DATE_FORMAT,
+              userData && userData.timelocale
+            )}
           </dd>
         </dl>
       </InnerPageContentWrapper>
