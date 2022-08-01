@@ -247,7 +247,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
 
   return (
     <>
-      <div className="col-lg-12 sdk sdk-chat-page">
+      <div className="col-lg-12 sdk sdk-ticket-details">
         <CombinedTicketNav
           ticket={activeTicket}
           mode={mode}

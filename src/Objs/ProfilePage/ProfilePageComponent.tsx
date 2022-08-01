@@ -148,7 +148,7 @@ Scrivito.provideComponent("ProfilePage", () => {
   }
 
   return (
-    <div className="col-lg-12 sdk">
+    <div className="col-lg-12 sdk sdk-profil">
       <ScrollHeader
         buttonText={translate("back")}
         onClick={() => {
