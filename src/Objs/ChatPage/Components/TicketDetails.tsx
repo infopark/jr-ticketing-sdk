@@ -45,7 +45,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
   return (
     <PageContentWrapper>
       <InnerPageContentWrapper additionalBoxClass="box_bg_white">
-        {/* extract this into a separate component and make it as a default  */}
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
             {translate("Ticket title")}
