@@ -69,6 +69,7 @@ module.exports = {
     publicPath: path.resolve(__dirname, "dist"),
     libraryTarget: "umd",
     library: "jr-customer-portal-sdk",
+    globalObject: "this",
   },
   mode: "production",
 };
