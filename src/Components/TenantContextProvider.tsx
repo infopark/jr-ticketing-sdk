@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import {
   each,
@@ -64,6 +65,7 @@ export function TenantContextProvider(props) {
 
   useEffect(() => {
     const loadLocalization = async () => {
+      const config = { withCredentials: true };
       if (!readySalesMeta) {
         return;
       }
@@ -71,6 +73,17 @@ export function TenantContextProvider(props) {
       const localizationFile = `sales_idns${
         localizationTimestamp ? `_${localizationTimestamp}` : ""
       }.json`;
+
+
+      try {
+        const result = await axios
+          .get(`${CDN_BASE_PATH}/cdn/i18ns/${instanceId}/${localizationFile}`, config)
+          .then((response) => console.log(response.data));
+        return result;
+      } catch (error: any) {
+        console.log("ERROR AXIOS")
+      }
+
 
       try {
         const localizationResponse = await fetch(

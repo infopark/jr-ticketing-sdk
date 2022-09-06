@@ -11,7 +11,7 @@ const isLocalhost = () => {
   return false;
 }
 
-const CDN_BASE_PATH = process.env.SCRIVITO_ORIGIN || window.location.origin;
+const CDN_BASE_PATH = process.env.CUSTOMER_PORTAL_SDK_CDN_URL || window.location.origin;
 
 const MAX_ATTACHMENT_SIZE = 20000000;
 

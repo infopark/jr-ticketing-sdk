@@ -12,7 +12,7 @@ To build the package run the following in your shell:
 npm run build
 ```
 
-## Install 
+## Install
 
 To install the package to your project run the following in your shell:
 
@@ -54,6 +54,7 @@ In your webpack.config.js add the following to the `EnvironmentPlugin`:
 
 ```bash
 JUST_RELATE_SITE_ORIGIN: "",
+CUSTOMER_PORTAL_SDK_CDN_URL: "",
 SCRIVITO_PRERENDER: "",
 AUTH_CLIENT_ID: "",
 AUTH_DOMAIN: "",
@@ -64,6 +65,7 @@ API_INSTANCE_ID: "",
 WS_API_BASE_URL: "",
 API_DEPLOYMENT_STAGE: "",
 ```
+
 
 ### Styles
 
