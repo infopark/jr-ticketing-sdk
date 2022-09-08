@@ -88,6 +88,17 @@ And the following to the `devServer`:
 
 ```bash
 proxy: {
+  "/cdn": {
+    secure: false,
+    changeOrigin: true,
+    target: process.env.DEVELOP_ORIGINAL_CDN_TARGET_URL,
+    onProxyReq(request) {
+      request.setHeader(
+        "X-JR-API-Location",
+        `http://localhost:${process.env.DEV_SERVER_PORT}`
+      );
+    },
+  },
   "/iam": {
     secure: false,
     changeOrigin: true,
