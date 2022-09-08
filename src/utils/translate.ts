@@ -1,10 +1,14 @@
 import { startsWith, split, toLower } from "lodash";
 import * as Scrivito from "scrivito";
 import translations from "./translations";
+const DEFAULT_LANGUAGE = "en";
 
 const getLanguage = () => {
   const current = Scrivito.currentPage();
-  return current && current.language();
+  if (current) {
+    return current.language() || DEFAULT_LANGUAGE;
+  }
+  return DEFAULT_LANGUAGE;
 };
 
 const getDictionary = (localizations, defaultLanguage = "en") => {
