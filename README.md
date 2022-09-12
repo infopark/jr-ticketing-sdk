@@ -95,7 +95,7 @@ proxy: {
     onProxyReq(request) {
       request.setHeader(
         "X-JR-API-Location",
-        `http://localhost:${process.env.DEV_SERVER_PORT}`
+        `http://localhost:${DEV_SERVER_PORT}`
       );
     },
   },
