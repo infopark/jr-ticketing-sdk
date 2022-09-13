@@ -26,7 +26,7 @@ npm install jr-customer-portal-sdk
 
 In your App.js you should include the following:
 
-```bash
+```javascript
 import {
   UserDataProvider,
   TenantContextProvider,
@@ -37,7 +37,7 @@ import {
 
 It could look for example like:
 
-```bash
+```javascript
 <ErrorAPIProvider>
   <UserDataProvider>
     <TenantContextProvider>
@@ -52,7 +52,7 @@ It could look for example like:
 
 In your webpack.config.js add the following to the `EnvironmentPlugin`:
 
-```bash
+```javascript
 JUST_RELATE_SITE_ORIGIN: "",
 CUSTOMER_PORTAL_SDK_CDN_URL: "",
 SCRIVITO_PRERENDER: "",
@@ -71,27 +71,34 @@ API_DEPLOYMENT_STAGE: "",
 
 In index.scss add the following:
 
-```bash
+```javascript
 @import "~jr-customer-portal-sdk/dist/cssBundle.css";
 ```
 
 ### Proxy for local Development
 
+In your .env add the following:
+
+```
+CUSTOMER_PORTAL_SDK_CDN_URL=https://jr-customer-portal-develop.justrelate.io
+```
+
 In your webpack.config.js add the following to the top:
 
-```bash
+```javascript
 const DEV_SERVER_PORT = 8080;
 const API_TARGET_URL = "https://api.justrelate.com/";
+const CDN_TARGET_URL = "https://jr-customer-portal-develop.justrelate.io";
 ```
 
 And the following to the `devServer`:
 
-```bash
+```javascript
 proxy: {
   "/cdn": {
     secure: false,
     changeOrigin: true,
-    target: process.env.DEVELOP_ORIGINAL_CDN_TARGET_URL,
+    target: CDN_TARGET_URL,
     onProxyReq(request) {
       request.setHeader(
         "X-JR-API-Location",
@@ -127,7 +134,7 @@ proxy: {
 
 There is a badge displaying information about the logged in user and offering some functionality like logout and language switch. It needs to be imported and included in some component, preferably a header:
 
-```bash
+```javascript
 import { UserProfile } from "jr-customer-portal-sdk";
 …
 <UserProfile />
@@ -137,7 +144,7 @@ import { UserProfile } from "jr-customer-portal-sdk";
 
 There is a component that offers automated redirects to the preferred language of a user. It needs to be imported and included in some component that gets always rendered, for example a header:
 
-```bash
+```javascript
 import { LanguageRedirect } from "jr-customer-portal-sdk";
 …
 <LanguageRedirect />
