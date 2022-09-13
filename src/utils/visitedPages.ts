@@ -1,7 +1,7 @@
 import * as Scrivito from "scrivito";
 import { some } from "lodash-es";
 
-const storage = window.localStorage;
+const storage = typeof window !== "undefined" ? window.localStorage : {getItem: () => {}, setItem: () => {}};
 
 const trackedPageTypes = ["TrainingPage", "ChatPage"];
 
