@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Scrivito from "scrivito";
 import { translate } from "../../utils/translate";
-import { callApiPost } from "../../api/portalApiCalls";
+import { callApiGet } from "../../api/portalApiCalls";
 import useAPIError from "../../utils/useAPIError";
 import { createDefaultTicketListFilter } from "../../utils/listFilters";
 import TicketNumberBox from "./TicketNumberBox";
@@ -9,7 +9,7 @@ import CreateNewTicket from "./CreateNewTicket";
 import { getUserUuid } from "../../Components/Auth/utils";
 import { useTenantLocalization } from "../../Components/TenantContextProvider";
 
-const FORM_FIELDS = ["tickettype", "title", "description", "attachment"];
+const FORM_FIELDS = ["type", "title", "description", "attachment"];
 
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
@@ -18,7 +18,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const { isTicketStatusClosed } = useTenantLocalization();
 
   useEffect(() => {
-    callApiPost(`get-tickets/${userUUID}`, {})
+    callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
       .then((response) => {
         if (!response.failedRequest) {
           const defaultFilter =

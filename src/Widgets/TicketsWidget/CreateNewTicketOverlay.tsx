@@ -1,6 +1,7 @@
 import React, { useState, useReducer } from "react";
 import * as Scrivito from "scrivito";
 import { trim } from "lodash";
+
 import Loader from "../../Components/Loader";
 import Modal from "react-overlays/Modal";
 import { translate } from "../../utils/translate";
@@ -15,20 +16,15 @@ import TextareaField from "./TextareaField";
 import newlinesToBreaks from "../../utils/newlinesToBreaks";
 
 function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
-  const { getInitialTicketStatusOpen, getTicketTypesAsOptions } =
-    useTenantContext();
+  const { getInitialTicketStatusOpen, getTicketTypesAsOptions } = useTenantContext();
   const [loading, setLoading] = useState(false);
-  const [uploadId, setUploadId] = useState<number | null>(null);
   const [attachmentLoading, setAttachmentLoading] = useState(false);
   const [attachmentFileName, setAttachmentFileName] = useState<string | null>(
     null
   );
   const [attachmentTooBig, setAttachmentTooBig] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [fieldsData, setFieldsData] = useReducer(
-    formReducer,
-    getInitialFieldsData(getTicketTypesAsOptions())
-  );
+  const [fieldsData, setFieldsData] = useReducer(formReducer, {});
 
   const renderBackdrop = (props) => (
     <div className="sdk_mute_bg_2" {...props} />
@@ -50,90 +46,85 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
   );
   const isSubmitDisabled = findEmptyInput !== undefined;
   const userUUID = getUserUuid();
-  const fieldsConfig = getTicketTypeFields(getTicketTypesAsOptions());
+  const fieldsConfig = getTicketTypeFields();
 
-  const onSubmitForm = (event) => {
+  const onSubmitForm = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const description = newlinesToBreaks(fieldsData.description);
-    callApiPost("create-ticket", {
-      ...fieldsData,
-      userId: userUUID,
-      description,
-      status: getInitialTicketStatusOpen(fieldsData.tickettype),
-    })
-      .then(async (response) => {
-        if (response.failedRequest) {
-          setLoading(false);
-          setShowError(true);
-          return;
-        }
-        const attachmentData = attachmentFileName
-          ? await callApiPost("create-cdn-object", {
-              path: `attachments/${uploadId}/${attachmentFileName}`,
-              uuid: response.ticketid,
-              objectType: "attachment",
-            }).then((resp) => {
-              if (resp.failedRequest) {
-                return;
-              }
-              return resp;
-            })
-          : null;
 
-        const msgData = {
-          text: `<strong>${fieldsData.title}</strong><br />${description}`,
-          ticketId: response.ticketid,
-          userId: userUUID,
-          attachment: attachmentData
-            ? `${CDN_BASE_PATH}/${attachmentData.objectPath}`
-            : null,
-        };
-        await callApiPost("create-ticketmessage", msgData).then((res) => {
-          setAttachmentFileName(null);
-          return res;
-        });
-        Scrivito.navigateTo(chatPage, {
-          ticketid: response.ticketid,
-        });
-      })
-      .catch((_error) => {
+    try {
+      const newTicket = await callApiPost("tickets", {
+        title: fieldsData.title,
+        type: fieldsData.type,
+        requester_id: userUUID,
+        status: "new",
+      });
+
+      if (newTicket.failedRequest) {
         setLoading(false);
         setShowError(true);
+        return;
+      }
+
+      const msgData = {
+        text: fieldsData.description,
+        ticket_id: newTicket.id,
+        user_id: userUUID,
+        attachments: [] as object[],
+      };
+
+      if (!!attachmentFileName) {
+        msgData.attachments.push({
+          filename: attachmentFileName
+        });
+      }
+
+      await callApiPost(`tickets/${newTicket.id}/messages`, msgData).then((res) => {
+        setAttachmentFileName(null);
+        return res;
       });
-  };
-  const handleAttachmentChange = (e) => {
-    const files = e.target && e.target.files;
-    const uploadFile = files[0];
-    const size = (uploadFile && uploadFile.size) || 0;
-    const fileName = uploadFile && uploadFile.name;
-    if (size > MAX_ATTACHMENT_SIZE) {
-      setAttachmentTooBig(true);
-      return;
+      Scrivito.navigateTo(chatPage, {
+        ticketid: newTicket.id,
+      });
+    } catch (_error) {
+      setLoading(false);
+      setShowError(true);
     }
+  };
+
+  const handleAttachmentChange = (e) => {
+    const uploadFile = e.target.files[0];
+    const size = (uploadFile && uploadFile.size) || 0;
+
     if (!uploadFile) {
       setAttachmentTooBig(false);
       return;
     }
+
+    if (size > MAX_ATTACHMENT_SIZE) {
+      setAttachmentTooBig(true);
+      return;
+    }
+
     setAttachmentTooBig(false);
-    const timestamp = Date.now();
     setAttachmentLoading(true);
-    callApiPost("get-signed-upload-url", {
-      fileName: `attachments/${timestamp}/${fileName}`,
+
+    callApiPost("signed-upload-url", {
+      filename: uploadFile.name,
     }).then(async (response) => {
       if (response.failedRequest) {
         setAttachmentLoading(false);
         return;
       }
-      await fetch(response.uploadUrl, {
+      await fetch(response.url, {
         method: "PUT",
         body: uploadFile,
       });
-      setUploadId(timestamp);
-      setAttachmentFileName(`${uploadFile.name}`);
+      setAttachmentFileName(response.filename);
       setAttachmentLoading(false);
     });
   };
+
   return (
     <Modal
       show={isOpen}
@@ -203,13 +194,6 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
       </div>
     </Modal>
   );
-}
-
-function getInitialFieldsData(ticketOptions) {
-  if (!ticketOptions || !ticketOptions.length) {
-    return {};
-  }
-  return { tickettype: ticketOptions[0].value };
 }
 
 export default CreateNewTicketOverlay;

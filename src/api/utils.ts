@@ -22,12 +22,17 @@ const formReducer = (state, event) => {
 };
 
 const availableFieldsConfig = {
-  tickettype: {
+  type: {
     tag: "select",
     type: null,
     labelName: "Ticket Type",
     placeholder: "Ticket Type",
-    selectOptions: [],
+    selectOptions: [
+      { name: "Please choose ticket type", value: "" },
+      { name: "problem", value: "problem" },
+      { name: "task", value: "task" },
+      { name: "question", value: "question" },
+    ],
     disabled: false,
     tooltip: ""
   },
@@ -86,13 +91,13 @@ const availableFieldsConfig = {
   },
 };
 
-const getTicketTypeFields = (typeOptions) => {
-  availableFieldsConfig.tickettype.disabled = typeOptions.length < 2;
-  if (typeOptions.length === 1) {
-    availableFieldsConfig.tickettype.tooltip =
-      "Please report an issue of this type only";
-  }
-  availableFieldsConfig.tickettype.selectOptions = typeOptions;
+const getTicketTypeFields = () => {
+  // availableFieldsConfig.tickettype.disabled = typeOptions.length < 2;
+  // if (typeOptions.length === 1) {
+  //   availableFieldsConfig.tickettype.tooltip =
+  //     "Please report an issue of this type only";
+  // }
+  // availableFieldsConfig.tickettype.selectOptions = typeOptions;
   return availableFieldsConfig;
 };
 
