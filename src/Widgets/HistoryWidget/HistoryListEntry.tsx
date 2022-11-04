@@ -5,18 +5,19 @@ import academyIcon from "../../assets/images/icons/academy.svg";
 import documentationIcon from "../../assets/images/icons/documentation.svg";
 import helpdeskIcon from "../../assets/images/icons/helpdesk_black.svg";
 import { translate } from "../../utils/translate";
-import { callApiPost } from "../../api/portalApiCalls";
+import { callApiGet } from "../../api/portalApiCalls";
 
 const HistoryListEntry = ({ link, title, pageType, query }) => {
   const [ticketName, setTicketName] = useState(null);
+
   const setTicketData = useCallback((ticketUpdate) => {
     async function setTicketFromId({ ticketId, canceled }) {
       try {
-        const ticketResponse = await callApiPost(`get-ticket/${ticketId}`, {});
+        const ticketResponse = await callApiGet(`tickets/${ticketId}`);
         if (canceled) {
           return;
         }
-        if (!ticketResponse.failedRequest && ticketResponse.length) {
+        if (!ticketResponse.failedRequest) {
           setTicketName(ticketResponse[0].title);
         }
       } catch (error) {
@@ -25,10 +26,12 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
     }
     setTicketFromId(ticketUpdate);
   }, []);
+
   useEffect(() => {
     const ticketUpdate = {
       canceled: false,
     } as any;
+
     if (!title && pageType === "ChatPage") {
       const search = new URLSearchParams(query);
       const params = {} as any;
@@ -38,6 +41,7 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
       ticketUpdate.ticketId = params.ticketid;
       setTicketData(ticketUpdate);
     }
+
     // cleanup
     return () => {
       ticketUpdate.canceled = true;

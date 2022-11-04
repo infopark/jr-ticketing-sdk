@@ -1,6 +1,6 @@
 import { filter as lFilter, map, uniq, each } from "lodash";
-import { capitalize } from "lodash-es";
-import { dictTranslate } from "./translate";
+
+import I18n from "../config/I18n";
 
 const staticTicketListFilters = {
   all: {
@@ -9,7 +9,12 @@ const staticTicketListFilters = {
     },
     label: "all",
   },
-  active: undefined as any,
+  active: {
+    filter(data) {
+      return data.filter((obj) => obj.status !== "closed");
+    },
+    label: "active",
+  },
 };
 
 const createTicketsListFilters = (
@@ -19,19 +24,13 @@ const createTicketsListFilters = (
 ) => {
   const filterKeys = uniq(map(tickets, (obj) => obj.status));
   const ticketsListFilters = { ...staticTicketListFilters };
-  ticketsListFilters.active =
-    createDefaultTicketListFilter(isTicketStatusClosed);
   each(filterKeys, (filterKey) => {
-    const localizedFilterKey = capitalize(
-      dictTranslate(filterKey, statusDictionary)
-    );
+    const localizedFilterKey = I18n.t(filterKey);
     ticketsListFilters[localizedFilterKey] = {
       filter(data) {
         return lFilter(
           data,
-          (obj) =>
-            capitalize(dictTranslate(obj.status, statusDictionary)) ===
-            localizedFilterKey
+          (obj) => I18n.t(obj.status) === localizedFilterKey
         );
       },
       label: localizedFilterKey,
@@ -40,15 +39,9 @@ const createTicketsListFilters = (
   return ticketsListFilters;
 };
 
-const createDefaultTicketListFilter = (isTicketStatusClosed) => ({
-  filter(data) {
-    return lFilter(
-      data,
-      (obj) => !isTicketStatusClosed(obj.tickettype, obj.status)
-    );
-  },
-  label: "active",
-});
+const createDefaultTicketListFilter = (isTicketStatusClosed) => {
+  return staticTicketListFilters.active;
+};
 
 const isTicketListFilterDisabled = (
   ticketsListFilters,

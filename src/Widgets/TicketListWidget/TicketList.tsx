@@ -36,14 +36,16 @@ function TicketList({
 
   const sortedList = ticketsListSorters[sortKey].sorter(ticketList);
   const filteredList = ticketsListFilters[filterKey].filter(sortedList);
+
   return (
     <>
       <TicketListHeadEntry />
       {filteredList.map((ticket, index) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
-          query: `ticketid=${ticket.ticketid}`,
+          query: `ticketid=${ticket.id}`,
         });
+
         return (
           <TicketEntry
             ticket={ticket}

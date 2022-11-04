@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as Scrivito from "scrivito";
-import { callApiPost } from "../../api/portalApiCalls";
+import { callApiGet } from "../../api/portalApiCalls";
 import useAPIError from "../../utils/useAPIError";
 import {
   createTicketsListFilters,
@@ -20,11 +20,11 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const allowDeferredBaseLink = useRef(true);
   const { tenantLocalization, isTicketStatusClosed } = useTenantLocalization();
   const statusDictionary = getDictionary(tenantLocalization);
-  const { addError } = useAPIError();
+  const { addError } = useAPIError();;
 
   const getTicketsByNewest = useCallback(() => {
     const userUUID = getUserUuid();
-    callApiPost(`get-tickets/${userUUID}`, { withAttachmentCount: true })
+    callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
       .then((response) => {
         if (!response.failedRequest) {
           setTicketList(response);
@@ -62,11 +62,12 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     isTicketStatusClosed
   );
 
-  const filterDisabled = isTicketListFilterDisabled(
-    ticketsListFilters,
-    ticketList,
-    isTicketStatusClosed
-  );
+  const filterDisabled = false;
+  // const filterDisabled = isTicketListFilterDisabled(
+  //   ticketsListFilters,
+  //   ticketList,
+  //   isTicketStatusClosed
+  // );
 
   return (
     <Scrivito.WidgetTag className="ticket-list-widget sdk">

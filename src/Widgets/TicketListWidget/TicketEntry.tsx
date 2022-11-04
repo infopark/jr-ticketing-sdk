@@ -2,21 +2,23 @@ import * as React from "react";
 import * as Scrivito from "scrivito";
 
 import attachmentIcon from "../../assets/images/icons/paperclip.svg";
-import { dictTranslate, translate } from "../../utils/translate";
+import I18n from "../../config/I18n";
 import { parseDate } from "../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../utils/constants";
 import stripHtmlTags from "../../utils/stripHtmlTags";
 import { useUserData } from "../../Components/UserDataContext";
-import { validate as uuidValidate } from "uuid";
 
 interface ticketEntryProps {
   ticket: {
-    status: string;
-    creationdate: string;
+    id: string;
     title: string;
-    description: string;
+    type: string;
+    status: string;
+    // description: string;
+    number: number;
     attachmentcount: number;
-    ticketnum: string;
+    created_at: string;
+    updated_at: string;
   };
   targetLink: Scrivito.Link;
   statusDictionary: object;
@@ -37,6 +39,12 @@ function TicketEntry({
   statusDictionary,
 }: ticketEntryProps) {
   const { userData } = useUserData();
+  const creationDate = parseDate(
+    ticket.created_at,
+    DEFAULT_DATE_FORMAT,
+    userData && userData.timelocale
+  );
+
   return (
     <div className="row ticket_list">
       <div className="col-xl-12 box space_box">
@@ -48,7 +56,7 @@ function TicketEntry({
                   {ticket.attachmentcount > 0 && (
                     <AttachmentFlag count={ticket.attachmentcount} />
                   )}
-                  {!uuidValidate(ticket.ticketnum) ? ticket.ticketnum : ""}
+                  {ticket.number}
                 </span>
               </span>
 
@@ -56,7 +64,7 @@ function TicketEntry({
                 <span className="ticket-box">
                   <span className="ticket-title dots">{ticket.title}</span>
                   <span className="ticket-description dots">
-                    {stripHtmlTags(ticket.description)}
+                    {stripHtmlTags("TODO ticket description")}
                   </span>
                 </span>
               </span>
@@ -64,7 +72,7 @@ function TicketEntry({
               <span className="col-md-3">
                 <span className="ticket-box ticket-status">
                   <span className="running-ticket">
-                    {dictTranslate(ticket.status, statusDictionary)}
+                    {I18n.t(ticket.status)}
                   </span>
                 </span>
               </span>
@@ -72,13 +80,9 @@ function TicketEntry({
               <span className="col-md-3">
                 <span className="ticket-box">
                   <span className="d-md-none">
-                    {`${translate("Created on")} `}
+                    {I18n.t("Created on")}
                   </span>
-                  {parseDate(
-                    ticket.creationdate,
-                    DEFAULT_DATE_FORMAT,
-                    userData && userData.timelocale
-                  )}
+                  {creationDate}
                 </span>
               </span>
             </span>
