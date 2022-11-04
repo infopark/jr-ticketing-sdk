@@ -3,12 +3,8 @@ import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
-import {
-  translate,
-  getDictionary,
-  dictTranslate,
-} from "../../../utils/translate";
-import { callApiPost } from "../../../api/portalApiCalls";
+import I18n from "../../../config/I18n";
+import { callApiPut } from "../../../api/portalApiCalls";
 import { useUserData } from "../../../Components/UserDataContext";
 import PageContentWrapper from "./PageContentWrapper";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
@@ -17,26 +13,27 @@ import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 
 const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
   const {
+    id,
     title,
-    description,
-    creationdate,
-    ticketid,
+    number,
+    type,
     status,
-    ticketnum,
-    tickettype,
+    created_at,
+    messages,
   } = ticket;
   const { tenantLocalization, getInitialTicketStatusClosed } =
     useTenantContext();
-  const statusDictionary = getDictionary(tenantLocalization);
   const { userData } = useUserData();
+
+  const description = messages[0] ? messages[0].text : "";
 
   const handleCloseTicket = async (id) => {
     if (!isClosed) {
       const data = {
-        status: getInitialTicketStatusClosed(tickettype),
+        status: "closed",
       };
-      const response = await callApiPost(`update-ticket/${id}`, data);
-      if (response.status === "ticketUpdated") {
+      const response = await callApiPut(`tickets/${id}`, data);
+      if (!response.failedRequest) {
         refreshCallback();
       }
     }
@@ -47,7 +44,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
       <InnerPageContentWrapper additionalBoxClass="box_bg_white">
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {translate("Ticket title")}
+            {I18n.t("Ticket title")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {sanitizeHtml(title)}
@@ -55,7 +52,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {translate("Description")}
+            {I18n.t("Description")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {parse(
@@ -67,33 +64,33 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {translate("Ticket Type")}
+            {I18n.t("Ticket Type")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {dictTranslate(tickettype, statusDictionary)}
+            {I18n.t(type)}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {translate("Status")}
+            {I18n.t("Status")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {dictTranslate(status, statusDictionary)}
+            {I18n.t(status)}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {translate("Ticket Number")}
+            {I18n.t("Ticket Number")}
           </dt>
-          <dd className="flex_order_2 item_label_content">{ticketnum}</dd>
+          <dd className="flex_order_2 item_label_content">{number}</dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {translate("Creation date")}
+            {I18n.t("Creation date")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {parseDate(
-              creationdate,
+              created_at,
               DEFAULT_DATE_FORMAT,
               userData && userData.timelocale
             )}
@@ -102,11 +99,11 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
       </InnerPageContentWrapper>
       <button
         className="btn btn-secondary"
-        onClick={() => handleCloseTicket(ticketid)}
+        onClick={() => handleCloseTicket(id)}
         disabled={isClosed}
         type="button"
       >
-        {translate("Close Ticket")}
+        {I18n.t("Close Ticket")}
       </button>
     </PageContentWrapper>
   );

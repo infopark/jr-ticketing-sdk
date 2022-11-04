@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 import { callApiPost } from "../../../api/portalApiCalls";
-import { CDN_BASE_PATH } from "../../../utils/constants";
+import { MAX_ATTACHMENT_SIZE } from "../../../utils/constants";
 import { useUserData } from "../../../Components/UserDataContext";
 import { translate } from "../../../utils/translate";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const { userData } = useUserData();
-  const userId = userData && userData.userid;
+  const userId = userData && userData.id;
   const [message, setMessage] = useState("");
   const [file, setFile] = useState("" as any);
   const [textareaHeight, setTextareaHeight] = useState<number | null>(null);
@@ -16,6 +16,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     null
   );
   const [attachmentLoading, setAttachmentLoading] = useState(false);
+  const [attachmentTooBig, setAttachmentTooBig] = useState(false);
 
   const messageOrAttachment = message || file;
 
@@ -31,39 +32,27 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     }
   };
 
-  const handleSendMessage = async (msg, id, usr) => {
+  const handleSendMessage = async (msg) => {
     if (!isClosed) {
-      const msgTextData = {
-        text: newlinesToBreaks(msg),
-        ticketId: id,
-        userId: usr,
-      };
-      const attachmentData = attachmentFileName
-        ? await callApiPost("create-cdn-object", {
-            path: `attachments/${ticketId}/${attachmentFileName}`,
-            uuid: ticketId,
-            objectType: "attachment",
-          }).then((response) => {
-            if (response.failedRequest) {
-              return;
-            }
-            return response;
-          })
-        : null;
-
       const msgData = {
-        ...msgTextData,
-        attachment: attachmentData
-          ? `${CDN_BASE_PATH}/${attachmentData.objectPath}`
-          : null,
+        text: newlinesToBreaks(msg),
+        ticket_id: ticketId,
+        user_id: userId,
+        attachments: [] as object[],
       };
 
-      callApiPost("create-ticketmessage", msgData).then((response) => {
+      if (!!attachmentFileName) {
+        msgData.attachments.push({
+          filename: attachmentFileName
+        });
+      }
+
+      callApiPost(`tickets/${ticketId}/messages`, msgData).then((response) => {
         setTextareaHeight(null);
         setFile("");
         setMessage("");
         setAttachmentFileName(null);
-        if (response.status === "ticketMessageCreated") {
+        if (!response.failedRequest) {
           refreshCallback();
         }
         return response;
@@ -74,20 +63,34 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const handleFileChange = async (e) => {
     if (!isClosed) {
       const uploadFile = e.target.files[0];
+      const size = (uploadFile && uploadFile.size) || 0;
+
+      if (!uploadFile) {
+        setAttachmentTooBig(false);
+        return;
+      }
+
+      if (size > MAX_ATTACHMENT_SIZE) {
+        setAttachmentTooBig(true);
+        return;
+      }
+
       setFile(uploadFile);
+      setAttachmentTooBig(false);
       setAttachmentLoading(true);
-      callApiPost("get-signed-upload-url", {
-        fileName: `attachments/${ticketId}/${uploadFile.name}`,
+
+      callApiPost("signed-upload-url", {
+        filename: uploadFile.name,
       }).then(async (response) => {
         if (response.failedRequest) {
           setAttachmentLoading(false);
           return;
         }
-        await fetch(response.uploadUrl, {
+        await fetch(response.url, {
           method: "PUT",
           body: uploadFile,
         });
-        setAttachmentFileName(`${uploadFile.name}`);
+        setAttachmentFileName(response.filename);
         setAttachmentLoading(false);
       });
       e.target.value = "";
@@ -140,8 +143,8 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
             </label>
             <button
               className="btn btn-primary btn_outline float_right"
-              onClick={() => handleSendMessage(message, ticketId, userId)}
-              disabled={isClosed || attachmentLoading || !messageOrAttachment}
+              onClick={() => handleSendMessage(message)}
+              disabled={isClosed || attachmentLoading || attachmentTooBig || !messageOrAttachment}
               type="button"
             >
               {translate("post message")}

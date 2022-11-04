@@ -7,8 +7,8 @@ import React, {
   useMemo,
 } from "react";
 import * as Scrivito from "scrivito";
-import { isNil } from "lodash-es";
-import { callApiPost } from "../../api/portalApiCalls";
+
+import { callApiGet } from "../../api/portalApiCalls";
 import Loader from "../../Components/Loader";
 import { isInVisitedPages, addToVisitedPages } from "../../utils/visitedPages";
 import CommunicationTree from "./Components/CommunicationTree";
@@ -37,6 +37,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       const refreshTicket = getTicket;
       const urlParams = new URLSearchParams(window.location.search);
       const ticketid = urlParams.get("ticketid");
+
       ws.current = new WebSocket(`${wsApiUrl}/${stage}`);
       ws.current.onopen = () => {
         wsOpened = true;
@@ -62,38 +63,39 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     [wsApiUrl, stage]
   );
 
-  useEffect(() => {
-    const effectStatus = { canceled: false };
-    createWebsocket(effectStatus);
+  // TODO websockets
+  // useEffect(() => {
+  //   const effectStatus = { canceled: false };
+  //   createWebsocket(effectStatus);
 
-    return () => {
-      effectStatus.canceled = true;
-      ws.current.onclose = null;
-      ws.current.close();
-    };
-  }, [createWebsocket]);
+  //   return () => {
+  //     effectStatus.canceled = true;
+  //     ws.current.onclose = null;
+  //     ws.current.close();
+  //   };
+  // }, [createWebsocket]);
 
   const getTicket = async (effectStatus) => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const ticketid = urlParams.get("ticketid");
       const ticket =
-        ticketid &&
-        (await callApiPost(`get-ticket/${ticketid}`, {})
-          .then((data) => {
-            if (data.failedRequest || effectStatus.canceled || !data.length) {
-              return TICKET_NOT_FOUND;
-            }
-            const ticketData = data[0];
-            const { messages } = ticketData;
-            setChatContent(messages);
-            const messageAttachments = messages.filter(
-              (message) => message.attachment
-            );
-            setAttachments(messageAttachments);
-            return ticketData;
-          })
-          .finally(() => setStatus("idle")));
+        ticketid && (
+          await callApiGet(`tickets/${ticketid}?include=messages`)
+            .then((data) => {
+              if (data.failedRequest || effectStatus.canceled) {
+                return TICKET_NOT_FOUND;
+              }
+              const ticketData = data;
+              const { messages } = ticketData;
+              setChatContent(messages);
+              const messageAttachments = messages.filter(
+                (message) => message.attachments
+              );
+              setAttachments(messageAttachments);
+              return ticketData;
+            })
+            .finally(() => setStatus("idle")));
 
       if (effectStatus.canceled) {
         return;
@@ -103,7 +105,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       if (wasTicketCreatedLessThanMsAgo(ticket, 1000)) {
         // ask again about the ticket details, it was created just now
         setTimeout(() => {
-          callApiPost(`get-ticket/${ticketid}`, {})
+          callApiGet(`tickets/${ticketid}`)
             .then((data) => {
               if (data.failedRequest) {
                 return;
@@ -226,7 +228,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     );
   }
 
-  if (isNil(activeTicket)) {
+  if (!activeTicket) {
     return (
       <div className="sdk white-bg-loader">
         <Loader />
@@ -240,10 +242,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     }
   });
 
-  const isTicketClosed = isTicketStatusClosed(
-    activeTicket.tickettype,
-    activeTicket.status
-  );
+  const isTicketClosed = activeTicket.status === "closed";
 
   return (
     <>
@@ -274,7 +273,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       </div>
       {mode === "chat" && (
         <MessageArea
-          ticketId={activeTicket.ticketid}
+          ticketId={activeTicket.id}
           refreshCallback={refreshCallback}
           isClosed={isTicketClosed}
         />
