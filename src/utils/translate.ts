@@ -1,6 +1,7 @@
 import { startsWith, split, toLower } from "lodash";
 import * as Scrivito from "scrivito";
-import translations from "./translations";
+
+import I18n from "../config/I18n";
 const DEFAULT_LANGUAGE = "en";
 
 const getLanguage = () => {
@@ -35,28 +36,14 @@ const isoToLanguageName = (iso: string) => {
   }
 }
 
-const translate = (
-  key: keyof typeof translations.en | keyof typeof translations.de
-) => {
-  const lang: keyof typeof translations = startsWith(getLanguage()!, "de") ? "de" : "en";
-  const keyPresent = Object.keys(translations[lang]).includes(key);
-  const langObj: typeof translations[typeof lang] = translations[lang];
-  return keyPresent ? langObj[key] : key;
-};
-
-const dictTranslate = (key: string, dict: any) => {
-  if (!dict) {
-    return key;
-  }
-  const result = dict[key] || key;
-  return result;
+const translate = (key: string) => {
+  return I18n.t(key);
 };
 
 export {
   translate,
   getLanguage,
   getDictionary,
-  dictTranslate,
   get2LetterLanguage,
   isoToLanguageName
 };
