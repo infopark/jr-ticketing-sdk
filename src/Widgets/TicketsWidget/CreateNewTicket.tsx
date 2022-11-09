@@ -1,7 +1,7 @@
 import * as React from "react";
 import CreateNewTicketOverlay from "./CreateNewTicketOverlay";
 
-function CreateNewTicket({ className, chatPage, text, formFields }) {
+function CreateNewTicket({ className, chatPage, text }) {
   const [overlayOpen, setOverlayOpen] = React.useState(false);
   return (
     <div className={`${className} box space_box text_center`}>
@@ -25,7 +25,6 @@ function CreateNewTicket({ className, chatPage, text, formFields }) {
           setOverlayOpen(false);
         }}
         chatPage={chatPage}
-        formFields={formFields}
       />
     </div>
   );

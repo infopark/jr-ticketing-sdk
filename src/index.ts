@@ -23,6 +23,7 @@ import "./Widgets/TicketsWidget/TicketsWidgetClass";
 import "./Widgets/TicketsWidget/TicketsWidgetComponent";
 import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
 import * as InitialContentBodyFactory from "./Bridge/InitialContentBodyFactory";
+export * as portalApiCalls from "./api/portalApiCalls";
 
 export {
   UserDataProvider,

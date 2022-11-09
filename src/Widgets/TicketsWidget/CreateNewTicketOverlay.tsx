@@ -1,61 +1,104 @@
-import React, { useState, useReducer } from "react";
+import React, { useState } from "react";
 import * as Scrivito from "scrivito";
-import { trim } from "lodash";
+
+import { WidgetProps, RegistryWidgetsType } from "@rjsf/utils";
+import validator from "@rjsf/validator-ajv6";
+import Form from "@rjsf/core";
+import { merge } from "lodash-es";
 
 import Loader from "../../Components/Loader";
 import Modal from "react-overlays/Modal";
 import { translate } from "../../utils/translate";
-import { getTicketTypeFields, formReducer } from "../../api/utils";
 import { callApiPost } from "../../api/portalApiCalls";
-import { CDN_BASE_PATH, MAX_ATTACHMENT_SIZE } from "../../utils/constants";
 import { getUserUuid } from "../../Components/Auth/utils";
-import { useTenantContext } from "../../Components/TenantContextProvider";
 import FooterButtons from "./FooterButtons";
-import InputField from "./InputField";
-import TextareaField from "./TextareaField";
-import newlinesToBreaks from "../../utils/newlinesToBreaks";
+import { useTenantContext } from "../../Components/TenantContextProvider";
 
-function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
-  const { getInitialTicketStatusOpen, getTicketTypesAsOptions } = useTenantContext();
+const CustomAttachment = function({ id, value, onChange }) {
+  const [file, setFile] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [attachmentLoading, setAttachmentLoading] = useState(false);
-  const [attachmentFileName, setAttachmentFileName] = useState<string | null>(
-    null
-  );
-  const [attachmentTooBig, setAttachmentTooBig] = useState(false);
+
+  const onChangeHandler = (e) => {
+    const uploadFile = e.target.files[0];
+
+    onChange(null);
+    setFile(null);
+
+    if (!uploadFile) {
+      return;
+    }
+
+    setLoading(true);
+
+    callApiPost("signed-upload-url", {
+      filename: uploadFile.name,
+    }).then(async (response) => {
+      if (response.failedRequest) {
+        setLoading(false);
+        return;
+      }
+      await fetch(response.url, {
+        method: "PUT",
+        body: uploadFile,
+      });
+
+      onChange(response.filename);
+      setFile(uploadFile);
+      setLoading(false);
+    });
+  };
+
+  return (
+    <div>
+      <div className="mb-1">
+        <input id={id} name={id} type="file" onChange={onChangeHandler} />
+      </div>
+      {loading && (
+        <small>{translate("Processing file…")}</small>
+      )}
+      {file && (
+        <ul className="file-info">
+          <li><strong>{file.name}</strong> ({[file.type, `${file.size} bytes`].filter(e => !!e).join(", ")})</li>
+        </ul>
+      )}
+    </div>
+  )
+}
+
+const widgets: RegistryWidgetsType = {
+  FileWidget: CustomAttachment
+};
+
+function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
+  const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [fieldsData, setFieldsData] = useReducer(formReducer, {});
 
   const renderBackdrop = (props) => (
     <div className="sdk_mute_bg_2" {...props} />
   );
 
-  const handleChange = ({ target: { name, value } }) => {
-    setFieldsData({
-      fld: name,
-      val: value,
-    });
-  };
-  const fieldsArray = formFields.map((field) => ({
-    fld: field,
-    val: fieldsData[field] || "",
-  }));
-
-  const findEmptyInput = fieldsArray.find(
-    (field) => field.fld !== "attachment" && trim(field.val) === ""
-  );
-  const isSubmitDisabled = findEmptyInput !== undefined;
   const userUUID = getUserUuid();
-  const fieldsConfig = getTicketTypeFields();
 
-  const onSubmitForm = async (event) => {
-    event.preventDefault();
+  const onSubmitForm = async () => {
     setLoading(true);
 
     try {
+      const ticketAttributes = {};
+      const messageAttributes = {
+        text: formData["message.text"],
+        attachments: [{
+          filename: formData["message.attachment"],
+        }]
+      };
+
+      Object.entries(formData).forEach(([name, value]) => {
+        if (!name.startsWith("message.")) {
+          ticketAttributes[name] = value;
+        }
+      });
       const newTicket = await callApiPost("tickets", {
-        title: fieldsData.title,
-        type: fieldsData.type,
+        ...ticketAttributes,
+        message: messageAttributes,
         requester_id: userUUID,
         status: "new",
       });
@@ -66,23 +109,6 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
         return;
       }
 
-      const msgData = {
-        text: fieldsData.description,
-        ticket_id: newTicket.id,
-        user_id: userUUID,
-        attachments: [] as object[],
-      };
-
-      if (!!attachmentFileName) {
-        msgData.attachments.push({
-          filename: attachmentFileName
-        });
-      }
-
-      await callApiPost(`tickets/${newTicket.id}/messages`, msgData).then((res) => {
-        setAttachmentFileName(null);
-        return res;
-      });
       Scrivito.navigateTo(chatPage, {
         ticketid: newTicket.id,
       });
@@ -92,38 +118,34 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
     }
   };
 
-  const handleAttachmentChange = (e) => {
-    const uploadFile = e.target.files[0];
-    const size = (uploadFile && uploadFile.size) || 0;
+  const [schema, setSchema] = React.useState({});
+  const [uiSchema, setUiSchema] = React.useState({});
+  const [formData, setFormData] = React.useState({});
+  const { ticketSchema } = useTenantContext();
+  React.useEffect(() => {
+    Scrivito.load(() => {
+      const [obj] = Scrivito.Obj.onAllSites()
+        .where("_objClass", "equals", "TicketFormConfiguration")
+        .take(1);
+      return obj;
+    }).then((obj) => {
+      const localUiSchema = JSON.parse(obj?.get("uiSchema") as string || "{}");
+      const localSchema = JSON.parse(obj?.get("formSchema") as string || "{}");
 
-    if (!uploadFile) {
-      setAttachmentTooBig(false);
-      return;
-    }
-
-    if (size > MAX_ATTACHMENT_SIZE) {
-      setAttachmentTooBig(true);
-      return;
-    }
-
-    setAttachmentTooBig(false);
-    setAttachmentLoading(true);
-
-    callApiPost("signed-upload-url", {
-      filename: uploadFile.name,
-    }).then(async (response) => {
-      if (response.failedRequest) {
-        setAttachmentLoading(false);
-        return;
-      }
-      await fetch(response.url, {
-        method: "PUT",
-        body: uploadFile,
+      Object.entries(ticketSchema.properties).forEach(([attribute, schema]) => {
+        Object.entries(schema as object).forEach(([key, value]) => {
+          if (key.startsWith("ui:")) {
+            localUiSchema[attribute] = localUiSchema[attribute] || {};
+            localUiSchema[attribute][key] = value;
+          }
+        });
       });
-      setAttachmentFileName(response.filename);
-      setAttachmentLoading(false);
+
+      setUiSchema(localUiSchema);
+      setSchema(merge(ticketSchema, localSchema));
+      setFormData(localSchema.formData);
     });
-  };
+  }, []);
 
   return (
     <Modal
@@ -143,36 +165,20 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
               <Loader bg="bg_color_transparent" />
             </div>
           )}
-          <form className="ticket-modal-form" onSubmit={onSubmitForm}>
+          <div className="ticket-modal-form">
             <div className="overlay_content scroll_content">
               <h2>{translate("create_new_ticket")}</h2>
               <div className="inline_form">
-                {formFields.map((fieldName, index) => {
-                  const fieldConfig = fieldsConfig[fieldName];
-                  if (!fieldConfig) {
-                    return null;
-                  }
-                  return fieldConfig.tag !== "textarea" ? (
-                    <InputField
-                      fieldConfig={fieldConfig}
-                      fieldName={fieldName}
-                      onChange={
-                        fieldConfig.type === "file"
-                          ? handleAttachmentChange
-                          : handleChange
-                      }
-                      loading={attachmentLoading}
-                      key={`f_${index}`}
-                    />
-                  ) : (
-                    <TextareaField
-                      fieldConfig={fieldConfig}
-                      fieldName={fieldName}
-                      onChange={handleChange}
-                      key={`f_${index}`}
-                    />
-                  );
-                })}
+                <Form
+                  formData={formData}
+                  schema={schema}
+                  uiSchema={uiSchema}
+                  validator={validator}
+                  widgets={widgets}
+                  onChange={(e) => setFormData(e.formData)}
+                  onSubmit={onSubmitForm}
+                  onError={() => console.log("errors")}
+                > </Form>
               </div>
               {showError && (
                 <div
@@ -184,12 +190,11 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage, formFields }) {
               )}
             </div>
             <FooterButtons
-              handleCancelClick={close}
-              disabled={
-                isSubmitDisabled || attachmentLoading || attachmentTooBig
-              }
+              onSubmit={onSubmitForm}
+              onCancel={close}
+              disabled={false}
             />
-          </form>
+          </div>
         </section>
       </div>
     </Modal>

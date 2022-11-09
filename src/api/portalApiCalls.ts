@@ -2,7 +2,6 @@ import { callApi } from "./callApi";
 import { isMockEnabled, mockGet, mockPost } from "./mockEndpoint";
 import { isLocalhost } from "../utils/constants";
 
-
 const callApiGet = async (endpoint) => {
   if (isMockEnabled()) {
     return mockGet(endpoint);

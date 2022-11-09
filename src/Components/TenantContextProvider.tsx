@@ -56,6 +56,12 @@ const DEFAULT_TICKET_STATUS_POSITIONS = {
 
 const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
 
+const RegularAttributes = {
+  "title": { title: "Title", type: "string", "ui:autofocus": true, "ui:required": true, "ui:regular": true },
+  "message.text": { title: "Text", type: "string", "ui:widget": "textarea", "ui:required": true, "ui:regular": true },
+  "message.attachment": { title: "Attachment", type: "string", format: "data-url", "ui:regular": true }
+};
+
 export function TenantContextProvider(props) {
   const [readyLocalization, setReadyLocalization] = useState(false);
   const [readySalesMeta, setReadySalesMeta] = useState(false);
@@ -73,7 +79,16 @@ export function TenantContextProvider(props) {
       try {
         const instance = await callApiGet("instance");
 
-        setTicketSchema(instance.schema.Ticket);
+        const properties = {
+          ...RegularAttributes,
+          ...instance.custom_attributes.Ticket
+        };
+
+        setTicketSchema({
+          type: "object",
+          properties,
+          required: Object.keys(properties).filter((name) => properties[name]["ui:required"]),
+        });
 
         const salesMetaData = instance;
         const ticketPositions = extractTicketStatusPositions(salesMetaData);
