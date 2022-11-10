@@ -10,8 +10,11 @@ import {
   sortBy,
 } from "lodash-es";
 import { CDN_BASE_PATH } from "../utils/constants";
-import { callApiPost } from "../api/portalApiCalls";
-import { dictTranslate, getDictionary, getLanguage } from "../utils/translate";
+import { callApiGet } from "../api/portalApiCalls";
+import {  getDictionary, getLanguage } from "../utils/translate";
+
+// dummy function will be removed later
+const dictTranslate = (a, b) => {}
 
 const TenantContext = React.createContext({} as any);
 
@@ -57,55 +60,30 @@ export function TenantContextProvider(props) {
   const [readyLocalization, setReadyLocalization] = useState(false);
   const [readySalesMeta, setReadySalesMeta] = useState(false);
   const [tenantLocalization, setTenantLocalization] = useState<any>();
-  const [localizationTimestamp, setLocalizationTimestamp] = useState();
   const [ticketStatusPositions, setTicketStatusPositions] = useState<any>();
   const ticketTypesAsOptions = useRef({});
-  const instanceId = process.env.API_INSTANCE_ID || "00000000000000000000000000000000";
+  const instanceId = process.env.SCRIVITO_TENANT;
+  const [ticketSchema, setTicketSchema] = useState<any>();
+  const [instanceReady, setInstanceReady] = useState<any>(false);
+
+  // TODO get localisation from instance
 
   useEffect(() => {
-    const loadLocalization = async () => {
-      if (!readySalesMeta) {
-        return;
-      }
-
-      const localizationFile = `sales_idns${
-        localizationTimestamp ? `_${localizationTimestamp}` : ""
-      }.json`;
-
+    const loadInstance = async () => {
       try {
-        const localizationResponse = await fetch(
-          `${CDN_BASE_PATH}/cdn/i18ns/${instanceId}/${localizationFile}`
-        )
-          .then(async (response) => {
-            const result = await response.json();
-            return result;
-          })
-          .catch(() => {});
+        const instance = await callApiGet("instance");
 
-        const localization = localizationResponse || DEFAULT_LOCALIZATION;
-        setTenantLocalization(localization);
-      } catch (error) {
-        setTenantLocalization(DEFAULT_LOCALIZATION);
-      }
-      setReadyLocalization(true);
-    };
-    loadLocalization();
-  }, [readySalesMeta, localizationTimestamp]);
+        setTicketSchema(instance.schema.Ticket);
 
-  useEffect(() => {
-    const loadSalesMeta = async () => {
-      try {
-        const salesMetaData = await callApiPost(`get-sales-meta`, {});
-
+        const salesMetaData = instance;
         const ticketPositions = extractTicketStatusPositions(salesMetaData);
         setTicketStatusPositions(ticketPositions);
-        setLocalizationTimestamp(extractLocalizationTimestamp(salesMetaData));
       } catch (error) {
         setTicketStatusPositions(DEFAULT_TICKET_STATUS_POSITIONS);
       }
-      setReadySalesMeta(true);
-    };
-    loadSalesMeta();
+      setInstanceReady(true);
+    }
+    loadInstance();
   }, []);
 
   // useMemo, useEffect do not work here, the language is set too late
@@ -208,12 +186,14 @@ export function TenantContextProvider(props) {
   }
 
   function isTenantContextReady() {
-    return readyLocalization && readySalesMeta;
+    // return readyLocalization && readySalesMeta;
+    return instanceReady;
   }
 
   return (
     <TenantContext.Provider
       value={{
+        ticketSchema,
         tenantLocalization,
         isTicketStatusOpen,
         isTicketStatusClosed,

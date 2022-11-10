@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { groupBy } from "lodash-es";
-import { parseDate } from "../../../utils/dateUtils";
-import { callApiPost } from "../../../api/portalApiCalls";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
+
+import { parseDate } from "../../../utils/dateUtils";
+import { callApiGet, callApiPost } from "../../../api/portalApiCalls";
 import { isImageFormat } from "../../../utils/isImage";
 import Loader from "../../../Components/Loader";
 import {
@@ -13,16 +14,16 @@ import {
 } from "../../../utils/constants";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { useUserData } from "../../../Components/UserDataContext";
-import { translate } from "../../../utils/translate";
+import I18n from "../../../config/I18n";
 import { matchExtension } from "../../../utils/fileExtension";
 import PageContentWrapper from "./PageContentWrapper";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 
 const unknownUser = {
-  firstname: "",
-  lastname: "",
-  avatarurl: noUserImg,
+  first_name: "",
+  last_name: "",
+  avatar_url: noUserImg,
 };
 
 const CommunicationTree = ({
@@ -41,7 +42,7 @@ const CommunicationTree = ({
 
   const isAttachmentsMode = mode === "attachments";
   const communications = isAttachmentsMode
-    ? comm.filter((message) => message.attachment)
+    ? comm.filter((message) => message.attachments)
     : comm;
 
   useEffect(() => {
@@ -83,28 +84,29 @@ const CommunicationDayTree = ({
   const { userData } = useUserData();
   const days = groupBy(communications, (message) =>
     parseDate(
-      message.creationdate,
+      message.created_at,
       DEFAULT_DATE_FORMAT,
       userData && userData.timelocale
     )
   );
-  const loggedUserId = loggedUserData.userid;
+  const loggedUserId = loggedUserData.id;
 
   const [senders, setSenders] = useState({
     unknown: unknownUser,
-    [loggedUserData.userid]: loggedUserData,
+    [loggedUserData.id]: loggedUserData,
   });
 
   useEffect(() => {
     const getMessageSenders = async () => {
-      const requestedUsers = { [loggedUserData.userid]: true };
+      const requestedUsers = { [loggedUserData.id]: true };
       const pendingRequests = [] as any[];
+
       for (const message of communications) {
-        const { userid } = message;
-        if (!requestedUsers[userid]) {
-          requestedUsers[userid] = true;
+        const { user_id } = message;
+        if (!requestedUsers[user_id]) {
+          requestedUsers[user_id] = true;
           pendingRequests.push(
-            callApiPost(`get-user/${userid}`, {}).then((response) => {
+            callApiGet(`users/${user_id}`).then((response) => {
               if (response.failedRequest) {
                 return undefined;
               }
@@ -113,15 +115,17 @@ const CommunicationDayTree = ({
           );
         }
       }
+
       const users = await Promise.all(pendingRequests);
       const mappedUsers = users.reduce((usersById, user) => {
         if (user) {
-          usersById[user.userid] = user;
+          usersById[user.id] = user;
         }
         return usersById;
       }, {});
+
       mappedUsers.unknown = unknownUser;
-      mappedUsers[loggedUserData.userid] = loggedUserData;
+      mappedUsers[loggedUserData.id] = loggedUserData;
       setSenders(mappedUsers);
     };
     getMessageSenders();
@@ -165,7 +169,7 @@ const DailyMessages = ({
     const isUsersMessage = loggedUser === message.userid;
     return (
       <Message
-        key={message.ticketmessageid}
+        key={message.id}
         message={message}
         sender={senders[message.userid] || senders.unknown}
         isUsersMessage={isUsersMessage}
@@ -196,7 +200,7 @@ const Message = ({
         <span className="wrapper_img_profil">
           {
             <img
-              src={sender.avatarurl || noUserImg}
+              src={sender.avatar_url || noUserImg}
               alt="User avatar"
               className="img_cover"
             />
@@ -207,11 +211,11 @@ const Message = ({
       <div className="com_content">
         <div className="box_bg_white box">
           <h4>
-            {sender.firstname} {sender.lastname}
+            {sender.first_name} {sender.last_name}
           </h4>
           <span className="time_stamp">
             {parseDate(
-              message.creationdate,
+              message.created_at,
               DEFAULT_TIME_FORMAT,
               userData && userData.timelocale
             )}
@@ -227,7 +231,7 @@ const Message = ({
               )}
             </div>
           )}
-          {message.attachment && (
+          {message.attachments && (
             <Attachment
               message={message}
               refreshCallback={refreshCallback}
@@ -240,6 +244,7 @@ const Message = ({
   );
 };
 
+// TODO remove handleDeleteAttachment and button
 const Attachment = ({ message, refreshCallback, isClosed }) => {
   const handleDeleteAttachment = async (msg) => {
     const cdnData = {
@@ -263,10 +268,18 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
     refreshCallback();
   };
 
-  const fileName = message.attachment.split("/").pop();
-  const fileExt = message.attachment.split(".").pop();
+  if (message.attachments.length === 0) {
+    return null;
+  }
+
+  console.log(message.attachments);
+  const attachment = message.attachments[0];
+
+  const fileName = attachment.filename;
+  const fileExt = fileName.split(".").pop();
   const isImage = isImageFormat(fileExt);
   const fileIcon = matchExtension(fileExt);
+
   return (
     <>
       <div className="collapsebox">
@@ -278,32 +291,26 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
               type="button"
               disabled={isClosed}
             >
-              {translate("delete")}
+              {I18n.t("delete")}
             </button>
             <a
-              href={message.attachment}
+              href={attachment.s3_url}
               target="_blank"
               className="btn btn-secondary float_right image"
               download
               rel="noreferrer"
             >
-              {translate("download")}
+              {I18n.t("download")}
             </a>
             <img
-              src={message.attachment}
+              src={attachment.s3_url}
               className="attachment_img"
               alt="img"
             />
           </>
         )}
         {!isImage && fileName && (
-          <a
-            href={message.attachment}
-            className="d-block attachment_section"
-            target="_blank"
-            download
-            rel="noreferrer"
-          >
+          <>
             <img src={fileIcon} alt="" className="nav_img" />
             <small className="color_text">{fileName}</small>
             <button
@@ -314,9 +321,18 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
               }}
               type="button"
             >
-              {translate("delete")}
+              {I18n.t("delete")}
             </button>
-          </a>
+            <a
+              href={attachment.s3_url}
+              target="_blank"
+              className="btn btn-secondary float_right image"
+              download
+              rel="noreferrer"
+            >
+              {I18n.t("download")}
+            </a>
+          </>
         )}
       </div>
     </>

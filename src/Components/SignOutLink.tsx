@@ -4,7 +4,6 @@ import { translate } from "../utils/translate";
 import { callLogout } from "../api/portalApiCalls";
 import {
   removeUserUuid,
-  setLoggedIn,
   removeUserLanguageHandledFlag,
 } from "./Auth/utils";
 
@@ -12,7 +11,6 @@ const SignOutLink = () => {
   async function signOut(event) {
     event.preventDefault();
     try {
-      setLoggedIn(false);
       removeUserUuid();
       removeUserLanguageHandledFlag();
       callLogout();
