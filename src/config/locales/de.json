@@ -114,5 +114,9 @@
   "ID": "ID",
   "Status": "Status",
   "Created": "Erstellt",
-  "Created on": "Erstellt am"
+  "Created on": "Erstellt am",
+  "TicketFormConfigDialog": {
+    "fieldname": "Feldname:",
+    "isVisible": "Sichtbar?"
+  }
 }

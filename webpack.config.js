@@ -5,6 +5,7 @@ module.exports = {
   cache: true,
   entry: {
     index: "./src/index.ts",
+    ScrivitoExtensions: "./src/Components/ScrivitoExtensions/index.ts",
     cssBundle: "./src/assets/stylesheets/main.scss",
   },
   module: {
