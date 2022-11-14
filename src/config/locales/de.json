@@ -118,5 +118,12 @@
   "TicketFormConfigDialog": {
     "fieldname": "Feldname:",
     "isVisible": "Sichtbar?"
+  },
+  "CreateNewTicket": {
+    "title": "Title",
+    "message": {
+      "text": "Text",
+      "attachment": "Attachment"
+    }
   }
 }

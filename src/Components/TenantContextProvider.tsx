@@ -12,6 +12,7 @@ import {
 import { CDN_BASE_PATH } from "../utils/constants";
 import { callApiGet } from "../api/portalApiCalls";
 import {  getDictionary, getLanguage } from "../utils/translate";
+import I18n from "../config/i18n";
 
 // dummy function will be removed later
 const dictTranslate = (a, b) => {}
@@ -57,9 +58,9 @@ const DEFAULT_TICKET_STATUS_POSITIONS = {
 const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
 
 const RegularAttributes = {
-  "title": { title: "Title", type: "string", "ui:autofocus": true, "ui:required": true, "ui:regular": true },
-  "message.text": { title: "Text", type: "string", "ui:widget": "textarea", "ui:required": true, "ui:regular": true },
-  "message.attachment": { title: "Attachment", type: "string", format: "data-url", "ui:regular": true }
+  "title": { title: I18n.t("CreateNewTicket.title"), type: "string", "ui:autofocus": true, "ui:required": true, "ui:regular": true },
+  "message.text": { title: I18n.t("CreateNewTicket.message.text"), type: "string", "ui:widget": "textarea", "ui:required": true, "ui:regular": true },
+  "message.attachment": { title: I18n.t("CreateNewTicket.message.attachment"), type: "string", format: "data-url", "ui:regular": true }
 };
 
 export function TenantContextProvider(props) {

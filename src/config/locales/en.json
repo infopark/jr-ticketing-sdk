@@ -116,7 +116,14 @@
   "Created": "Created",
   "Created on": "Created on",
   "TicketFormConfigDialog": {
-    "fieldname": "Feldname:",
-    "isVisible": "Sichtbar?"
+    "fieldname": "Field name:",
+    "isVisible": "Visible?"
+  },
+  "CreateNewTicket": {
+    "title": "Title",
+    "message": {
+      "text": "Text",
+      "attachment": "Attachment"
+    }
   }
 }
