@@ -59,7 +59,7 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
         .take(1);
       return obj;
     }).then((obj) => {
-      const localUiSchema = JSON.parse(obj.get("uiSchema") as string || "{}");
+      const localUiSchema = JSON.parse(obj?.get("uiSchema") as string || "{}");
       setOrderedObjs(
         transformPropertiesToArray(ticketSchema.properties, localUiSchema)
       );
@@ -87,11 +87,17 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
         .take(1);
       return obj;
     }).then((obj) => {
-      obj.update({
-        formSchema: JSON.stringify(formSchema),
-        uiSchema: JSON.stringify(uiSchema),
-      });
-      obj.finishSaving();
+      if (obj) {
+        obj.update({
+          formSchema: JSON.stringify(formSchema),
+          uiSchema: JSON.stringify(uiSchema),
+        });
+      } else {
+        (Scrivito.getClass("TicketFormConfiguration") as any).onAllSites().create({
+          formSchema: JSON.stringify(formSchema),
+          uiSchema: JSON.stringify(uiSchema),
+        });
+      }
     });
   };
 

@@ -13,6 +13,8 @@ import "./Objs/ChatPage/ChatPageObjClass";
 import "./Objs/ProfilePage/ProfilePageComponent";
 import "./Objs/ProfilePage/ProfilePageEditingConfig";
 import "./Objs/ProfilePage/ProfilePageObjClass";
+import "./Objs/TicketFormConfiguration/TicketFormConfigurationEditingConfig";
+import "./Objs/TicketFormConfiguration/TicketFormConfigurationObjClass";
 import { translate, getLanguage } from "./utils/translate";
 import { isInVisitedPages, addToVisitedPages } from "./utils/visitedPages";
 import "./Widgets/HistoryWidget/HistoryWidgetClass";
