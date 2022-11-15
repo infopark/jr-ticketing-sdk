@@ -1,6 +1,6 @@
 import { filter as lFilter, map, uniq, each } from "lodash";
 
-import I18n from "../config/I18n";
+import i18n from "../config/i18n";
 
 const staticTicketListFilters = {
   all: {
@@ -25,12 +25,12 @@ const createTicketsListFilters = (
   const filterKeys = uniq(map(tickets, (obj) => obj.status));
   const ticketsListFilters = { ...staticTicketListFilters };
   each(filterKeys, (filterKey) => {
-    const localizedFilterKey = I18n.t(filterKey);
+    const localizedFilterKey = i18n.t(filterKey);
     ticketsListFilters[localizedFilterKey] = {
       filter(data) {
         return lFilter(
           data,
-          (obj) => I18n.t(obj.status) === localizedFilterKey
+          (obj) => i18n.t(obj.status) === localizedFilterKey
         );
       },
       label: localizedFilterKey,

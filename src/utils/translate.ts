@@ -1,7 +1,7 @@
 import { startsWith, split, toLower } from "lodash";
 import * as Scrivito from "scrivito";
 
-import I18n from "../config/I18n";
+import i18n from "../config/i18n";
 const DEFAULT_LANGUAGE = "en";
 
 const getLanguage = () => {
@@ -37,7 +37,7 @@ const isoToLanguageName = (iso: string) => {
 }
 
 const translate = (key: string) => {
-  return I18n.t(key);
+  return i18n.t(key);
 };
 
 export {

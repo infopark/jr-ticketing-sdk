@@ -1,7 +1,7 @@
 import I18n from "i18next"
 
-import en from "../locales/en.json"
-import de from "../locales/de.json"
+import en from "./locales/en.json"
+import de from "./locales/de.json"
 
 const i18n = I18n.createInstance({
   lng: window.localStorage.getItem("language") || "de",
@@ -10,6 +10,7 @@ const i18n = I18n.createInstance({
     en: { portal: en },
     de: { portal: de },
   },
+  ns: ["portal"],
   defaultNS: ['portal'],
   debug: false,
 

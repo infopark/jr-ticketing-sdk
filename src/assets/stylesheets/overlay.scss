@@ -1,6 +1,6 @@
 .sdk {
   section#overlay {
-    form {
+    .ticket-modal-form {
       display: flex;
       flex-direction: column;
       .overlay_content {
@@ -70,7 +70,7 @@
   .overlay_content {
     border-top: solid 1px #eae7e3;
     border-bottom: solid 1px #eae7e3;
-    padding: 20px 20px 50px 20px;
+    padding: 20px 20px 20px 20px;
     height: 65vh;
     left: 0;
     position: absolute;

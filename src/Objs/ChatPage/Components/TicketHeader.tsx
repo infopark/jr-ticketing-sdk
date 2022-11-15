@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import I18n from "../../../config/I18n";
+import i18n from "../../../config/i18n";
 
 const TicketHeader = ({ ticket }) => {
   const status = ticket && ticket.status;
@@ -12,7 +12,7 @@ const TicketHeader = ({ ticket }) => {
             {ticket && ticket.title}
           </span>
           <span className="info_item on_progress ticket-status dots float-right float-md-none">
-            {I18n.t(status)}
+            {i18n.t(status)}
           </span>
         </span>
       </div>

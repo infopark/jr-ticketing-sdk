@@ -9,8 +9,6 @@ import CreateNewTicket from "./CreateNewTicket";
 import { getUserUuid } from "../../Components/Auth/utils";
 import { useTenantLocalization } from "../../Components/TenantContextProvider";
 
-const FORM_FIELDS = ["type", "title", "description", "attachment"];
-
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
   const { addError } = useAPIError();
@@ -48,7 +46,6 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
         className={boxClassName}
         chatPage={chatPage}
         text={translate("create_new_ticket")}
-        formFields={FORM_FIELDS}
       />
       <TicketNumberBox
         todoBox={false}

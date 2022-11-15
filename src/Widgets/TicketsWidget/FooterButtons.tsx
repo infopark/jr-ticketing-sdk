@@ -1,15 +1,13 @@
 import * as React from "react";
 import { translate } from "../../utils/translate";
 
-function FooterButtons({ handleCancelClick, disabled }) {
+function FooterButtons({ disabled, onSubmit, onCancel }) {
   return (
     <footer id="overlay_footer" className="btn_control">
       <button
         type="button"
         className="btn btn-secondary float_left"
-        onClick={(event) => {
-          handleCancelClick(event);
-        }}
+        onClick={onCancel}
       >
         {translate("cancel")}
       </button>
@@ -17,6 +15,7 @@ function FooterButtons({ handleCancelClick, disabled }) {
         type="submit"
         className="btn btn-primary float_right"
         disabled={disabled}
+        onClick={onSubmit}
       >
         {translate("Create")}
       </button>

@@ -3,7 +3,7 @@ import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
-import I18n from "../../../config/I18n";
+import i18n from "../../../config/i18n";
 import { callApiPut } from "../../../api/portalApiCalls";
 import { useUserData } from "../../../Components/UserDataContext";
 import PageContentWrapper from "./PageContentWrapper";
@@ -44,7 +44,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
       <InnerPageContentWrapper additionalBoxClass="box_bg_white">
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {I18n.t("Ticket title")}
+            {i18n.t("Ticket title")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {sanitizeHtml(title)}
@@ -52,7 +52,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {I18n.t("Description")}
+            {i18n.t("Description")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {parse(
@@ -64,29 +64,29 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {I18n.t("Ticket Type")}
+            {i18n.t("Ticket Type")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {I18n.t(type)}
+            {i18n.t(type)}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {I18n.t("Status")}
+            {i18n.t("Status")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {I18n.t(status)}
+            {i18n.t(status)}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {I18n.t("Ticket Number")}
+            {i18n.t("Ticket Number")}
           </dt>
           <dd className="flex_order_2 item_label_content">{number}</dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {I18n.t("Creation date")}
+            {i18n.t("Creation date")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {parseDate(
@@ -103,7 +103,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         disabled={isClosed}
         type="button"
       >
-        {I18n.t("Close Ticket")}
+        {i18n.t("Close Ticket")}
       </button>
     </PageContentWrapper>
   );

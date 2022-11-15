@@ -14,7 +14,7 @@ import {
 } from "../../../utils/constants";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { useUserData } from "../../../Components/UserDataContext";
-import I18n from "../../../config/I18n";
+import i18n from "../../../config/i18n";
 import { matchExtension } from "../../../utils/fileExtension";
 import PageContentWrapper from "./PageContentWrapper";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
@@ -291,7 +291,7 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
               type="button"
               disabled={isClosed}
             >
-              {I18n.t("delete")}
+              {i18n.t("delete")}
             </button>
             <a
               href={attachment.s3_url}
@@ -300,7 +300,7 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
               download
               rel="noreferrer"
             >
-              {I18n.t("download")}
+              {i18n.t("download")}
             </a>
             <img
               src={attachment.s3_url}
@@ -321,7 +321,7 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
               }}
               type="button"
             >
-              {I18n.t("delete")}
+              {i18n.t("delete")}
             </button>
             <a
               href={attachment.s3_url}
@@ -330,7 +330,7 @@ const Attachment = ({ message, refreshCallback, isClosed }) => {
               download
               rel="noreferrer"
             >
-              {I18n.t("download")}
+              {i18n.t("download")}
             </a>
           </>
         )}
