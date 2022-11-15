@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
-import I18n from "../../config/i18n";
+import i18n from "../../config/i18n";
 import { TenantContextProvider, useTenantContext } from "../TenantContextProvider";
 import { SortableContainer } from "./SortableContainer";
 
@@ -148,14 +148,14 @@ const SortableObjListItem = ({ obj, updateVisibility }) => {
   return (
     <li>
       <div>
-        {I18n.t("TicketFormConfigDialog.fieldname")}
+        {i18n.t("TicketFormConfigDialog.fieldname")}
         {" "}
         {obj.title || obj.name}
       </div>
       {!obj["ui:regular"] && (
         <div>
           <label>
-            {I18n.t("TicketFormConfigDialog.isVisible")}
+            {i18n.t("TicketFormConfigDialog.isVisible")}
             {" "}
             <input
               type="checkbox"

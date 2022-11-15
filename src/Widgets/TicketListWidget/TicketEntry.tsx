@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Scrivito from "scrivito";
 
 import attachmentIcon from "../../assets/images/icons/paperclip.svg";
-import I18n from "../../config/I18n";
+import i18n from "../../config/i18n";
 import { parseDate } from "../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../utils/constants";
 import stripHtmlTags from "../../utils/stripHtmlTags";
@@ -72,7 +72,7 @@ function TicketEntry({
               <span className="col-md-3">
                 <span className="ticket-box ticket-status">
                   <span className="running-ticket">
-                    {I18n.t(ticket.status)}
+                    {i18n.t(ticket.status)}
                   </span>
                 </span>
               </span>
@@ -80,7 +80,7 @@ function TicketEntry({
               <span className="col-md-3">
                 <span className="ticket-box">
                   <span className="d-md-none">
-                    {I18n.t("Created on")}
+                    {i18n.t("Created on")}
                   </span>
                   {creationDate}
                 </span>
