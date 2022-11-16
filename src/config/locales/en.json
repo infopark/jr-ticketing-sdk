@@ -109,6 +109,7 @@
   "Please upload files up to 20 MB": "You can attach a file up to 20 MB in size",
   "The size of your attachment exceeds 20 MB": "The size of your attachment exceeds 20 MB",
   "Processing file…": "Processing file…",
+  "Failed": "Failed",
   "Create": "Create",
   "Please report an issue of this type only": "Please report an issue of this type only",
   "ID": "ID",
@@ -123,7 +124,7 @@
     "title": "Title",
     "message": {
       "text": "Text",
-      "attachment": "Attachment"
+      "attachments": "Attachments"
     }
   }
 }

@@ -15,52 +15,80 @@ import FooterButtons from "./FooterButtons";
 import { useTenantContext } from "../../Components/TenantContextProvider";
 
 const CustomAttachment = function({ id, value, onChange }) {
-  const [file, setFile] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState<object[]>([]);
 
-  const onChangeHandler = (e) => {
-    const uploadFile = e.target.files[0];
+  function updateFiles(fileObject) {
+    setFiles((files) => files.map((f) => f === fileObject ? fileObject : f));
+  }
 
-    onChange(null);
-    setFile(null);
+  function uploadFile(fileList: FileList) {
+    Array.from(fileList).forEach(async (file: any) => {
+      const fileObject = {
+        name: file.name,
+        loading: true,
+        error: false
+      };
+      setFiles(files => [...files, fileObject]);
 
-    if (!uploadFile) {
-      return;
-    }
-
-    setLoading(true);
-
-    callApiPost("signed-upload-url", {
-      filename: uploadFile.name,
-    }).then(async (response) => {
-      if (response.failedRequest) {
-        setLoading(false);
-        return;
-      }
-      await fetch(response.url, {
-        method: "PUT",
-        body: uploadFile,
+      const signedResult = await callApiPost("signed-upload-url", {
+        filename: file.name,
       });
 
-      onChange(response.filename);
-      setFile(uploadFile);
-      setLoading(false);
+      if (signedResult.failedRequest) {
+        fileObject.error = true;
+        fileObject.loading = false;
+        updateFiles(fileObject);
+        return;
+      }
+
+      const uploadResult = await fetch(signedResult.url, {
+        method: "PUT",
+        body: file,
+      });
+
+      if (uploadResult.status >= 200 && uploadResult.status < 300) {
+        onChange([...value, signedResult.filename]);
+      } else {
+        fileObject.error = true;
+      }
+      fileObject.loading = false;
+      updateFiles(fileObject);
     });
   };
+
+  function removeUpload(file) {
+    setFiles(files.filter(f => f !== file))
+  }
 
   return (
     <div>
       <div className="mb-1">
-        <input id={id} name={id} type="file" onChange={onChangeHandler} />
+        <label htmlFor={id} className="btn btn-secondary btn-sm px-2 py-1 with-btn-lnf">
+          {translate("attach file")}
+          <input
+            type="file"
+            id={id}
+            name={id}
+            value=""
+            onChange={(e: any) => uploadFile(e.target.files)}
+            hidden
+            multiple
+          />
+        </label>
       </div>
-      {loading && (
-        <small>{translate("Processing file…")}</small>
-      )}
-      {file && (
-        <ul className="file-info">
-          <li><strong>{file.name}</strong> ({[file.type, `${file.size} bytes`].filter(e => !!e).join(", ")})</li>
-        </ul>
-      )}
+      {files.map((file: any) => (
+        <div className="attachment_file mb-0" key={file.name}>
+          <div className="dots">
+            {file.name}
+            {" "}
+            {file.loading && translate("Processing file…")}
+            {file.error && translate("Failed")}
+          </div>
+          <div className="delete_file pointer" onClick={() => removeUpload(file)}>
+            x
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -86,9 +114,9 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       const ticketAttributes = {};
       const messageAttributes = {
         text: formData["message.text"],
-        attachments: [{
-          filename: formData["message.attachment"],
-        }]
+        attachments: formData["message.attachments"]?.map(attachment => ({
+          filename: attachment,
+        }))
       };
 
       Object.entries(formData).forEach(([name, value]) => {
