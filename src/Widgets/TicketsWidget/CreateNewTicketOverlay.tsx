@@ -149,16 +149,11 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
   const [schema, setSchema] = React.useState({});
   const [uiSchema, setUiSchema] = React.useState({});
   const [formData, setFormData] = React.useState({});
-  const { ticketSchema } = useTenantContext();
+  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
   React.useEffect(() => {
-    Scrivito.load(() => {
-      const [obj] = Scrivito.Obj.onAllSites()
-        .where("_objClass", "equals", "TicketFormConfiguration")
-        .take(1);
-      return obj;
-    }).then((obj) => {
-      const localUiSchema = JSON.parse(obj?.get("uiSchema") as string || "{}");
-      const localSchema = JSON.parse(obj?.get("formSchema") as string || "{}");
+    if (ticketSchema && ticketFormConfiguration) {
+      const localUiSchema = ticketFormConfiguration.uiSchema;
+      const localSchema = ticketFormConfiguration.formSchema;
 
       Object.entries(ticketSchema.properties).forEach(([attribute, schema]) => {
         Object.entries(schema as object).forEach(([key, value]) => {
@@ -172,8 +167,8 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       setUiSchema(localUiSchema);
       setSchema(merge(ticketSchema, localSchema));
       setFormData(localSchema.formData);
-    });
-  }, []);
+    }
+  }, [ticketSchema, ticketFormConfiguration]);
 
   return (
     <Modal
