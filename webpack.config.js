@@ -70,7 +70,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     publicPath: path.resolve(__dirname, "dist"),
     libraryTarget: "umd",
-    library: "jr-customer-portal-sdk",
+    library: "jr-ticketing-sdk",
     globalObject: "this",
   },
   mode: "production",

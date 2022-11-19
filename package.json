@@ -1,10 +1,11 @@
 {
-  "name": "jr-customer-portal-sdk",
+  "name": "jr-ticketing-sdk",
   "version": "0.0.17",
   "description": "Library for JustRelate Customer Portal apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "install": "[ -f ./dist/index.js ] || ([ -f ./src/index.ts ] && webpack)",
     "test": "jest",
     "build": "webpack",
     "watch": "webpack watch",
