@@ -10,10 +10,11 @@ import {
   reduce,
   sortBy,
 } from "lodash-es";
-import { CDN_BASE_PATH } from "../utils/constants";
+
 import { callApiGet } from "../api/portalApiCalls";
 import {  getDictionary, getLanguage } from "../utils/translate";
 import i18n from "../config/i18n";
+import addI18nBundles from "../config/addI18nBundles";
 
 // dummy function will be removed later
 const dictTranslate = (a, b) => {}
@@ -26,21 +27,6 @@ const TenantContext = React.createContext({} as any);
  * never access the IDs directly outside this module and simply add
  * additional functions to the context if necessary.
  */
-
-const DEFAULT_LOCALIZATION = {
-  en: {
-    PSA_SVC_TRB_CLS: "Closed",
-    PSA_SVC_TRB_DON: "Done",
-    PSA_SVC_TRB_DCS: "Decided",
-    PSA_SVC_TRB_ACQ: "Captured",
-    PSA_SVC_TRB_DSP: "Disposed",
-    PSA_SVC_CAL: "Question",
-    PSA_SVC_CPL: "Claim",
-    PSA_SVC_SUP: "Support",
-    PSA_SVC_TRB: "Fault",
-    PSA_SVC_TRB_LIT: "Minor Fault",
-  },
-};
 
 const DEFAULT_TICKET_STATUS_POSITIONS = {
   PSA_SVC_TRB: {
@@ -58,23 +44,20 @@ const DEFAULT_TICKET_STATUS_POSITIONS = {
 
 const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
 
-const RegularAttributes = {
+const TicketAttributes = {
   "title": {
-    title: i18n.t("CreateNewTicket.title"),
     type: "string",
     "ui:autofocus": true,
     "ui:required": true,
     "ui:regular": true
   },
   "message.text": {
-    title: i18n.t("CreateNewTicket.message.text"),
     type: "string",
     "ui:widget": "textarea",
     "ui:required": true,
     "ui:regular": true
   },
   "message.attachments": {
-    title: i18n.t("CreateNewTicket.message.attachments"),
     type: "array",
     items: {
       type: "string",
@@ -90,14 +73,19 @@ export function TenantContextProvider(props) {
   const [tenantLocalization, setTenantLocalization] = useState<any>();
   const [ticketStatusPositions, setTicketStatusPositions] = useState<any>();
   const ticketTypesAsOptions = useRef({});
+
   const instanceId = process.env.SCRIVITO_TENANT;
+
+  const [customAttributes, setCustomAttributes] = React.useState({});
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketFormConfiguration, setTicketFormConfiguration] = useState<any>();
-  const [instanceReady, setInstanceReady] = useState<any>(false);
-
-  // TODO get localisation from instance
 
   useEffect(() => {
+    loadTicketFormConfiguration();
+    loadConfiguration();
+  }, []);
+
+  const loadTicketFormConfiguration = () => {
     Scrivito.load(() => {
       const [obj] = Scrivito.Obj.onAllSites()
         .where("_objClass", "equals", "TicketFormConfiguration")
@@ -109,32 +97,46 @@ export function TenantContextProvider(props) {
         formSchema: JSON.parse(obj?.get("formSchema") as string || "{}"),
       });
     });
+  }
 
-    const loadInstance = async () => {
-      try {
-        const instance = await callApiGet("instance");
+  const loadConfiguration = async () => {
+    try {
+      const instance = await callApiGet("instance");
 
-        const properties = {
-          ...RegularAttributes,
-          ...instance.custom_attributes.Ticket
-        };
+      setCustomAttributes(instance.custom_attributes);
+      addI18nBundles(instance.locales);
 
-        setTicketSchema({
-          type: "object",
-          properties,
-          required: Object.keys(properties).filter((name) => properties[name]["ui:required"]),
-        });
+      // set ticket schema
+      const customTicketProps = instance.custom_attributes.Ticket;
 
-        const salesMetaData = instance;
-        const ticketPositions = extractTicketStatusPositions(salesMetaData);
-        setTicketStatusPositions(ticketPositions);
-      } catch (error) {
-        setTicketStatusPositions(DEFAULT_TICKET_STATUS_POSITIONS);
-      }
-      setInstanceReady(true);
+
+      setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
+
+      const salesMetaData = instance;
+      const ticketPositions = extractTicketStatusPositions(salesMetaData);
+      setTicketStatusPositions(ticketPositions);
+
+    } catch (error) {
+      setTicketSchemaForInstance({ ...TicketAttributes });
     }
-    loadInstance();
-  }, []);
+  }
+
+  const setTicketSchemaForInstance = (properties) => {
+    Object.keys(properties).forEach((key) => {
+      const prop = properties[key];
+
+      prop.title = i18n.t(`Ticket.labels.${key}`);
+      if (prop.enum) {
+        prop.enumNames = prop.enum.map((value) => i18n.t(`Ticket.${key}.${value}`));
+      }
+    });
+
+    setTicketSchema({
+      type: "object",
+      properties,
+      required: Object.keys(properties).filter((name) => properties[name]["ui:required"]),
+    });
+  }
 
   // useMemo, useEffect do not work here, the language is set too late
   // so we useRef to cache computation results
@@ -236,8 +238,7 @@ export function TenantContextProvider(props) {
   }
 
   function isTenantContextReady() {
-    // return readyLocalization && readySalesMeta;
-    return instanceReady;
+    return !isEmpty(ticketSchema) && !isEmpty(ticketFormConfiguration);
   }
 
   return (

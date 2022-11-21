@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
+
 import i18n from "../../config/i18n";
 import { TenantContextProvider, useTenantContext } from "../TenantContextProvider";
 import { SortableContainer } from "./SortableContainer";

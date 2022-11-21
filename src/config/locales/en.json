@@ -113,11 +113,13 @@
     "showInCreateForm": "Show in create form",
     "showInDetails": "Show in details"
   },
-  "CreateNewTicket": {
-    "title": "Title",
-    "message": {
-      "text": "Text",
-      "attachments": "Attachments"
+  "Ticket": {
+    "labels": {
+      "title": "Title",
+      "message": {
+        "text": "Message",
+        "attachments": "Attachments"
+      }
     }
   }
 }

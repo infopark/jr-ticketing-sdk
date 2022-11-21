@@ -153,7 +153,6 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
   React.useEffect(() => {
     if (ticketSchema && ticketFormConfiguration) {
       const localUiSchema = ticketFormConfiguration.uiSchema;
-      const localSchema = ticketFormConfiguration.formSchema;
 
       Object.entries(ticketSchema.properties).forEach(([attribute, schema]) => {
         Object.entries(schema as object).forEach(([key, value]) => {
@@ -165,8 +164,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       });
 
       setUiSchema(localUiSchema);
-      setSchema(merge(ticketSchema, localSchema));
-      setFormData(localSchema.formData);
+      setSchema(ticketSchema);
     }
   }, [ticketSchema, ticketFormConfiguration]);
 
