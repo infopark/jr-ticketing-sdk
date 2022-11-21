@@ -109,7 +109,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             )}
           </dd>
         </dl>
-        {customAttributes.map(name => (
+        {customAttributes.filter(name => ticketFormConfiguration?.uiSchema[name]?.["ui:details"] !== "hidden").map(name => (
           <dl className="table_style flex_grid" key={name}>
             <dt className="flex_order_1 bold item_label">
               {ticketSchema.properties[name].title || name}

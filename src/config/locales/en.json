@@ -100,25 +100,18 @@
   "Ticket you are looking for was either deleted or its address is wrong.": "Ticket you are looking for was either deleted or its address is wrong.",
   "Go to mainpage": "Go to mainpage",
   "Time locale": "Time locale",
-  "Attachment": "Attachment",
-  "Provide a supplementary attachment": "Provide a supplementary attachment",
   "No tickets available.": "No tickets available.",
-  "Subject cannot be empty": "Subject cannot be empty",
-  "Subject must be 80 characters or less": "Please limit the subject to 80 characters",
-  "Description cannot be empty": "Description cannot be empty",
-  "Please upload files up to 20 MB": "You can attach a file up to 20 MB in size",
-  "The size of your attachment exceeds 20 MB": "The size of your attachment exceeds 20 MB",
   "Processing file…": "Processing file…",
   "Failed": "Failed",
   "Create": "Create",
-  "Please report an issue of this type only": "Please report an issue of this type only",
   "ID": "ID",
   "Status": "Status",
   "Created": "Created",
   "Created on": "Created on",
   "TicketFormConfigDialog": {
     "fieldname": "Field name:",
-    "isVisible": "Visible?"
+    "showInCreateForm": "Show in create form",
+    "showInDetails": "Show in details"
   },
   "CreateNewTicket": {
     "title": "Title",

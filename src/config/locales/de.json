@@ -100,25 +100,18 @@
   "Ticket you are looking for was either deleted or its address is wrong.": "Das Ticket, wonach Sie suchen, wurde entweder gelöscht oder ist anders gekennzeichnet!",
   "Go to mainpage": "Zurück zur Hauptseite",
   "Time locale": "Zeitgebietsschema",
-  "Attachment": "Anhang",
-  "Provide a supplementary attachment": "Einen Anhang hinzufügen",
   "No tickets available.": "Keine Tickets vorhanden.",
-  "Subject cannot be empty": "Thema darf nicht leer sein",
-  "Subject must be 80 characters or less": "Bitte beschränken Sie das Thema auf 80 Zeichen",
-  "Description cannot be empty": "Beschreibung darf nicht leer sein",
-  "Please upload files up to 20 MB": "Sie können eine Datei bis zu einer Größe von 20 MB anhängen",
-  "The size of your attachment exceeds 20 MB": "Die Größer Ihres Anhangs überschreitet 20 MB",
   "Processing file…": "Die Datei wird bearbeitet ...",
   "Failed": "Gescheitert",
   "Create": "Anlegen",
-  "Please report an issue of this type only": "Bitte melden Sie nur ein Problem dieser Art",
   "ID": "ID",
   "Status": "Status",
   "Created": "Erstellt",
   "Created on": "Erstellt am",
   "TicketFormConfigDialog": {
     "fieldname": "Feldname:",
-    "isVisible": "Sichtbar?"
+    "showInCreateForm": "Im Formular anzeigen",
+    "showInDetails": "In Details anzeigen"
   },
   "CreateNewTicket": {
     "title": "Titel",
