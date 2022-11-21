@@ -46,25 +46,14 @@ const TicketFormConfigDialog = Scrivito.connect(() => (
 
 const TicketFormConfigDialogContent = Scrivito.connect(() => {
   const [orderedObjs, setOrderedObjs] = React.useState<Array<any>>([]);
-  // const [schema, setSchema] = React.useState({});
-  const { ticketSchema } = useTenantContext();
+  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
   React.useEffect(() => {
-    if (!ticketSchema) {
-      return;
-    }
-
-    Scrivito.load(() => {
-      const [obj] = Scrivito.Obj.onAllSites()
-        .where("_objClass", "equals", "TicketFormConfiguration")
-        .take(1);
-      return obj;
-    }).then((obj) => {
-      const localUiSchema = JSON.parse(obj?.get("uiSchema") as string || "{}");
+    if (ticketSchema && ticketFormConfiguration) {
       setOrderedObjs(
-        transformPropertiesToArray(ticketSchema.properties, localUiSchema)
+        transformPropertiesToArray(ticketSchema.properties, ticketFormConfiguration.uiSchema)
       );
-    });
-  }, [ticketSchema]);
+    }
+  }, [ticketSchema, ticketFormConfiguration]);
 
   const updateVisibility = (_event, obj) => {
     const newObjs = orderedObjs.map((item: any) =>

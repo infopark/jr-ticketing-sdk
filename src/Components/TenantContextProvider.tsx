@@ -1,3 +1,4 @@
+import * as Scrivito from "scrivito";
 import React, { useState, useEffect, useRef } from "react";
 import {
   each,
@@ -91,11 +92,24 @@ export function TenantContextProvider(props) {
   const ticketTypesAsOptions = useRef({});
   const instanceId = process.env.SCRIVITO_TENANT;
   const [ticketSchema, setTicketSchema] = useState<any>();
+  const [ticketFormConfiguration, setTicketFormConfiguration] = useState<any>();
   const [instanceReady, setInstanceReady] = useState<any>(false);
 
   // TODO get localisation from instance
 
   useEffect(() => {
+    Scrivito.load(() => {
+      const [obj] = Scrivito.Obj.onAllSites()
+        .where("_objClass", "equals", "TicketFormConfiguration")
+        .take(1);
+      return obj;
+    }).then((obj) => {
+      setTicketFormConfiguration({
+        uiSchema: JSON.parse(obj?.get("uiSchema") as string || "{}"),
+        formSchema: JSON.parse(obj?.get("formSchema") as string || "{}"),
+      });
+    });
+
     const loadInstance = async () => {
       try {
         const instance = await callApiGet("instance");
@@ -230,6 +244,7 @@ export function TenantContextProvider(props) {
     <TenantContext.Provider
       value={{
         ticketSchema,
+        ticketFormConfiguration,
         tenantLocalization,
         isTicketStatusOpen,
         isTicketStatusClosed,

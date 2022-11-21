@@ -1,4 +1,5 @@
 import React from "react";
+import * as Scrivito from "scrivito";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 import { parseDate } from "../../../utils/dateUtils";
@@ -39,6 +40,18 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     }
   };
 
+  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
+
+  const customAttributes = Object.keys(ticketSchema.properties || {}).filter(name => !ticketSchema.properties[name]["ui:regular"]);
+  if (ticketFormConfiguration?.uiSchema["ui:order"]) {
+    const asterixPosition = 1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf("*");
+    customAttributes.sort((a, b) => {
+      const posA = (1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf(a)) || asterixPosition;
+      const posB = (1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf(b)) || asterixPosition;
+      return posA - posB;
+    });
+  }
+
   return (
     <PageContentWrapper>
       <InnerPageContentWrapper additionalBoxClass="box_bg_white">
@@ -67,7 +80,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             {i18n.t("Ticket Type")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {i18n.t(type)}
+            {i18n.t(type) || "-"}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
@@ -96,6 +109,16 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             )}
           </dd>
         </dl>
+        {customAttributes.map(name => (
+          <dl className="table_style flex_grid" key={name}>
+            <dt className="flex_order_1 bold item_label">
+              {ticketSchema.properties[name].title || name}
+            </dt>
+            <dd className="flex_order_2 item_label_content">
+              {Array.isArray(ticket[name]) ? ticket[name].join(", ") : ticket[name]}
+            </dd>
+          </dl>
+        ))}
       </InnerPageContentWrapper>
       <button
         className="btn btn-secondary"
