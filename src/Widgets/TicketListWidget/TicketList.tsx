@@ -16,7 +16,6 @@ function TicketList({
   loading,
   ticketsListFilters,
   filterKey,
-  statusDictionary,
 }) {
   if (loading) {
     return (
@@ -51,7 +50,6 @@ function TicketList({
             ticket={ticket}
             targetLink={targetLink}
             key={index}
-            statusDictionary={statusDictionary}
           />
         );
       })}

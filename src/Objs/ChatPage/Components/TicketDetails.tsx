@@ -22,8 +22,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     created_at,
     messages,
   } = ticket;
-  const { tenantLocalization, getInitialTicketStatusClosed } =
-    useTenantContext();
   const { userData } = useUserData();
 
   const description = messages[0] ? messages[0].text : "";

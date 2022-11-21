@@ -1,5 +1,5 @@
 import * as Scrivito from "scrivito";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   each,
   head,
@@ -12,12 +12,8 @@ import {
 } from "lodash-es";
 
 import { callApiGet } from "../api/portalApiCalls";
-import {  getDictionary, getLanguage } from "../utils/translate";
 import i18n from "../config/i18n";
 import addI18nBundles from "../config/addI18nBundles";
-
-// dummy function will be removed later
-const dictTranslate = (a, b) => {}
 
 const TenantContext = React.createContext({} as any);
 
@@ -27,22 +23,6 @@ const TenantContext = React.createContext({} as any);
  * never access the IDs directly outside this module and simply add
  * additional functions to the context if necessary.
  */
-
-const DEFAULT_TICKET_STATUS_POSITIONS = {
-  PSA_SVC_TRB: {
-    initial_open: "PSA_SVC_TRB_ACQ",
-    initial_closed: "PSA_SVC_TRB_CLS",
-    open: [
-      "PSA_SVC_TRB_ACQ",
-      "PSA_SVC_TRB_DON",
-      "PSA_SVC_TRB_DSP",
-      "PSA_SVC_TRB_DCS",
-    ],
-    closed: ["PSA_SVC_TRB_CLS"],
-  },
-};
-
-const DEFAULT_TICKET_TYPE = "PSA_SVC_TRB";
 
 const TicketAttributes = {
   "title": {
@@ -68,17 +48,11 @@ const TicketAttributes = {
 };
 
 export function TenantContextProvider(props) {
-  const [readyLocalization, setReadyLocalization] = useState(false);
-  const [readySalesMeta, setReadySalesMeta] = useState(false);
-  const [tenantLocalization, setTenantLocalization] = useState<any>();
-  const [ticketStatusPositions, setTicketStatusPositions] = useState<any>();
-  const ticketTypesAsOptions = useRef({});
-
-  const instanceId = process.env.SCRIVITO_TENANT;
-
   const [customAttributes, setCustomAttributes] = React.useState({});
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketFormConfiguration, setTicketFormConfiguration] = useState<any>();
+
+  const instanceId = process.env.SCRIVITO_TENANT;
 
   useEffect(() => {
     loadTicketFormConfiguration();
@@ -106,16 +80,8 @@ export function TenantContextProvider(props) {
       setCustomAttributes(instance.custom_attributes);
       addI18nBundles(instance.locales);
 
-      // set ticket schema
       const customTicketProps = instance.custom_attributes.Ticket;
-
-
       setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
-
-      const salesMetaData = instance;
-      const ticketPositions = extractTicketStatusPositions(salesMetaData);
-      setTicketStatusPositions(ticketPositions);
-
     } catch (error) {
       setTicketSchemaForInstance({ ...TicketAttributes });
     }
@@ -138,105 +104,6 @@ export function TenantContextProvider(props) {
     });
   }
 
-  // useMemo, useEffect do not work here, the language is set too late
-  // so we useRef to cache computation results
-  const getTicketTypesAsOptions = () => {
-    if (!readyLocalization || !readySalesMeta) {
-      return [];
-    }
-    const language = getLanguage();
-    if (!language) {
-      return [];
-    }
-    const dictionary = getDictionary(tenantLocalization);
-    if (isEmpty(dictionary)) {
-      return [];
-    }
-
-    // stored version
-    if (
-      ticketTypesAsOptions.current &&
-      !isEmpty(ticketTypesAsOptions.current[language])
-    ) {
-      return ticketTypesAsOptions.current[language];
-    }
-
-    // ok, let's compute the type names
-    const tickettypes = keys(ticketStatusPositions);
-    const result = sortBy(
-      map(tickettypes, (tickettype) => ({
-        value: tickettype,
-        name: dictTranslate(tickettype, dictionary),
-      })),
-      "name"
-    );
-    ticketTypesAsOptions.current[language] = result;
-    return result;
-  };
-
-  function isTicketStatusClosed(
-    ticketType = DEFAULT_TICKET_TYPE,
-    ticketStatus
-  ) {
-    if (isEmpty(ticketType) || isEmpty(ticketStatus)) {
-      return false;
-    }
-    const positions = ticketStatusPositions[ticketType];
-    if (isNil(positions)) {
-      return false;
-    }
-    return positions.closed.indexOf(ticketStatus) >= 0;
-  }
-
-  function isTicketStatusOpen(ticketType = DEFAULT_TICKET_TYPE, ticketStatus) {
-    if (isEmpty(ticketType) || isEmpty(ticketStatus)) {
-      return false;
-    }
-    const positions = ticketStatusPositions[ticketType];
-    if (isNil(positions)) {
-      return false;
-    }
-    return positions.open.indexOf(ticketStatus) >= 0;
-  }
-
-  function getInitialTicketStatusOpen(ticketType = DEFAULT_TICKET_TYPE) {
-    if (isEmpty(ticketType)) {
-      return "";
-    }
-    const positions = ticketStatusPositions[ticketType];
-    if (isNil(positions)) {
-      return "";
-    }
-    let initial = positions.initial_open;
-    if (!isNil(initial)) {
-      return initial;
-    }
-    initial = head(positions.open);
-    if (!isNil(initial)) {
-      return initial;
-    }
-    return "";
-  }
-
-  function getInitialTicketStatusClosed(ticketType = DEFAULT_TICKET_TYPE) {
-    if (isEmpty(ticketType)) {
-      return "";
-    }
-    const positions = ticketStatusPositions[ticketType];
-    if (isNil(positions)) {
-      return "";
-    }
-    let initial = positions.initial_closed;
-    if (!isNil(initial)) {
-      return initial;
-    }
-    initial = head(positions.closed);
-    if (!isNil(initial)) {
-      return initial;
-    }
-    return "";
-  }
-
   function isTenantContextReady() {
     return !isEmpty(ticketSchema) && !isEmpty(ticketFormConfiguration);
   }
@@ -246,12 +113,6 @@ export function TenantContextProvider(props) {
       value={{
         ticketSchema,
         ticketFormConfiguration,
-        tenantLocalization,
-        isTicketStatusOpen,
-        isTicketStatusClosed,
-        getInitialTicketStatusOpen,
-        getInitialTicketStatusClosed,
-        getTicketTypesAsOptions,
         isTenantContextReady,
       }}
     >
@@ -260,117 +121,6 @@ export function TenantContextProvider(props) {
   );
 }
 
-export function useTenantLocalization() {
-  return React.useContext(TenantContext);
-}
-
 export function useTenantContext() {
   return React.useContext(TenantContext);
-}
-
-function extractTicketStatusPositions(metadata) {
-  if (!metadata) {
-    return DEFAULT_TICKET_STATUS_POSITIONS;
-  }
-  if (!metadata.ticket_status || !metadata.ticket_status.length) {
-    return DEFAULT_TICKET_STATUS_POSITIONS;
-  }
-
-  const positions = createTicketStatusPositionsPerType(metadata.ticket_type);
-  assignTicketStatiToTicketTypes(positions, metadata.ticket_status);
-  filterInvalidTicketStatusPositions(positions);
-
-  // keep default ticket type around if everything else fails
-  if (isEmpty(positions)) {
-    return DEFAULT_TICKET_STATUS_POSITIONS;
-  }
-
-  return positions;
-}
-
-function extractLocalizationTimestamp(metadata) {
-  if (
-    !metadata ||
-    !metadata.localization_timestamp ||
-    !metadata.localization_timestamp.length
-  ) {
-    return "";
-  }
-  return metadata.localization_timestamp[0].id;
-}
-
-function createTicketStatusPositionsPerType(ticketTypes) {
-  if (isEmpty(ticketTypes)) {
-    return {};
-  }
-  return reduce(
-    ticketTypes,
-    (accum, t) => {
-      if (!t) {
-        return accum;
-      }
-      accum[t.id] = createInitialTicketStatusPositions();
-      return accum;
-    },
-    {}
-  );
-}
-
-function assignTicketStatiToTicketTypes(ticketTypes, ticketStati) {
-  reduce(
-    ticketStati,
-    (accum, value) => {
-      if (!value) {
-        return accum;
-      }
-      const { id, tags, ref } = value;
-      if (isEmpty(id) || isNil(tags) || isEmpty(ref)) {
-        return accum;
-      }
-      if (!accum[ref]) {
-        accum[ref] = createInitialTicketStatusPositions();
-      }
-      const typePositions = accum[ref];
-
-      const initial = tags.indexOf("initial") >= 0;
-      if (tags.indexOf("open") >= 0) {
-        typePositions.open.push(id);
-        if (initial) {
-          typePositions.initial_open = id;
-        }
-      } else if (tags.indexOf("done") >= 0) {
-        typePositions.closed.push(id);
-        if (initial) {
-          typePositions.initial_closed = id;
-        }
-      }
-
-      return accum;
-    },
-    ticketTypes
-  );
-}
-
-function filterInvalidTicketStatusPositions(positions) {
-  if (isEmpty(positions)) {
-    return;
-  }
-  each(keys(positions), (k) => {
-    const p = positions[k];
-    if (isNil(p)) {
-      return;
-    }
-    if (isEmpty(p.open) || isEmpty(p.closed)) {
-      delete positions[k];
-    }
-  });
-}
-
-function createInitialTicketStatusPositions() {
-  return {
-    initial_open: undefined,
-    initial_closed: undefined,
-    open: [],
-    closed: [],
-  };
 }

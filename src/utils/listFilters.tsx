@@ -17,11 +17,7 @@ const staticTicketListFilters = {
   },
 };
 
-const createTicketsListFilters = (
-  tickets,
-  statusDictionary,
-  isTicketStatusClosed
-) => {
+const createTicketsListFilters = (tickets) => {
   const filterKeys = uniq(map(tickets, (obj) => obj.status));
   const ticketsListFilters = { ...staticTicketListFilters };
   each(filterKeys, (filterKey) => {
@@ -39,31 +35,11 @@ const createTicketsListFilters = (
   return ticketsListFilters;
 };
 
-const createDefaultTicketListFilter = (isTicketStatusClosed) => {
+const createDefaultTicketListFilter = () => {
   return staticTicketListFilters.active;
-};
-
-const isTicketListFilterDisabled = (
-  ticketsListFilters,
-  tickets,
-  isTicketStatusClosed
-) => {
-  if (
-    Object.keys(ticketsListFilters).length >
-    Object.keys(staticTicketListFilters).length + 1
-  ) {
-    return false;
-  }
-  for (const ticket of tickets) {
-    if (isTicketStatusClosed(ticket.tickettype, ticket.status)) {
-      return false;
-    }
-  }
-  return true;
 };
 
 export {
   createTicketsListFilters,
   createDefaultTicketListFilter,
-  isTicketListFilterDisabled,
 };

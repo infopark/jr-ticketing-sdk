@@ -21,7 +21,6 @@ interface ticketEntryProps {
     updated_at: string;
   };
   targetLink: Scrivito.Link;
-  statusDictionary: object;
 }
 
 function AttachmentFlag({ count }) {
@@ -36,7 +35,6 @@ function AttachmentFlag({ count }) {
 function TicketEntry({
   ticket,
   targetLink,
-  statusDictionary,
 }: ticketEntryProps) {
   const { userData } = useUserData();
   const creationDate = parseDate(
