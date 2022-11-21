@@ -26,8 +26,6 @@
   "search for ticket": "Search for Ticket",
   "Please enter a subject": "Please specify the subject of your request.",
   "Please describe your request in a few sentences": "Please describe your request in a few sentences.",
-  "Progress": "Progress",
-  "Ticket Type": "Ticket Type",
   "You need to select a service request type": "You need to select a service request type.",
   "in progress": "In Progress",
   "chat": "Messages",
@@ -106,8 +104,6 @@
   "Create": "Create",
   "ID": "ID",
   "Status": "Status",
-  "Created": "Created",
-  "Created on": "Created on",
   "TicketFormConfigDialog": {
     "fieldname": "Field name:",
     "showInCreateForm": "Show in create form",
@@ -115,11 +111,28 @@
   },
   "Ticket": {
     "labels": {
+      "created_at": "Created on",
       "title": "Title",
       "message": {
         "text": "Message",
         "attachments": "Attachments"
-      }
+      },
+      "number": "Ticket Number",
+      "status": "Status",
+      "type": "Ticket Type"
+    },
+    "status": {
+      "new": "new",
+      "open": "open",
+      "waiting": "waiting",
+      "closed": "closed",
+      "null": "-"
+    },
+    "type": {
+      "problem": "problem",
+      "task": "task",
+      "question": "question",
+      "null": "-"
     }
   }
 }

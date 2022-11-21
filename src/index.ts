@@ -1,5 +1,3 @@
-import * as Scrivito from "scrivito";
-
 import isLoggedIn from "./Components/Auth/utils";
 import UserProfile from "./Components/Layout/UserProfile";
 import ErrorAPIProvider from "./Components/ErrorAPIContext";
@@ -27,17 +25,6 @@ import "./Widgets/TicketsWidget/TicketsWidgetClass";
 import "./Widgets/TicketsWidget/TicketsWidgetComponent";
 import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
 import * as InitialContentBodyFactory from "./Bridge/InitialContentBodyFactory";
-export * as portalApiCalls from "./api/portalApiCalls";
-
-if (Scrivito.isEditorLoggedIn()) {
-  Scrivito.extendMenu((menu) => {
-    menu.insert({
-      id: "ticket-form-configuration",
-      title: "Form configuration",
-      onClick: () => Scrivito.openDialog("TicketFormConfigDialog"),
-    });
-  });
-}
 
 export {
   UserDataProvider,
