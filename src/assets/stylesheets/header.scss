@@ -1,0 +1,15 @@
+.profil_menu {
+  // background: #555;
+  height: calc(100vh - 70px);
+  left: -100vw;
+  position: fixed;
+  top: 70px;
+  // width: 270px;
+  z-index: 16;
+  @media screen and (min-width: 992px) {
+    height: calc(100vh - 60px);
+    left: -270px;
+    top: 60px;
+    width: 270px;
+  }
+}
