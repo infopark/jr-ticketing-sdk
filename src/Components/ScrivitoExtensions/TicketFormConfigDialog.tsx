@@ -8,7 +8,8 @@ function transformPropertiesToArray(input, uiSchema) {
   const fieldList = Object.keys(input).map((key) => ({
     ...input[key],
     name: key,
-    visibility: uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : true,
+    showCreate: uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : true,
+    showDetails: uiSchema[key] ? uiSchema[key]["ui:details"] !== "hidden" : true,
   }));
   if (uiSchema["ui:order"]) {
     const sortArray = uiSchema["ui:order"].filter((item) => item !== "*");
@@ -26,9 +27,12 @@ function fromPropertiesDefinitionToSchema(inputList) {
   const uiSchema = {};
   const formData = {};
   inputList.forEach((item) => {
-    const { name, visibility } = item;
-    if (!visibility) {
+    const { name, showCreate, showDetails } = item;
+    if (!showCreate) {
       uiSchema[name] = { "ui:widget": "hidden" };
+    }
+    if (!showDetails) {
+      uiSchema[name] = { "ui:details": "hidden" };
     }
   });
   uiSchema["ui:order"] = [...inputList.map((item) => item.name), "*"];
@@ -55,9 +59,9 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
     }
   }, [ticketSchema, ticketFormConfiguration]);
 
-  const updateVisibility = (_event, obj) => {
+  const updateField = (field, changes) => {
     const newObjs = orderedObjs.map((item: any) =>
-      item.name === obj.name ? { ...item, visibility: !item.visibility } : item
+      item.name === field.name ? { ...item, ...changes } : item
     );
     updateSchema(newObjs);
   };
@@ -99,7 +103,7 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
         <SortableObjList
           objs={orderedObjs}
           onSortEnd={onSortEnd}
-          updateVisibility={updateVisibility}
+          updateField={updateField}
         />
       </div>
     </div>
@@ -110,7 +114,7 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
 function SortableObjList({
   objs,
   onSortEnd,
-  updateVisibility,
+  updateField,
 }) {
   return (
     <div id="scrivito_obj_sorting_sortable">
@@ -125,7 +129,7 @@ function SortableObjList({
           <SortableObjListItem
             key={obj.name}
             obj={obj}
-            updateVisibility={updateVisibility}
+            updateField={updateField}
           />
         ))}
       </SortableContainer>
@@ -133,7 +137,7 @@ function SortableObjList({
   );
 }
 
-const SortableObjListItem = ({ obj, updateVisibility }) => {
+const SortableObjListItem = ({ obj, updateField }) => {
   return (
     <li>
       <div>
@@ -142,20 +146,36 @@ const SortableObjListItem = ({ obj, updateVisibility }) => {
         {obj.title || obj.name}
       </div>
       {!obj["ui:regular"] && (
-        <div>
-          <label>
-            {i18n.t("TicketFormConfigDialog.isVisible")}
-            {" "}
-            <input
-              type="checkbox"
-              name="visibility"
-              checked={obj.visibility}
-              onChange={(e) => {
-                updateVisibility(e, obj);
-              }}
-            />
-          </label>
-        </div>
+        <>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                name="showCreate"
+                checked={obj.showCreate}
+                onChange={(_event) => {
+                  updateField(obj, { showCreate: !obj.showCreate });
+                }}
+              />
+              {" "}
+              {i18n.t("TicketFormConfigDialog.showInCreateForm")}
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                name="showDetails"
+                checked={obj.showDetails}
+                onChange={(_event) => {
+                  updateField(obj, { showDetails: !obj.showDetails });
+                }}
+              />
+              {" "}
+              {i18n.t("TicketFormConfigDialog.showInDetails")}
+            </label>
+          </div>
+        </>
       )}
     </li>
   );
