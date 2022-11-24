@@ -68,7 +68,6 @@ export function TenantContextProvider(props) {
     }).then((obj) => {
       setTicketFormConfiguration({
         uiSchema: JSON.parse(obj?.get("uiSchema") as string || "{}"),
-        formSchema: JSON.parse(obj?.get("formSchema") as string || "{}"),
       });
     });
   }

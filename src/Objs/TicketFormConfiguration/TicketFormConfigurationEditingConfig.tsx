@@ -1,6 +1,6 @@
 import * as Scrivito from "scrivito";
 
 Scrivito.provideEditingConfig("TicketFormConfiguration", {
-  properties: ["formSchema", "uiSchema"],
+  properties: ["uiSchema"],
   hideInSelectionDialogs: true,
 });

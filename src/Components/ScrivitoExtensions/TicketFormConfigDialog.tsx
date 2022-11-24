@@ -39,7 +39,6 @@ function fromPropertiesDefinitionToSchema(inputList) {
   uiSchema["ui:order"] = [...inputList.map((item) => item.name), "*"];
   return {
     uiSchema,
-    formSchema: { formData },
   };
 }
 
@@ -73,8 +72,7 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
 
   const updateSchema = (orderedItems) => {
     setOrderedObjs(orderedItems);
-    const { formSchema, uiSchema } =
-      fromPropertiesDefinitionToSchema(orderedItems);
+    const { uiSchema } = fromPropertiesDefinitionToSchema(orderedItems);
     Scrivito.load(() => {
       const [obj] = Scrivito.Obj.onAllSites()
         .where("_objClass", "equals", "TicketFormConfiguration")
@@ -83,12 +81,10 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
     }).then((obj) => {
       if (obj) {
         obj.update({
-          formSchema: JSON.stringify(formSchema),
           uiSchema: JSON.stringify(uiSchema),
         });
       } else {
         (Scrivito.getClass("TicketFormConfiguration") as any).onAllSites().create({
-          formSchema: JSON.stringify(formSchema),
           uiSchema: JSON.stringify(uiSchema),
         });
       }
