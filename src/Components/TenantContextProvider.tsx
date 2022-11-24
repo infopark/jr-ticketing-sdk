@@ -50,7 +50,7 @@ const TicketAttributes = {
 export function TenantContextProvider(props) {
   const [customAttributes, setCustomAttributes] = React.useState({});
   const [ticketSchema, setTicketSchema] = useState<any>();
-  const [ticketFormConfiguration, setTicketFormConfiguration] = useState<any>();
+  const [ticketUiSchema, setTicketUiSchema] = useState<any>();
 
   const instanceId = process.env.SCRIVITO_TENANT;
 
@@ -66,9 +66,8 @@ export function TenantContextProvider(props) {
         .take(1);
       return obj;
     }).then((obj) => {
-      setTicketFormConfiguration({
-        uiSchema: JSON.parse(obj?.get("uiSchema") as string || "{}"),
-      });
+      const schema = JSON.parse(obj?.get("uiSchema") as string || "{}");
+      setTicketUiSchema(schema);
     });
   }
 
@@ -104,14 +103,14 @@ export function TenantContextProvider(props) {
   }
 
   function isTenantContextReady() {
-    return !isEmpty(ticketSchema) && !isEmpty(ticketFormConfiguration);
+    return !isEmpty(ticketSchema) && !isEmpty(ticketUiSchema);
   }
 
   return (
     <TenantContext.Provider
       value={{
         ticketSchema,
-        ticketFormConfiguration,
+        ticketUiSchema,
         isTenantContextReady,
       }}
     >

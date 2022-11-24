@@ -149,10 +149,11 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
   const [schema, setSchema] = React.useState({});
   const [uiSchema, setUiSchema] = React.useState({});
   const [formData, setFormData] = React.useState({});
-  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
+  const { ticketSchema, ticketUiSchema } = useTenantContext();
+
   React.useEffect(() => {
-    if (ticketSchema && ticketFormConfiguration) {
-      const localUiSchema = ticketFormConfiguration.uiSchema;
+    if (ticketSchema && ticketUiSchema) {
+      const localUiSchema = { ...ticketUiSchema };
 
       Object.entries(ticketSchema.properties).forEach(([attribute, schema]) => {
         Object.entries(schema as object).forEach(([key, value]) => {
@@ -166,7 +167,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       setUiSchema(localUiSchema);
       setSchema(ticketSchema);
     }
-  }, [ticketSchema, ticketFormConfiguration]);
+  }, [ticketSchema, ticketUiSchema]);
 
   return (
     <Modal

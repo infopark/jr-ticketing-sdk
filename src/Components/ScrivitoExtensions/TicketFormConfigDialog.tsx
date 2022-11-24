@@ -50,14 +50,14 @@ const TicketFormConfigDialog = Scrivito.connect(() => (
 
 const TicketFormConfigDialogContent = Scrivito.connect(() => {
   const [orderedObjs, setOrderedObjs] = React.useState<Array<any>>([]);
-  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
+  const { ticketSchema, ticketUiSchema } = useTenantContext();
   React.useEffect(() => {
-    if (ticketSchema && ticketFormConfiguration) {
+    if (ticketSchema && ticketUiSchema) {
       setOrderedObjs(
-        transformPropertiesToArray(ticketSchema.properties, ticketFormConfiguration.uiSchema)
+        transformPropertiesToArray(ticketSchema.properties, ticketUiSchema)
       );
     }
-  }, [ticketSchema, ticketFormConfiguration]);
+  }, [ticketSchema, ticketUiSchema]);
 
   const updateField = (field, changes) => {
     const newObjs = orderedObjs.map((item: any) =>

@@ -38,14 +38,18 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     }
   };
 
-  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
+  const { ticketSchema, ticketUiSchema } = useTenantContext();
+
+  if (!ticketSchema || !ticketUiSchema) {
+    return <PageContentWrapper>Loading ...</PageContentWrapper>;
+  }
 
   const customAttributes = Object.keys(ticketSchema.properties || {}).filter(name => !ticketSchema.properties[name]["ui:regular"]);
-  if (ticketFormConfiguration?.uiSchema["ui:order"]) {
-    const asterixPosition = 1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf("*");
+  if (ticketUiSchema["ui:order"]) {
+    const asterixPosition = 1 + ticketUiSchema["ui:order"].indexOf("*");
     customAttributes.sort((a, b) => {
-      const posA = (1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf(a)) || asterixPosition;
-      const posB = (1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf(b)) || asterixPosition;
+      const posA = (1 + ticketUiSchema["ui:order"].indexOf(a)) || asterixPosition;
+      const posB = (1 + ticketUiSchema["ui:order"].indexOf(b)) || asterixPosition;
       return posA - posB;
     });
   }
@@ -107,7 +111,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             )}
           </dd>
         </dl>
-        {customAttributes.filter(name => ticketFormConfiguration?.uiSchema[name]?.["ui:details"] !== "hidden").map(name => (
+        {customAttributes.filter(name => ticketUiSchema[name]?.["ui:details"] !== "hidden").map(name => (
           <dl className="table_style flex_grid" key={name}>
             <dt className="flex_order_1 bold item_label">
               {ticketSchema.properties[name].title || name}
