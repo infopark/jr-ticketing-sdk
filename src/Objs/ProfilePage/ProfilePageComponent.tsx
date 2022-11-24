@@ -4,7 +4,7 @@ import useAPIError from "../../utils/useAPIError";
 import { useUserData } from "../../Components/UserDataContext";
 import { translate } from "../../utils/translate";
 import { CDN_BASE_PATH } from "../../utils/constants";
-import { callApiPost } from "../../api/portalApiCalls";
+import { callApiGet, callApiPost } from "../../api/portalApiCalls";
 import getUserData from "../../api/getUserData";
 import { formReducer, getEditableUserFields } from "../../api/utils";
 import { removeUserLanguageHandledFlag } from "../../Components/Auth/utils";
@@ -21,26 +21,6 @@ Scrivito.provideComponent("ProfilePage", () => {
   const [newAvatar, setNewAvatar] = useState(null);
   const [avatarFileName, setAvatarFileName] = useState(null);
   const { addError } = useAPIError();
-
-  useEffect(() => {
-    let canceled = false;
-    callApiPost(`get-user/${userData.userid}`, {})
-      .then((response) => {
-        if (response.failedRequest) {
-          return undefined;
-        }
-        return response[0];
-      })
-      .then((currentProfile) => {
-        if (currentProfile && !canceled) {
-          updateUserData(currentProfile);
-        }
-      });
-
-    return () => {
-      canceled = true;
-    };
-  }, [userData.userid, updateUserData]);
 
   const handleInputChange = (event) => {
     setFieldsData({

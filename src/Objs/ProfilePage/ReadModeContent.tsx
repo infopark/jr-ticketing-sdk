@@ -10,12 +10,12 @@ import { mapLocale } from "../../utils/dateUtils";
 function ReadModeContent({ userAvatarSrc, userFields, user, onEditClick }) {
   return (
     <ContentWrapper>
-      <div className="d-flex align-items-center mb-4">
+      {/* <div className="d-flex align-items-center mb-4">
         <h2 className="reset-mb">{translate("profile_your_data")}</h2>
         <button className="btn btn-primary ml-4" onClick={() => onEditClick()}>
           {translate("edit_profile")}
         </button>
-      </div>
+      </div> */}
       <AvatarImage userAvatarSrc={userAvatarSrc} />
       {userFields.map((field, index) => (
         <PersonalDataRow

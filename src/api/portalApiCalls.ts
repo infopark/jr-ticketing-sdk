@@ -1,11 +1,7 @@
 import { callApi } from "./callApi";
-import { isMockEnabled, mockGet, mockPost } from "./mockEndpoint";
 import { isLocalhost } from "../utils/constants";
 
 const callApiGet = async (endpoint) => {
-  if (isMockEnabled()) {
-    return mockGet(endpoint);
-  }
   const instanceId = process.env.SCRIVITO_TENANT;
   const apiUrl = process.env.API_BASE_URL;
 
@@ -13,10 +9,6 @@ const callApiGet = async (endpoint) => {
 };
 
 const callApiPost = async (endpoint, data) => {
-  if (isMockEnabled()) {
-    return mockPost(endpoint, data);
-  }
-
   const instanceId = process.env.SCRIVITO_TENANT;
   const apiUrl = process.env.API_BASE_URL;
 
@@ -24,10 +16,6 @@ const callApiPost = async (endpoint, data) => {
 };
 
 const callApiPut = async (endpoint, data) => {
-  if (isMockEnabled()) {
-    return mockPost(endpoint, data);
-  }
-
   const instanceId = process.env.SCRIVITO_TENANT;
   const apiUrl = process.env.API_BASE_URL;
 
@@ -35,10 +23,6 @@ const callApiPut = async (endpoint, data) => {
 };
 
 const callApiDelete = async (endpoint, data) => {
-  if (isMockEnabled()) {
-    return mockPost(endpoint, data);
-  }
-
   const instanceId = process.env.SCRIVITO_TENANT;
   const apiUrl = process.env.API_BASE_URL;
 
@@ -47,10 +31,6 @@ const callApiDelete = async (endpoint, data) => {
 
 
 const callLogout = () => {
-  if (isMockEnabled()) {
-    window.location.reload();
-    return;
-  }
   const apiUrl = getApiTargetUrl();
   window.location.href = `${apiUrl}/iam/logout`;
 };

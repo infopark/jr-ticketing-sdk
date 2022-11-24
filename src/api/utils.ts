@@ -16,10 +16,10 @@ const formReducer = (state, event) => {
 };
 
 const getEditableUserFields = () => [
-  { label: "First name", name: "firstname", editable: true },
-  { label: "Last name", name: "lastname", editable: true },
+  { label: "First name", name: "first_name", editable: true },
+  { label: "Last name", name: "last_name", editable: true },
   { label: "Position", name: "position", editable: true },
-  { label: "Phone number", name: "phonenumber", editable: true },
+  { label: "Phone number", name: "phone_number", editable: true },
   { label: "Email address", name: "email", editable: false },
   { label: "Company name", name: "organisation", editable: false },
   {
