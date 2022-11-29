@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
+
 import i18n from "../../config/i18n";
 import { TenantContextProvider, useTenantContext } from "../TenantContextProvider";
 import { SortableContainer } from "./SortableContainer";
@@ -38,7 +39,6 @@ function fromPropertiesDefinitionToSchema(inputList) {
   uiSchema["ui:order"] = [...inputList.map((item) => item.name), "*"];
   return {
     uiSchema,
-    formSchema: { formData },
   };
 }
 
@@ -50,14 +50,14 @@ const TicketFormConfigDialog = Scrivito.connect(() => (
 
 const TicketFormConfigDialogContent = Scrivito.connect(() => {
   const [orderedObjs, setOrderedObjs] = React.useState<Array<any>>([]);
-  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
+  const { ticketSchema, ticketUiSchema } = useTenantContext();
   React.useEffect(() => {
-    if (ticketSchema && ticketFormConfiguration) {
+    if (ticketSchema && ticketUiSchema) {
       setOrderedObjs(
-        transformPropertiesToArray(ticketSchema.properties, ticketFormConfiguration.uiSchema)
+        transformPropertiesToArray(ticketSchema.properties, ticketUiSchema)
       );
     }
-  }, [ticketSchema, ticketFormConfiguration]);
+  }, [ticketSchema, ticketUiSchema]);
 
   const updateField = (field, changes) => {
     const newObjs = orderedObjs.map((item: any) =>
@@ -72,8 +72,7 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
 
   const updateSchema = (orderedItems) => {
     setOrderedObjs(orderedItems);
-    const { formSchema, uiSchema } =
-      fromPropertiesDefinitionToSchema(orderedItems);
+    const { uiSchema } = fromPropertiesDefinitionToSchema(orderedItems);
     Scrivito.load(() => {
       const [obj] = Scrivito.Obj.onAllSites()
         .where("_objClass", "equals", "TicketFormConfiguration")
@@ -82,12 +81,10 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
     }).then((obj) => {
       if (obj) {
         obj.update({
-          formSchema: JSON.stringify(formSchema),
           uiSchema: JSON.stringify(uiSchema),
         });
       } else {
         (Scrivito.getClass("TicketFormConfiguration") as any).onAllSites().create({
-          formSchema: JSON.stringify(formSchema),
           uiSchema: JSON.stringify(uiSchema),
         });
       }

@@ -22,8 +22,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     created_at,
     messages,
   } = ticket;
-  const { tenantLocalization, getInitialTicketStatusClosed } =
-    useTenantContext();
   const { userData } = useUserData();
 
   const description = messages[0] ? messages[0].text : "";
@@ -40,14 +38,18 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     }
   };
 
-  const { ticketSchema, ticketFormConfiguration } = useTenantContext();
+  const { ticketSchema, ticketUiSchema } = useTenantContext();
+
+  if (!ticketSchema || !ticketUiSchema) {
+    return <PageContentWrapper>Loading ...</PageContentWrapper>;
+  }
 
   const customAttributes = Object.keys(ticketSchema.properties || {}).filter(name => !ticketSchema.properties[name]["ui:regular"]);
-  if (ticketFormConfiguration?.uiSchema["ui:order"]) {
-    const asterixPosition = 1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf("*");
+  if (ticketUiSchema["ui:order"]) {
+    const asterixPosition = 1 + ticketUiSchema["ui:order"].indexOf("*");
     customAttributes.sort((a, b) => {
-      const posA = (1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf(a)) || asterixPosition;
-      const posB = (1 + ticketFormConfiguration.uiSchema["ui:order"].indexOf(b)) || asterixPosition;
+      const posA = (1 + ticketUiSchema["ui:order"].indexOf(a)) || asterixPosition;
+      const posB = (1 + ticketUiSchema["ui:order"].indexOf(b)) || asterixPosition;
       return posA - posB;
     });
   }
@@ -57,7 +59,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
       <InnerPageContentWrapper additionalBoxClass="box_bg_white">
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {i18n.t("Ticket title")}
+            {i18n.t("Ticket.labels.title")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {sanitizeHtml(title)}
@@ -65,7 +67,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {i18n.t("Description")}
+            {i18n.t("Ticket.labels.message.text")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {parse(
@@ -77,29 +79,29 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {i18n.t("Ticket Type")}
+            {i18n.t("Ticket.labels.type")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {i18n.t(type) || "-"}
+            {i18n.t(`Ticket.type.${type}`)}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {i18n.t("Status")}
+            {i18n.t("Ticket.labels.status")}
           </dt>
           <dd className="flex_order_2 item_label_content">
-            {i18n.t(status)}
+            {i18n.t(`Ticket.status.${status}`)}
           </dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {i18n.t("Ticket Number")}
+            {i18n.t("Ticket.labels.number")}
           </dt>
           <dd className="flex_order_2 item_label_content">{number}</dd>
         </dl>
         <dl className="table_style flex_grid">
           <dt className="flex_order_1 bold item_label">
-            {i18n.t("Creation date")}
+            {i18n.t("Ticket.labels.created_at")}
           </dt>
           <dd className="flex_order_2 item_label_content">
             {parseDate(
@@ -109,13 +111,13 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             )}
           </dd>
         </dl>
-        {customAttributes.filter(name => ticketFormConfiguration?.uiSchema[name]?.["ui:details"] !== "hidden").map(name => (
+        {customAttributes.filter(name => ticketUiSchema[name]?.["ui:details"] !== "hidden").map(name => (
           <dl className="table_style flex_grid" key={name}>
             <dt className="flex_order_1 bold item_label">
               {ticketSchema.properties[name].title || name}
             </dt>
             <dd className="flex_order_2 item_label_content">
-              {Array.isArray(ticket[name]) ? ticket[name].join(", ") : ticket[name]}
+              {translateValue(name, ticket[name])}
             </dd>
           </dl>
         ))}
@@ -131,5 +133,14 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     </PageContentWrapper>
   );
 };
+
+function translateValue(name, value) {
+  if (Array.isArray(value)) {
+    return value.map((v) => translateValue(name, v)).join(", ");
+  } else if (!!value) {
+    return i18n.t(`Ticket.${name}.${value}`, value);
+  }
+  return "-";
+}
 
 export default TicketDetails;

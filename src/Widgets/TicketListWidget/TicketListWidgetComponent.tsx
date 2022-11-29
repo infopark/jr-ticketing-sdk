@@ -2,15 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as Scrivito from "scrivito";
 import { callApiGet } from "../../api/portalApiCalls";
 import useAPIError from "../../utils/useAPIError";
-import {
-  createTicketsListFilters,
-  isTicketListFilterDisabled,
-} from "../../utils/listFilters";
+import { createTicketsListFilters } from "../../utils/listFilters";
 import TicketList from "./TicketList";
 import TicketListBoxHeader from "./TicketListBoxHeader";
 import { getUserUuid } from "../../Components/Auth/utils";
-import { useTenantLocalization } from "../../Components/TenantContextProvider";
-import { getDictionary } from "../../utils/translate";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [loading, setLoading] = useState(true);
@@ -18,8 +13,6 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [sortKey, setSortKey] = useState("byCreationDate");
   const [filterKey, setFilterKey] = useState("active");
   const allowDeferredBaseLink = useRef(true);
-  const { tenantLocalization, isTicketStatusClosed } = useTenantLocalization();
-  const statusDictionary = getDictionary(tenantLocalization);
   const { addError } = useAPIError();;
 
   const getTicketsByNewest = useCallback(() => {
@@ -56,18 +49,8 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     setFilterKey(event.target.value);
   };
 
-  const ticketsListFilters = createTicketsListFilters(
-    ticketList,
-    statusDictionary,
-    isTicketStatusClosed
-  );
-
+  const ticketsListFilters = createTicketsListFilters(ticketList);
   const filterDisabled = false;
-  // const filterDisabled = isTicketListFilterDisabled(
-  //   ticketsListFilters,
-  //   ticketList,
-  //   isTicketStatusClosed
-  // );
 
   return (
     <Scrivito.WidgetTag className="ticket-list-widget sdk">
@@ -89,7 +72,6 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
         widgetId={widget.id()}
         ticketsListFilters={ticketsListFilters}
         filterKey={filterKey}
-        statusDictionary={statusDictionary}
       />
     </Scrivito.WidgetTag>
   );

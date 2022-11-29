@@ -15,13 +15,11 @@ import CommunicationTree from "./Components/CommunicationTree";
 import MessageArea from "./Components/MessageArea";
 import TicketDetails from "./Components/TicketDetails";
 import CombinedTicketNav from "./Components/CombinedTicketNav";
-import { useTenantContext } from "../../Components/TenantContextProvider";
 import { translate } from "../../utils/translate";
 
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
 Scrivito.provideComponent("ChatPage", ({ page }) => {
-  const { isTicketStatusClosed } = useTenantContext();
   const [chatContent, setChatContent] = useState();
   const [activeTicket, setActiveTicket] = useState(undefined as any);
   const [attachments, setAttachments] = useState([]);

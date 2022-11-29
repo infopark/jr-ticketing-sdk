@@ -4,6 +4,7 @@ import i18n from "../../../config/i18n";
 
 const TicketHeader = ({ ticket }) => {
   const status = ticket && ticket.status;
+
   return (
     <div className="ticket_info">
       <div className="row">
@@ -12,7 +13,7 @@ const TicketHeader = ({ ticket }) => {
             {ticket && ticket.title}
           </span>
           <span className="info_item on_progress ticket-status dots float-right float-md-none">
-            {i18n.t(status)}
+            {i18n.t(`Ticket.status.${status}`)}
           </span>
         </span>
       </div>

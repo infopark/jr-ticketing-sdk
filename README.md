@@ -48,6 +48,21 @@ It could look for example like:
 </ErrorAPIProvider>
 ```
 
+### For Editing the ticket form with custom attributes and order
+
+Import to `ScrivitoExtensions`
+
+```
+import "jr-ticketing-sdk/dist/ScrivitoExtensions";
+```
+
+Import to `ScrivitoEditing`
+
+```
+import "jr-ticketing-sdk/dist/ScrivitoEditing";
+```
+
+
 ### Environment Variables
 
 In your webpack.config.js add the following to the `EnvironmentPlugin`:
@@ -56,10 +71,6 @@ In your webpack.config.js add the following to the `EnvironmentPlugin`:
 JUST_RELATE_SITE_ORIGIN: "",
 CUSTOMER_PORTAL_SDK_CDN_URL: "",
 SCRIVITO_PRERENDER: "",
-AUTH_CLIENT_ID: "",
-AUTH_DOMAIN: "",
-AUTH_USER_POOL_ID: "",
-AUTH_POOL_ID_REGION: "",
 API_BASE_URL: "",
 API_INSTANCE_ID: "",
 WS_API_BASE_URL: "",

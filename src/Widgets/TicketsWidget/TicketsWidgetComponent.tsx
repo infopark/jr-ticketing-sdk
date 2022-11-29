@@ -7,20 +7,17 @@ import { createDefaultTicketListFilter } from "../../utils/listFilters";
 import TicketNumberBox from "./TicketNumberBox";
 import CreateNewTicket from "./CreateNewTicket";
 import { getUserUuid } from "../../Components/Auth/utils";
-import { useTenantLocalization } from "../../Components/TenantContextProvider";
 
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
   const { addError } = useAPIError();
   const userUUID = getUserUuid();
-  const { isTicketStatusClosed } = useTenantLocalization();
 
   useEffect(() => {
     callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
       .then((response) => {
         if (!response.failedRequest) {
-          const defaultFilter =
-            createDefaultTicketListFilter(isTicketStatusClosed);
+          const defaultFilter = createDefaultTicketListFilter();
           const filteredResponse = defaultFilter.filter(response);
           setRunningTickets(filteredResponse.length);
         }
@@ -28,7 +25,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       .catch((error) => {
         addError("TICKET_LIST, ", error, "TicketListComponent");
       });
-  }, [addError, userUUID, isTicketStatusClosed]);
+  }, [addError, userUUID]);
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
   const helpdeskPage = helpdeskPages.first();
