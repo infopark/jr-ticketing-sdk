@@ -10,6 +10,7 @@ import { matchExtension } from "../../../utils/fileExtension";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
+import ticketingUrl from "../../../api/ticketingUrl";
 
 type Attachment = {
   filename: string;
@@ -93,16 +94,11 @@ function Message({
 
 // TODO merge MessageImage and Message File into MessageAttachment
 
-const ticketingStage = process.env.JR_TICKETING_STAGE || "";
-const ticketingPath = [process.env.JR_API_LOCATION, ticketingStage, "ticketing", process.env.SCRIVITO_TENANT]
-  .filter(x => !!x)
-  .join("/");
-
 function MessageImage({ attachment }) {
   return (
     <div className="collapsebox">
       <a
-        href={`${ticketingPath}/attachments/${attachment.key}`}
+        href={`${ticketingUrl()}/attachments/${attachment.key}`}
         target="_blank"
         className="btn btn-secondary float_right image"
         download
@@ -127,7 +123,7 @@ function MessageFile({ attachment }) {
       <img src={fileIcon} alt="" className="nav_img" />
       <small className="color_text">{attachment.filename}</small>
       <a
-        href={`${ticketingPath}/attachments/${attachment.key}`}
+        href={`${ticketingUrl()}/attachments/${attachment.key}`}
         target="_blank"
         className="btn btn-secondary float_right image"
         download

@@ -45,7 +45,6 @@
     "sanitize-html": "^2.7.0",
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
-    "scrivito": "^1.29.0",
     "ts-jest": "^28.0.2",
     "ts-loader": "^9.3.0",
     "typescript": "^4.9.4",
@@ -75,7 +74,7 @@
     "react-dom": "*",
     "react-overlays": "*",
     "sanitize-html": "*",
-    "scrivito": "*",
+    "scrivito": "^1.32.0-rc1",
     "uuid": "*"
   }
 }
