@@ -8,7 +8,7 @@ import Form from "@rjsf/core";
 import i18n from "../../config/i18n";
 import Loader from "../../Components/Loader";
 import Modal from "react-overlays/Modal";
-import { callApiPost } from "../../api/portalApiCalls";
+import TicketingApi from "../../api/TicketingApi";
 import FooterButtons from "./FooterButtons";
 import { useTenantContext } from "../../Components/TenantContextProvider";
 
@@ -28,8 +28,10 @@ const CustomAttachment = function({ id, value, onChange }) {
       };
       setFiles(files => [...files, fileObject]);
 
-      const signedResult = await callApiPost("signed-upload-url", {
-        filename: file.name,
+      const signedResult = await TicketingApi.post("signed-upload-url", {
+        data: {
+          filename: file.name,
+        }
       });
 
       if (signedResult.failedRequest) {
@@ -122,11 +124,13 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
           ticketAttributes[name] = value;
         }
       });
-      const newTicket = await callApiPost("tickets", {
-        ...ticketAttributes,
-        message: messageAttributes,
-        requester_id: userId,
-        status: "new",
+      const newTicket = await TicketingApi.post("tickets", {
+        data: {
+          ...ticketAttributes,
+          message: messageAttributes,
+          requester_id: userId,
+          status: "new",
+        }
       });
 
       if (newTicket.failedRequest) {

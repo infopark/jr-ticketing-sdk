@@ -5,7 +5,8 @@ import sanitizeHtml from "sanitize-html";
 import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
 import i18n from "../../../config/i18n";
-import { callApiPut } from "../../../api/portalApiCalls";
+
+import TicketingApi from "../../../api/TicketingApi";
 import PageContentWrapper from "./PageContentWrapper";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
@@ -28,7 +29,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
       const data = {
         status: "closed",
       };
-      const response = await callApiPut(`tickets/${id}`, data);
+      const response = await TicketingApi.put(`tickets/${id}`, { data: data });
       if (!response.failedRequest) {
         refreshCallback();
       }

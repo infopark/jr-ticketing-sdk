@@ -5,7 +5,8 @@ import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
 import { parseDate } from "../../../utils/dateUtils";
-import { callApiGet, callApiPost } from "../../../api/portalApiCalls";
+import { callApiPost } from "../../../api/portalApiCalls";
+import TicketingApi from "../../../api/TicketingApi";
 import { isImageFormat } from "../../../utils/isImage";
 import Loader from "../../../Components/Loader";
 import {
@@ -101,7 +102,7 @@ const CommunicationDayTree = ({
         if (!requestedUsers[user_id]) {
           requestedUsers[user_id] = true;
           pendingRequests.push(
-            callApiGet(`users/${user_id}`).then((response) => {
+            TicketingApi.get(`users/${user_id}`).then((response) => {
               if (response.failedRequest) {
                 return undefined;
               }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as Scrivito from "scrivito";
 
-import { callApiGet } from "../../api/portalApiCalls";
+import TicketingApi from "../../api/TicketingApi";
 import { createTicketsListFilters } from "../../utils/listFilters";
 import TicketList from "./TicketList";
 import TicketListBoxHeader from "./TicketListBoxHeader";
@@ -20,7 +20,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
       return;
     }
 
-    callApiGet(`tickets?filter[requester_id][eq]=${userId}`)
+    TicketingApi.get(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
           setTicketList(response);

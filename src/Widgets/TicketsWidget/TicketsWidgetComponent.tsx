@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Scrivito from "scrivito";
 
-import { callApiGet } from "../../api/portalApiCalls";
+import TicketingApi from "../../api/TicketingApi";
 import { createDefaultTicketListFilter } from "../../utils/listFilters";
 import TicketNumberBox from "./TicketNumberBox";
 import CreateNewTicket from "./CreateNewTicket";
@@ -17,7 +17,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       return;
     }
 
-    callApiGet(`tickets?filter[requester_id][eq]=${userId}`)
+    TicketingApi.get(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
           const defaultFilter = createDefaultTicketListFilter();

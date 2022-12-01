@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 
-import { callApiPost } from "../../../api/portalApiCalls";
+import TicketingApi from "../../../api/TicketingApi";
 import { MAX_ATTACHMENT_SIZE } from "../../../utils/constants";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
@@ -46,7 +46,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
         });
       }
 
-      callApiPost(`tickets/${ticketId}/messages`, msgData).then((response) => {
+      TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData }).then((response) => {
         setTextareaHeight(null);
         setFile("");
         setMessage("");
@@ -78,8 +78,10 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
       setAttachmentTooBig(false);
       setAttachmentLoading(true);
 
-      callApiPost("signed-upload-url", {
-        filename: uploadFile.name,
+      TicketingApi.post("signed-upload-url", {
+        data: {
+          filename: uploadFile.name,
+        }
       }).then(async (response) => {
         if (response.failedRequest) {
           setAttachmentLoading(false);
