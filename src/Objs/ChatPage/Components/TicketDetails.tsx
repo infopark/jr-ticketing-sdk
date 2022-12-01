@@ -44,15 +44,15 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     return <PageContentWrapper>Loading ...</PageContentWrapper>;
   }
 
-  const customAttributes = Object.keys(ticketSchema.properties || {}).filter(name => !ticketSchema.properties[name]["ui:regular"]);
-  if (ticketUiSchema["ui:order"]) {
-    const asterixPosition = 1 + ticketUiSchema["ui:order"].indexOf("*");
-    customAttributes.sort((a, b) => {
-      const posA = (1 + ticketUiSchema["ui:order"].indexOf(a)) || asterixPosition;
-      const posB = (1 + ticketUiSchema["ui:order"].indexOf(b)) || asterixPosition;
+  const customAttributesOrder = ticketUiSchema["ui:order"] || [];
+  const customAttributes = Object.keys(ticketSchema.properties || {})
+    .filter(name => !ticketSchema.properties[name]["ui:regular"])
+    .filter(name => ticketUiSchema[name]?.["ui:details"] !== "hidden")
+    .sort((a, b) => {
+      const posA = (1 + customAttributesOrder.indexOf(a));
+      const posB = (1 + customAttributesOrder.indexOf(b));
       return posA - posB;
     });
-  }
 
   return (
     <PageContentWrapper>
@@ -111,7 +111,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             )}
           </dd>
         </dl>
-        {customAttributes.filter(name => ticketUiSchema[name]?.["ui:details"] !== "hidden").map(name => (
+        {customAttributes.map(name => (
           <dl className="table_style flex_grid" key={name}>
             <dt className="flex_order_1 bold item_label">
               {ticketSchema.properties[name].title || name}

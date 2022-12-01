@@ -6,37 +6,37 @@ import { TenantContextProvider, useTenantContext } from "../TenantContextProvide
 import { SortableContainer } from "./SortableContainer";
 
 function transformPropertiesToArray(input, uiSchema) {
-  const fieldList = Object.keys(input).map((key) => ({
-    ...input[key],
+  const fieldList = Object.entries(input).map(([key, schema]: [string, any]) => ({
+    ...schema,
     name: key,
-    showCreate: uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : true,
-    showDetails: uiSchema[key] ? uiSchema[key]["ui:details"] !== "hidden" : true,
+    showCreate: schema["ui:regular"] || (uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : false),
+    showDetails: schema["ui:regular"] || (uiSchema[key] ? uiSchema[key]["ui:details"] !== "hidden" : false),
   }));
   if (uiSchema["ui:order"]) {
-    const sortArray = uiSchema["ui:order"].filter((item) => item !== "*");
-    return fieldList.sort((a, b) =>
-      sortArray.findIndex((name) => name === a.name) >
-      sortArray.findIndex((name) => name === b.name)
-        ? 1
-        : -1
-    );
+    const order = uiSchema["ui:order"];
+    fieldList.sort((a, b) => {
+      const indexA = 1 + order.indexOf(a.name) || 1 + Object.keys(input).indexOf(a.name);
+      const indexB = 1 + order.indexOf(b.name) || 1 + Object.keys(input).indexOf(b.name);
+
+      return indexA - indexB;
+    });
   }
   return fieldList;
 }
 
 function fromPropertiesDefinitionToSchema(inputList) {
   const uiSchema = {};
-  const formData = {};
   inputList.forEach((item) => {
     const { name, showCreate, showDetails } = item;
+    uiSchema[name] = {}
     if (!showCreate) {
-      uiSchema[name] = { "ui:widget": "hidden" };
+      uiSchema[name]["ui:widget"] = "hidden";
     }
     if (!showDetails) {
-      uiSchema[name] = { "ui:details": "hidden" };
+      uiSchema[name]["ui:details"] = "hidden";
     }
   });
-  uiSchema["ui:order"] = [...inputList.map((item) => item.name), "*"];
+  uiSchema["ui:order"] = inputList.map((item) => item.name);
   return {
     uiSchema,
   };
@@ -50,11 +50,11 @@ const TicketFormConfigDialog = Scrivito.connect(() => (
 
 const TicketFormConfigDialogContent = Scrivito.connect(() => {
   const [orderedObjs, setOrderedObjs] = React.useState<Array<any>>([]);
-  const { ticketSchema, ticketUiSchema } = useTenantContext();
+  const { ticketSchema, ticketUiSchema, customAttributes } = useTenantContext();
   React.useEffect(() => {
     if (ticketSchema && ticketUiSchema) {
       setOrderedObjs(
-        transformPropertiesToArray(ticketSchema.properties, ticketUiSchema)
+        transformPropertiesToArray({ ...ticketSchema.properties, ...customAttributes.Ticket }, ticketUiSchema)
       );
     }
   }, [ticketSchema, ticketUiSchema]);
