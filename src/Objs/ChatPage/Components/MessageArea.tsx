@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import classNames from "classnames";
+
 import { callApiPost } from "../../../api/portalApiCalls";
 import { MAX_ATTACHMENT_SIZE } from "../../../utils/constants";
-import { useUserData } from "../../../Components/UserDataContext";
-import { translate } from "../../../utils/translate";
+import { useTenantContext } from "../../../Components/TenantContextProvider";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
+import i18n from "../../../config/i18n";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
-  const { userData } = useUserData();
-  const userId = userData && userData.id;
+  const { userId } = useTenantContext();
   const [message, setMessage] = useState("");
   const [file, setFile] = useState("" as any);
   const [textareaHeight, setTextareaHeight] = useState<number | null>(null);
@@ -116,7 +116,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
           <div className="textfield">
             <textarea
               className="form-control dialog_text_area resize-ta"
-              placeholder={translate("your message ...")}
+              placeholder={i18n.t("your message ...")}
               value={message}
               onChange={handleChange}
               onKeyUp={handleKeys}
@@ -131,7 +131,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
                 isClosed ? " disabled" : ""
               }`}
             >
-              {translate("attach file")}
+              {i18n.t("attach file")}
               <input
                 type="file"
                 id="fileUpload"
@@ -147,7 +147,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
               disabled={isClosed || attachmentLoading || attachmentTooBig || !messageOrAttachment}
               type="button"
             >
-              {translate("post message")}
+              {i18n.t("post message")}
             </button>
           </div>
         </div>

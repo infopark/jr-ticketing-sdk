@@ -6,7 +6,6 @@ import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
 import i18n from "../../../config/i18n";
 import { callApiPut } from "../../../api/portalApiCalls";
-import { useUserData } from "../../../Components/UserDataContext";
 import PageContentWrapper from "./PageContentWrapper";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
@@ -22,7 +21,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     created_at,
     messages,
   } = ticket;
-  const { userData } = useUserData();
+  const { userData } = useTenantContext();
 
   const description = messages[0] ? messages[0].text : "";
 

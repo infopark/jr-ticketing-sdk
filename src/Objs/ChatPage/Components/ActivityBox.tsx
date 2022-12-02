@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 
+import i18n from "../../../config/i18n";
 import { parseDate } from "../../../utils/dateUtils";
-import { translate } from "../../../utils/translate";
-import { useUserData } from "../../../Components/UserDataContext";
+import { useTenantContext } from "../../../Components/TenantContextProvider";
 import { matchIconToType as matchType } from "./ActivityTypeUtils";
 
 const ActivityBox = ({ activity }) => {
-  const { userData } = useUserData();
+  const { userData } = useTenantContext();
   const [showDetails, setShowDetails] = useState(false);
 
   function toggleDetails() {
@@ -28,11 +28,11 @@ const ActivityBox = ({ activity }) => {
           </h2>
           <small className="d-block mb-2">
             <span className="mr-3 semi_bold color_captured">
-              {translate(activity["PSA_ACT_XRO.STA_NAM_ENG"])}
+              {i18n.t(activity["PSA_ACT_XRO.STA_NAM_ENG"])}
             </span>
             <span className="mr-3">|</span>
             <span className="color-gray mr-3">
-              {translate("start date")}
+              {i18n.t("start date")}
               {": "}
               {parseDate(
                 activity["PSA_ACT_XRO.BEG_DAT"],
@@ -42,7 +42,7 @@ const ActivityBox = ({ activity }) => {
             </span>
             <span className="mr-3">|</span>
             <span className="color-faded mr-1">
-              {translate("end date")}
+              {i18n.t("end date")}
               {": "}
               {parseDate(
                 activity["PSA_ACT_XRO.END_DAT"],
@@ -51,10 +51,10 @@ const ActivityBox = ({ activity }) => {
               )}{" "}
             </span>
           </small>
-          {translate("responsible")}
+          {i18n.t("responsible")}
           {": "}
           {activity["PSA_ACT_XRO.PSA_AGN_PRS.FRN_IDN"]} <br />
-          {translate("client")}
+          {i18n.t("client")}
           {": "}
           {activity["PSA_ACT_XRO.PSA_CLI_CON.FRN_IDN"]}
         </div>
@@ -68,7 +68,7 @@ const ActivityBox = ({ activity }) => {
                 "icon-rotated": showDetails,
               })}
             />
-            {translate("details")}
+            {i18n.t("details")}
           </button>
         </div>
       </div>

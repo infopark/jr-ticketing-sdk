@@ -6,7 +6,7 @@ import i18n from "../../config/i18n";
 import { parseDate } from "../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../utils/constants";
 import stripHtmlTags from "../../utils/stripHtmlTags";
-import { useUserData } from "../../Components/UserDataContext";
+import { useTenantContext } from "../../Components/TenantContextProvider";
 
 interface ticketEntryProps {
   ticket: {
@@ -36,7 +36,7 @@ function TicketEntry({
   ticket,
   targetLink,
 }: ticketEntryProps) {
-  const { userData } = useUserData();
+  const { userData } = useTenantContext();
   const creationDate = parseDate(
     ticket.created_at,
     DEFAULT_DATE_FORMAT,

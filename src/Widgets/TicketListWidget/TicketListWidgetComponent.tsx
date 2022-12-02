@@ -5,7 +5,7 @@ import useAPIError from "../../utils/useAPIError";
 import { createTicketsListFilters } from "../../utils/listFilters";
 import TicketList from "./TicketList";
 import TicketListBoxHeader from "./TicketListBoxHeader";
-import { getUserUuid } from "../../Components/Auth/utils";
+import { useTenantContext } from "../../Components/TenantContextProvider";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [loading, setLoading] = useState(true);
@@ -16,8 +16,9 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const { addError } = useAPIError();;
 
   const getTicketsByNewest = useCallback(() => {
-    const userUUID = getUserUuid();
-    callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
+    const { userId } = useTenantContext();
+
+    callApiGet(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
           setTicketList(response);

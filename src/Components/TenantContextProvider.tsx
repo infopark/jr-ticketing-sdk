@@ -1,8 +1,10 @@
 import * as Scrivito from "scrivito";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { isEmpty } from "lodash-es";
 
 import { callApiGet } from "../api/portalApiCalls";
+import useAPIError from "../utils/useAPIError";
+import getUserData from "../api/getUserData";
 import i18n from "../config/i18n";
 import addI18nBundles from "../config/addI18nBundles";
 
@@ -42,6 +44,13 @@ export function TenantContextProvider(props) {
   const [customAttributes, setCustomAttributes] = React.useState<any>({});
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketUiSchema, setTicketUiSchema] = useState<any>();
+
+  const [language, setLanguage] = useState("en");
+  const [userData, setUserData] = useState(undefined as any);
+  const [userId, setUserId] = useState(null);
+
+  const instanceId = process.env.SCRIVITO_TENANT;
+  const { addError } = useAPIError();
 
   useEffect(() => {
     loadTicketFormConfiguration();
@@ -101,9 +110,37 @@ export function TenantContextProvider(props) {
     });
   }
 
+  const loadUserInfo = async () => {
+    try {
+      const data = await getUserData();
+      if (!data) {
+        setUserId(null);
+        return;
+      }
+
+      if (data.failedRequest) {
+        setUserId(null);
+        if (data.tooManyIamRedirects) {
+          setUserData(data);
+        }
+        return;
+      }
+
+      setUserId(data.id);
+      setUserData(data);
+    } catch (error) {
+      addError("LOAD_DATA_ERROR, ", error, "UserDataContext");
+    }
+  }
+
   function isTenantContextReady() {
     return !isEmpty(ticketSchema) && !isEmpty(ticketUiSchema);
   }
+
+  const updateLanguage = useCallback((language) => {
+    // TODO update I18n
+    setLanguage(language);
+  }, []);
 
   return (
     <TenantContext.Provider
