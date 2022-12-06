@@ -1,15 +1,6 @@
 import * as Scrivito from "scrivito";
 import React, { useState, useEffect } from "react";
-import {
-  each,
-  head,
-  isEmpty,
-  isNil,
-  keys,
-  map,
-  reduce,
-  sortBy,
-} from "lodash-es";
+import { isEmpty } from "lodash-es";
 
 import { callApiGet } from "../api/portalApiCalls";
 import i18n from "../config/i18n";
@@ -48,16 +39,31 @@ const TicketAttributes = {
 };
 
 export function TenantContextProvider(props) {
-  const [customAttributes, setCustomAttributes] = React.useState({});
+  const [customAttributes, setCustomAttributes] = React.useState<any>({});
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketUiSchema, setTicketUiSchema] = useState<any>();
-
-  const instanceId = process.env.SCRIVITO_TENANT;
 
   useEffect(() => {
     loadTicketFormConfiguration();
     loadConfiguration();
   }, []);
+
+  useEffect(() => {
+    if (ticketUiSchema && customAttributes) {
+      try {
+        const customTicketProps = {};
+        const order = ticketUiSchema["ui:order"] || [];
+        Object.entries(customAttributes.Ticket).forEach(([name, schema]) => {
+          if (order.indexOf(name) >= 0) {
+            customTicketProps[name] = schema;
+          }
+        });
+        setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
+      } catch (error) {
+        setTicketSchemaForInstance({ ...TicketAttributes });
+      }
+    }
+  }, [ticketUiSchema, customAttributes]);
 
   const loadTicketFormConfiguration = () => {
     Scrivito.load(() => {
@@ -72,17 +78,10 @@ export function TenantContextProvider(props) {
   }
 
   const loadConfiguration = async () => {
-    try {
-      const instance = await callApiGet("instance");
+    const instance = await callApiGet("instance");
 
-      setCustomAttributes(instance.custom_attributes);
-      addI18nBundles(instance.locales);
-
-      const customTicketProps = instance.custom_attributes.Ticket;
-      setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
-    } catch (error) {
-      setTicketSchemaForInstance({ ...TicketAttributes });
-    }
+    setCustomAttributes(instance.custom_attributes);
+    addI18nBundles(instance.locales);
   }
 
   const setTicketSchemaForInstance = (properties) => {
@@ -109,6 +108,7 @@ export function TenantContextProvider(props) {
   return (
     <TenantContext.Provider
       value={{
+        customAttributes,
         ticketSchema,
         ticketUiSchema,
         isTenantContextReady,

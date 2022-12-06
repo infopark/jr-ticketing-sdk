@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import * as Scrivito from "scrivito";
 
-import { WidgetProps, RegistryWidgetsType } from "@rjsf/utils";
+import { RegistryWidgetsType } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv6";
 import Form from "@rjsf/core";
-import { merge } from "lodash-es";
 
 import Loader from "../../Components/Loader";
 import Modal from "react-overlays/Modal";
@@ -153,19 +152,23 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
 
   React.useEffect(() => {
     if (ticketSchema && ticketUiSchema) {
+      const localSchema = { ...ticketSchema, properties: {} };
       const localUiSchema = { ...ticketUiSchema };
 
-      Object.entries(ticketSchema.properties).forEach(([attribute, schema]) => {
+      Object.entries(ticketSchema.properties).forEach(([attribute, schema]: [string, any]) => {
+        if (ticketUiSchema[attribute]["ui:widget"] !== "hidden" || schema["default"]) {
+          localSchema.properties[attribute] = schema;
+        }
         Object.entries(schema as object).forEach(([key, value]) => {
           if (key.startsWith("ui:")) {
-            localUiSchema[attribute] = localUiSchema[attribute] || {};
+            localUiSchema[attribute] ||= {};
             localUiSchema[attribute][key] = value;
           }
         });
       });
 
+      setSchema(localSchema);
       setUiSchema(localUiSchema);
-      setSchema(ticketSchema);
     }
   }, [ticketSchema, ticketUiSchema]);
 
