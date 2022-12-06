@@ -1,10 +1,12 @@
 import I18n from "i18next"
 
+import { getLanguage } from "../utils/page"
+
 import en from "./locales/en.json"
 import de from "./locales/de.json"
 
 const i18n = I18n.createInstance({
-  lng: window.localStorage.getItem("language") || "de",
+  lng: window.localStorage.language || getLanguage() || "de",
   fallbackLng: "de",
   resources: {
     en: { portal: en },
@@ -22,6 +24,10 @@ const i18n = I18n.createInstance({
     console.log("I18n.init failed", err);
   }
   t('key');
-})
+});
+
+window.addEventListener("language-changed", () => {
+  i18n.changeLanguage(window.localStorage.language || "de");
+}, false);
 
 export default i18n;
