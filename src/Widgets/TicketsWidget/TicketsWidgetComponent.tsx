@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import * as Scrivito from "scrivito";
 
 import { callApiGet } from "../../api/portalApiCalls";
-import useAPIError from "../../utils/useAPIError";
 import { createDefaultTicketListFilter } from "../../utils/listFilters";
 import TicketNumberBox from "./TicketNumberBox";
 import CreateNewTicket from "./CreateNewTicket";
@@ -11,10 +10,13 @@ import i18n from "../../config/i18n";
 
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
-  const { addError } = useAPIError();
-  const { userId } = useTenantContext();
+  const { addError, userId } = useTenantContext();
 
-  useEffect(() => {
+  useCallback(() => {
+    if (!userId) {
+      return;
+    }
+
     callApiGet(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
@@ -24,7 +26,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
         }
       })
       .catch((error) => {
-        addError("TICKET_LIST, ", error, "TicketListComponent");
+        addError("Error loading ticket list", "TicketListComponent", error);
       });
   }, [addError, userId]);
 

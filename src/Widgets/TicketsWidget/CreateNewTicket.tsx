@@ -3,6 +3,7 @@ import CreateNewTicketOverlay from "./CreateNewTicketOverlay";
 
 function CreateNewTicket({ className, chatPage, text }) {
   const [overlayOpen, setOverlayOpen] = React.useState(false);
+
   return (
     <div className={`${className} box space_box text_center`}>
       <div

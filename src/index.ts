@@ -1,4 +1,6 @@
 import { TenantContextProvider, useTenantContext } from "./Components/TenantContextProvider";
+import getUserData from "./api/getUserData";
+
 import "./Objs/ChatPage/ChatPageComponent";
 import "./Objs/ChatPage/ChatPageEditingConfig";
 import "./Objs/ChatPage/ChatPageObjClass";
@@ -17,4 +19,5 @@ import "./Widgets/TicketsWidget/TicketsWidgetEditingConfig";
 export {
   TenantContextProvider,
   useTenantContext,
+  getUserData,
 };
