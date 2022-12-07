@@ -37,7 +37,6 @@ export function TenantContextProvider(props) {
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketUiSchema, setTicketUiSchema] = useState<any>();
 
-  const [language, setLanguage] = useState("en");
   const [userData, setUserData] = useState(undefined as any);
   const [userId, setUserId] = useState(null as any);
   const [error, setError] = useState(null as any);
@@ -132,8 +131,7 @@ export function TenantContextProvider(props) {
   }
 
   const updateLanguage = useCallback((language) => {
-    // TODO update I18n
-    setLanguage(language);
+    i18n.changeLanguage(language);
   }, []);
 
   const removeError = () => setError(null);

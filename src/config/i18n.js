@@ -4,7 +4,7 @@ import en from "./locales/en.json"
 import de from "./locales/de.json"
 
 const i18n = I18n.createInstance({
-  lng: window.localStorage.getItem("language") || "de",
+  lng: "de",
   fallbackLng: "de",
   resources: {
     en: { portal: en },
