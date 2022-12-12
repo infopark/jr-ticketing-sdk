@@ -3,11 +3,9 @@ import classNames from "classnames";
 
 import i18n from "../../../config/i18n";
 import { parseDate } from "../../../utils/dateUtils";
-import { useTenantContext } from "../../../Components/TenantContextProvider";
 import { matchIconToType as matchType } from "./ActivityTypeUtils";
 
 const ActivityBox = ({ activity }) => {
-  const { userData } = useTenantContext();
   const [showDetails, setShowDetails] = useState(false);
 
   function toggleDetails() {
@@ -37,7 +35,6 @@ const ActivityBox = ({ activity }) => {
               {parseDate(
                 activity["PSA_ACT_XRO.BEG_DAT"],
                 undefined,
-                userData && userData.timelocale
               )}{" "}
             </span>
             <span className="mr-3">|</span>
@@ -47,7 +44,6 @@ const ActivityBox = ({ activity }) => {
               {parseDate(
                 activity["PSA_ACT_XRO.END_DAT"],
                 undefined,
-                userData && userData.timelocale
               )}{" "}
             </span>
           </small>

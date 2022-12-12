@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useCallback } from "react";
 import * as Scrivito from "scrivito";
+
 import academyIcon from "../../assets/images/icons/academy.svg";
 import documentationIcon from "../../assets/images/icons/documentation.svg";
 import helpdeskIcon from "../../assets/images/icons/helpdesk_black.svg";
-import { translate } from "../../utils/translate";
+import i18n from "../../config/i18n";
 import { callApiGet } from "../../api/portalApiCalls";
 
 const HistoryListEntry = ({ link, title, pageType, query }) => {
@@ -54,23 +55,23 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
   const typeMapping = {
     TrainingPage: {
       icon: academyIcon,
-      name: translate("Academy Page" as any),
+      name: i18n.t("Academy Page" as any),
     },
     TrainingHomePage: {
       icon: academyIcon,
-      name: translate("Academy Page" as any),
+      name: i18n.t("Academy Page" as any),
     },
     ChatPage: {
       icon: helpdeskIcon,
-      name: translate("Helpdesk Ticket" as any),
+      name: i18n.t("Helpdesk Ticket" as any),
     },
     DocumentationPage: {
       icon: documentationIcon,
-      name: translate("Documentation"),
+      name: i18n.t("Documentation"),
     },
     DocumentationHomePage: {
       icon: documentationIcon,
-      name: translate("Documentation"),
+      name: i18n.t("Documentation"),
     },
     Page: {
       icon: academyIcon,

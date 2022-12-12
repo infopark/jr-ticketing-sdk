@@ -15,7 +15,7 @@ import CommunicationTree from "./Components/CommunicationTree";
 import MessageArea from "./Components/MessageArea";
 import TicketDetails from "./Components/TicketDetails";
 import CombinedTicketNav from "./Components/CombinedTicketNav";
-import { translate } from "../../utils/translate";
+import i18n from "../../config/i18n";
 
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
@@ -204,11 +204,11 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     return (
       <div className="container">
         <div className="text-center pt-5">
-          <h1 className="hero-bold">{translate("Ticket not found!")}</h1>
+          <h1 className="hero-bold">{i18n.t("Ticket not found!")}</h1>
         </div>
         <div className="text-center">
           <h2 className="hero-small light">
-            {translate(
+            {i18n.t(
               "Ticket you are looking for was either deleted or its address is wrong."
             )}
           </h2>
@@ -218,7 +218,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
             to={Scrivito.Obj.root()}
             className="btn btn-primary"
           >
-            {translate("Go to mainpage")}
+            {i18n.t("Go to mainpage")}
             <i className="fa fa-angle-right ml-1" aria-hidden="true" />
           </Scrivito.LinkTag>
         </div>

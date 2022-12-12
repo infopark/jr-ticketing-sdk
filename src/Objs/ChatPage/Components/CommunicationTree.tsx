@@ -81,13 +81,8 @@ const CommunicationDayTree = ({
   refreshCallback,
   isClosed,
 }) => {
-  const { userData } = useTenantContext();
   const days = groupBy(communications, (message) =>
-    parseDate(
-      message.created_at,
-      DEFAULT_DATE_FORMAT,
-      userData && userData.timelocale
-    )
+    parseDate(message.created_at, DEFAULT_DATE_FORMAT)
   );
   const loggedUserId = loggedUserData.id;
 
@@ -188,8 +183,6 @@ const Message = ({
   refreshCallback,
   isClosed,
 }) => {
-  const { userData } = useTenantContext();
-
   return (
     <div
       className={classNames({
@@ -215,11 +208,7 @@ const Message = ({
             {sender.first_name} {sender.last_name}
           </h4>
           <span className="time_stamp">
-            {parseDate(
-              message.created_at,
-              DEFAULT_TIME_FORMAT,
-              userData && userData.timelocale
-            )}
+            {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
           </span>
           {!isAttachmentsMode && (
             <div>

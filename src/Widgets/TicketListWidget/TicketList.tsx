@@ -3,7 +3,7 @@ import * as Scrivito from "scrivito";
 
 import Loader from "../../Components/Loader";
 import { ticketsListSorters } from "../../utils/listSorters";
-import { translate } from "../../utils/translate";
+import i18n from "../../config/i18n";
 
 import TicketEntry from "./TicketEntry";
 import TicketListHeadEntry from "./TicketListHeadEntry";
@@ -28,7 +28,7 @@ function TicketList({
     return (
       <>
         <TicketListHeadEntry />
-        <div className="text-center">{translate("No tickets available.")}</div>
+        <div className="text-center">{i18n.t("No tickets available.")}</div>
       </>
     );
   }

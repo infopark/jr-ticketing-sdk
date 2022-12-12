@@ -21,8 +21,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     created_at,
     messages,
   } = ticket;
-  const { userData } = useTenantContext();
-
   const description = messages[0] ? messages[0].text : "";
 
   const handleCloseTicket = async (id) => {
@@ -106,7 +104,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             {parseDate(
               created_at,
               DEFAULT_DATE_FORMAT,
-              userData && userData.timelocale
             )}
           </dd>
         </dl>
