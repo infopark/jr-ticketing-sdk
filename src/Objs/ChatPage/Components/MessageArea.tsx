@@ -36,7 +36,6 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     if (!isClosed) {
       const msgData = {
         text: newlinesToBreaks(msg),
-        ticket_id: ticketId,
         user_id: userId,
         attachments: [] as object[],
       };
