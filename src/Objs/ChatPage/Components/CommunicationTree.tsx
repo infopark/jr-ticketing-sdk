@@ -13,7 +13,7 @@ import {
   DEFAULT_TIME_FORMAT,
 } from "../../../utils/constants";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
-import { useUserData } from "../../../Components/UserDataContext";
+import { useTenantContext } from "../../../Components/TenantContextProvider";
 import i18n from "../../../config/i18n";
 import { matchExtension } from "../../../utils/fileExtension";
 import PageContentWrapper from "./PageContentWrapper";
@@ -33,7 +33,7 @@ const CommunicationTree = ({
   refreshCallback,
   isClosed,
 }) => {
-  const { userData } = useUserData();
+  const { userData } = useTenantContext();
   const messagesEndRef = useRef(null as any);
   const scrollToBottom = () => {
     messagesEndRef.current &&
@@ -81,13 +81,8 @@ const CommunicationDayTree = ({
   refreshCallback,
   isClosed,
 }) => {
-  const { userData } = useUserData();
   const days = groupBy(communications, (message) =>
-    parseDate(
-      message.created_at,
-      DEFAULT_DATE_FORMAT,
-      userData && userData.timelocale
-    )
+    parseDate(message.created_at, DEFAULT_DATE_FORMAT)
   );
   const loggedUserId = loggedUserData.id;
 
@@ -188,7 +183,6 @@ const Message = ({
   refreshCallback,
   isClosed,
 }) => {
-  const { userData } = useUserData();
   return (
     <div
       className={classNames({
@@ -214,11 +208,7 @@ const Message = ({
             {sender.first_name} {sender.last_name}
           </h4>
           <span className="time_stamp">
-            {parseDate(
-              message.created_at,
-              DEFAULT_TIME_FORMAT,
-              userData && userData.timelocale
-            )}
+            {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
           </span>
           {!isAttachmentsMode && (
             <div>

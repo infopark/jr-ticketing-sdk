@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as Scrivito from "scrivito";
+
 import { callApiGet } from "../../api/portalApiCalls";
-import useAPIError from "../../utils/useAPIError";
 import { createTicketsListFilters } from "../../utils/listFilters";
 import TicketList from "./TicketList";
 import TicketListBoxHeader from "./TicketListBoxHeader";
-import { getUserUuid } from "../../Components/Auth/utils";
+import { useTenantContext } from "../../Components/TenantContextProvider";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [loading, setLoading] = useState(true);
@@ -13,21 +13,24 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [sortKey, setSortKey] = useState("byCreationDate");
   const [filterKey, setFilterKey] = useState("active");
   const allowDeferredBaseLink = useRef(true);
-  const { addError } = useAPIError();;
+  const { addError, userId } = useTenantContext();
 
   const getTicketsByNewest = useCallback(() => {
-    const userUUID = getUserUuid();
-    callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
+    if (!userId) {
+      return;
+    }
+
+    callApiGet(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
           setTicketList(response);
         }
       })
       .catch((error) => {
-        addError("TICKET_LIST, ", error, "TicketListWidget");
+        addError("Error loading ticket list", "TicketListWidget", error);
       })
       .finally(() => setLoading(false));
-  }, [addError]);
+  }, [addError, userId]);
 
   // initial load tickets
   useEffect(() => {

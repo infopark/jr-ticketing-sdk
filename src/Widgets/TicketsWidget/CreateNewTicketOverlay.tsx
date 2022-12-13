@@ -5,11 +5,10 @@ import { RegistryWidgetsType } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv6";
 import Form from "@rjsf/core";
 
+import i18n from "../../config/i18n";
 import Loader from "../../Components/Loader";
 import Modal from "react-overlays/Modal";
-import { translate } from "../../utils/translate";
 import { callApiPost } from "../../api/portalApiCalls";
-import { getUserUuid } from "../../Components/Auth/utils";
 import FooterButtons from "./FooterButtons";
 import { useTenantContext } from "../../Components/TenantContextProvider";
 
@@ -63,7 +62,7 @@ const CustomAttachment = function({ id, value, onChange }) {
     <div>
       <div className="mb-1">
         <label htmlFor={id} className="btn btn-secondary btn-sm px-2 py-1 with-btn-lnf">
-          {translate("attach file")}
+          {i18n.t("attach file")}
           <input
             type="file"
             id={id}
@@ -80,8 +79,8 @@ const CustomAttachment = function({ id, value, onChange }) {
           <div className="dots">
             {file.name}
             {" "}
-            {file.loading && translate("Processing file…")}
-            {file.error && translate("Failed")}
+            {file.loading && i18n.t("Processing file…")}
+            {file.error && i18n.t("Failed")}
           </div>
           <div className="delete_file pointer" onClick={() => removeUpload(file)}>
             x
@@ -104,7 +103,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
     <div className="sdk_mute_bg_2" {...props} />
   );
 
-  const userUUID = getUserUuid();
+  const { userId } = useTenantContext();
 
   const onSubmitForm = async () => {
     setLoading(true);
@@ -126,7 +125,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       const newTicket = await callApiPost("tickets", {
         ...ticketAttributes,
         message: messageAttributes,
-        requester_id: userUUID,
+        requester_id: userId,
         status: "new",
       });
 
@@ -156,7 +155,9 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       const localUiSchema = { ...ticketUiSchema };
 
       Object.entries(ticketSchema.properties).forEach(([attribute, schema]: [string, any]) => {
-        if (ticketUiSchema[attribute]["ui:widget"] !== "hidden" || schema["default"]) {
+        // Don't render hidden attributes unless they have a default value
+        const uiSchema = ticketUiSchema[attribute] || {};
+        if (uiSchema["ui:widget"] !== "hidden" || schema["default"]) {
           localSchema.properties[attribute] = schema;
         }
         Object.entries(schema as object).forEach(([key, value]) => {
@@ -192,7 +193,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
           )}
           <div className="ticket-modal-form">
             <div className="overlay_content scroll_content">
-              <h2>{translate("create_new_ticket")}</h2>
+              <h2>{i18n.t("create_new_ticket")}</h2>
               <div className="inline_form">
                 <Form
                   formData={formData}
@@ -210,7 +211,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
                   className="alert alert-danger box radius mt-4"
                   role="alert"
                 >
-                  {translate("creation-error")}
+                  {i18n.t("creation-error")}
                 </div>
               )}
             </div>

@@ -6,7 +6,6 @@ import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
 import i18n from "../../../config/i18n";
 import { callApiPut } from "../../../api/portalApiCalls";
-import { useUserData } from "../../../Components/UserDataContext";
 import PageContentWrapper from "./PageContentWrapper";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
@@ -22,8 +21,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     created_at,
     messages,
   } = ticket;
-  const { userData } = useUserData();
-
   const description = messages[0] ? messages[0].text : "";
 
   const handleCloseTicket = async (id) => {
@@ -107,7 +104,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
             {parseDate(
               created_at,
               DEFAULT_DATE_FORMAT,
-              userData && userData.timelocale
             )}
           </dd>
         </dl>

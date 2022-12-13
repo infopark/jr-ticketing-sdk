@@ -1,5 +1,6 @@
 import * as React from "react";
-import { translate } from "../../utils/translate";
+
+import i18n from "../../config/i18n";
 
 function FooterButtons({ disabled, onSubmit, onCancel }) {
   return (
@@ -9,7 +10,7 @@ function FooterButtons({ disabled, onSubmit, onCancel }) {
         className="btn btn-secondary float_left"
         onClick={onCancel}
       >
-        {translate("cancel")}
+        {i18n.t("cancel")}
       </button>
       <button
         type="submit"
@@ -17,7 +18,7 @@ function FooterButtons({ disabled, onSubmit, onCancel }) {
         disabled={disabled}
         onClick={onSubmit}
       >
-        {translate("Create")}
+        {i18n.t("Create")}
       </button>
     </footer>
   );

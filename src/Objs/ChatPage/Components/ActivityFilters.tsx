@@ -1,12 +1,13 @@
 import React from "react";
 import classNames from "classnames";
 import { uniqueId } from "lodash-es";
-import { translate } from "../../../utils/translate";
+
+import i18n from "../../../config/i18n";
 import { activityTypes, typesDictionary } from "./ActivityTypeUtils";
 
 const ActivityFilters = ({ filters, handleFilterClick }) => (
   <>
-    <span className="mr-3">{translate("show only")}</span>
+    <span className="mr-3">{i18n.t("show only")}</span>
     {activityTypes.map((type) => {
       const { name, icon } = typesDictionary[type];
       return (
@@ -18,7 +19,7 @@ const ActivityFilters = ({ filters, handleFilterClick }) => (
           key={uniqueId()}
         >
           <i className={`fa opacity_5 mr-2 fa-${icon}`} />
-          {translate(name)}
+          {i18n.t(name)}
         </button>
       );
     })}

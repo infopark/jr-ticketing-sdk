@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import classNames from "classnames";
-import { translate } from "../../../utils/translate";
+
+import i18n from "../../../config/i18n";
 
 const TicketNav = ({ toggleMode, mode, viewModes }) => {
   useEffect(() => {
@@ -29,7 +30,7 @@ const TicketNav = ({ toggleMode, mode, viewModes }) => {
                   }}
                   key={viewModeObj.name}
                 >
-                  {translate(viewModeObj.name)}
+                  {i18n.t(viewModeObj.name)}
                 </li>
               );
             })}

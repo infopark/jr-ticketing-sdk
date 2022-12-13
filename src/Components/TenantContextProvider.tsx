@@ -1,19 +1,13 @@
 import * as Scrivito from "scrivito";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { isEmpty } from "lodash-es";
 
 import { callApiGet } from "../api/portalApiCalls";
+import getUserData from "../api/getUserData";
 import i18n from "../config/i18n";
 import addI18nBundles from "../config/addI18nBundles";
 
 const TenantContext = React.createContext({} as any);
-
-/**
- * Warning: This context provider uses tenant specific IDs in order to
- * manage meaningful defaults. Please use the provided contxt functions,
- * never access the IDs directly outside this module and simply add
- * additional functions to the context if necessary.
- */
 
 const TicketAttributes = {
   "title": {
@@ -43,9 +37,16 @@ export function TenantContextProvider(props) {
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketUiSchema, setTicketUiSchema] = useState<any>();
 
+  const [userData, setUserData] = useState(undefined as any);
+  const [userId, setUserId] = useState(null as any);
+  const [error, setError] = useState(null as any);
+
+  const instanceId = process.env.SCRIVITO_TENANT;
+
   useEffect(() => {
-    loadTicketFormConfiguration();
+    loadUserInfo();
     loadConfiguration();
+    loadTicketFormConfiguration();
   }, []);
 
   useEffect(() => {
@@ -61,6 +62,7 @@ export function TenantContextProvider(props) {
         setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
       } catch (error) {
         setTicketSchemaForInstance({ ...TicketAttributes });
+        addError("Error load ticket schema", "TenantContextProvider", error);
       }
     }
   }, [ticketUiSchema, customAttributes]);
@@ -101,9 +103,43 @@ export function TenantContextProvider(props) {
     });
   }
 
-  function isTenantContextReady() {
-    return !isEmpty(ticketSchema) && !isEmpty(ticketUiSchema);
+  const loadUserInfo = async () => {
+    try {
+      const data = await getUserData();
+      if (!data) {
+        setUserId(null);
+        return;
+      }
+
+      if (data.failedRequest) {
+        setUserId(null);
+        if (data.tooManyIamRedirects) {
+          setUserData(data);
+        }
+        return;
+      }
+
+      setUserId(data.id);
+      setUserData(data);
+    } catch (error) {
+      addError("Error load user info", "TenantContextProvider", error);
+    }
   }
+
+  function isTenantContextReady() {
+    return !isEmpty(ticketSchema) && !isEmpty(ticketUiSchema) && userId;
+  }
+
+  const updateLanguage = useCallback((language) => {
+    i18n.changeLanguage(language);
+  }, []);
+
+  const removeError = () => setError(null);
+
+  const addError = useCallback((message, location, error) => {
+    console.log("[TenantContextProvider] addError", message, location);
+    setError({ message, location, error });
+  }, []);
 
   return (
     <TenantContext.Provider
@@ -112,6 +148,12 @@ export function TenantContextProvider(props) {
         ticketSchema,
         ticketUiSchema,
         isTenantContextReady,
+        userData,
+        userId,
+        updateLanguage,
+        error,
+        addError,
+        removeError,
       }}
     >
       {props.children}

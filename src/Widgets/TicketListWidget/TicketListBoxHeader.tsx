@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
-import { translate } from "../../utils/translate";
+
+import i18n from "../../config/i18n";
 import { ticketsListSorters } from "../../utils/listSorters";
 
 function TicketListBoxHeader({
@@ -35,7 +36,7 @@ function TicketListBoxHeader({
             >
               {sortKeys.map((item) => (
                 <option value={item} key={`option_${item}_${widget.id()}`}>
-                  {translate(item as any)}
+                  {i18n.t(item as any)}
                 </option>
               ))}
             </select>
@@ -49,7 +50,7 @@ function TicketListBoxHeader({
             >
               {filterKeys.map((item) => (
                 <option value={item} key={`option_${item}_${widget.id()}`}>
-                  {translate(item as any)}
+                  {i18n.t(item as any)}
                 </option>
               ))}
             </select>
