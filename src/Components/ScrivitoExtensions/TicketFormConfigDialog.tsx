@@ -28,7 +28,7 @@ function fromPropertiesDefinitionToSchema(inputList) {
   const uiSchema = {};
   inputList.forEach((item) => {
     const { name, showCreate, showDetails } = item;
-    uiSchema[name] = {}
+    uiSchema[name] = {};
     if (!showCreate) {
       uiSchema[name]["ui:widget"] = "hidden";
     }

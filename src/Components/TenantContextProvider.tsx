@@ -77,14 +77,14 @@ export function TenantContextProvider(props) {
       const schema = JSON.parse(obj?.get("uiSchema") as string || "{}");
       setTicketUiSchema(schema);
     });
-  }
+  };
 
   const loadConfiguration = async () => {
     const instance = await callApiGet("instance");
 
     setCustomAttributes(instance.custom_attributes);
     addI18nBundles(instance.locales);
-  }
+  };
 
   const setTicketSchemaForInstance = (properties) => {
     Object.keys(properties).forEach((key) => {
@@ -101,7 +101,7 @@ export function TenantContextProvider(props) {
       properties,
       required: Object.keys(properties).filter((name) => properties[name]["ui:required"]),
     });
-  }
+  };
 
   const loadUserInfo = async () => {
     try {
@@ -124,7 +124,7 @@ export function TenantContextProvider(props) {
     } catch (error) {
       addError("Error load user info", "TenantContextProvider", error);
     }
-  }
+  };
 
   function isTenantContextReady() {
     return !isEmpty(ticketSchema) && !isEmpty(ticketUiSchema) && userId;

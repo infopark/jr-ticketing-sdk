@@ -146,4 +146,4 @@ const ItemWithDragHandle = React.forwardRef((props: any, ref: any) => {
       {props.children}
     </div>
   );
-})
+});

@@ -37,10 +37,10 @@ const getDateObject = (date) =>
 
 const getFormat = (format, locale) => {
   let mappedFormat = formatsMap[format];
-  if (!!mappedFormat) {
+  if (mappedFormat) {
     mappedFormat = formatsMap[DEFAULT_DATE_FORMAT];
   }
-  if (!!mappedFormat) {
+  if (mappedFormat) {
     return format;
   }
   return mappedFormat;
