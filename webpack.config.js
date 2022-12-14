@@ -1,8 +1,13 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+// Please use the same version that is also used by the transpiler (e.g. "target" of tsconfig)
+const ecmascriptTarget = 'es2015';
+
 module.exports = {
   cache: true,
+  node: false,
+  target: ['web', ecmascriptTarget],
   entry: {
     index: "./src/index.ts",
     ScrivitoExtensions: "./src/Components/ScrivitoExtensions/index.ts",
