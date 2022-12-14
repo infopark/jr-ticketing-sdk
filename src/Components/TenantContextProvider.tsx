@@ -33,7 +33,7 @@ const TicketAttributes = {
 };
 
 export function TenantContextProvider(props) {
-  const [customAttributes, setCustomAttributes] = React.useState<any>({});
+  const [customAttributes, setCustomAttributes] = React.useState<any>();
   const [ticketSchema, setTicketSchema] = useState<any>();
   const [ticketUiSchema, setTicketUiSchema] = useState<any>();
 
@@ -50,20 +50,22 @@ export function TenantContextProvider(props) {
   }, []);
 
   useEffect(() => {
-    if (ticketUiSchema && customAttributes) {
-      try {
-        const customTicketProps = {};
-        const order = ticketUiSchema["ui:order"] || [];
-        Object.entries(customAttributes.Ticket).forEach(([name, schema]) => {
-          if (order.indexOf(name) >= 0) {
-            customTicketProps[name] = schema;
-          }
-        });
-        setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
-      } catch (error) {
-        setTicketSchemaForInstance({ ...TicketAttributes });
-        addError("Error load ticket schema", "TenantContextProvider", error);
-      }
+    if (!ticketUiSchema || !customAttributes) {
+      return;
+    }
+
+    try {
+      const customTicketProps = {};
+      const order = ticketUiSchema["ui:order"] || [];
+      Object.entries(customAttributes.Ticket).forEach(([name, schema]) => {
+        if (order.indexOf(name) >= 0) {
+          customTicketProps[name] = schema;
+        }
+      });
+      setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
+    } catch (error) {
+      setTicketSchemaForInstance({ ...TicketAttributes });
+      addError("Error load ticket schema", "TenantContextProvider", error);
     }
   }, [ticketUiSchema, customAttributes]);
 
@@ -137,7 +139,7 @@ export function TenantContextProvider(props) {
   const removeError = () => setError(null);
 
   const addError = useCallback((message, location, error) => {
-    console.log("[TenantContextProvider] addError", message, location);
+    console.error(location, message, error);
     setError({ message, location, error });
   }, []);
 
