@@ -133,7 +133,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
 function translateValue(name, value) {
   if (Array.isArray(value)) {
     return value.map((v) => translateValue(name, v)).join(", ");
-  } else if (!!value) {
+  } else if (value) {
     return i18n.t(`Ticket.${name}.${value}`, value);
   }
   return "-";

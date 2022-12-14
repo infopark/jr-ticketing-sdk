@@ -9,7 +9,7 @@ const isLocalhost = () => {
     return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   }
   return false;
-}
+};
 
 const CDN_BASE_PATH = process.env.CUSTOMER_PORTAL_SDK_CDN_URL || window.location.origin;
 

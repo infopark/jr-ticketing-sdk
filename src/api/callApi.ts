@@ -10,7 +10,7 @@ async function callApi(method, url, data = {}) {
   };
 
   if (METHODS_WITH_BODY.includes(method.toUpperCase())) {
-    options.data = data
+    options.data = data;
   }
 
   try {

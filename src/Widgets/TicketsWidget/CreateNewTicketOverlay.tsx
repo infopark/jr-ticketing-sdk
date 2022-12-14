@@ -52,10 +52,10 @@ const CustomAttachment = function({ id, value, onChange }) {
       fileObject.loading = false;
       updateFiles(fileObject);
     });
-  };
+  }
 
   function removeUpload(file) {
-    setFiles(files.filter(f => f !== file))
+    setFiles(files.filter(f => f !== file));
   }
 
   return (
@@ -88,8 +88,8 @@ const CustomAttachment = function({ id, value, onChange }) {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 const widgets: RegistryWidgetsType = {
   FileWidget: CustomAttachment

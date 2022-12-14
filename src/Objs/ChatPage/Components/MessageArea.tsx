@@ -40,7 +40,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
         attachments: [] as object[],
       };
 
-      if (!!attachmentFileName) {
+      if (attachmentFileName) {
         msgData.attachments.push({
           filename: attachmentFileName
         });

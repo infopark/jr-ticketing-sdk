@@ -1,10 +1,10 @@
 import deepmerge from "deepmerge";
 import { isEmpty } from "lodash-es";
 
-import i18n from "./i18n"
+import i18n from "./i18n";
 
-import en from "./locales/en.json"
-import de from "./locales/de.json"
+import en from "./locales/en.json";
+import de from "./locales/de.json";
 
 /**
  * Add locale bundles such as new translations for a language or multiple languages.
@@ -16,6 +16,6 @@ export default function addI18nBundles(locales) {
     return;
   }
 
-  i18n.addResourceBundle("en", "portal", deepmerge(en, locales.en || {}))
-  i18n.addResourceBundle("de", "portal", deepmerge(de, locales.de || {}))
+  i18n.addResourceBundle("en", "portal", deepmerge(en, locales.en || {}));
+  i18n.addResourceBundle("de", "portal", deepmerge(de, locales.de || {}));
 }
