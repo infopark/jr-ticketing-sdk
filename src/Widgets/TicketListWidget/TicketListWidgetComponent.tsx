@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as Scrivito from "scrivito";
 
 import { callApiGet } from "../../api/portalApiCalls";
@@ -15,7 +15,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const allowDeferredBaseLink = useRef(true);
   const { addError, userId } = useTenantContext();
 
-  const getTicketsByNewest = useCallback(() => {
+  useEffect(() => {
     if (!userId) {
       return;
     }
@@ -31,11 +31,6 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
       })
       .finally(() => setLoading(false));
   }, [addError, userId]);
-
-  // initial load tickets
-  useEffect(() => {
-    getTicketsByNewest();
-  }, [getTicketsByNewest]);
 
   const baseLink = widget.get("link");
   if (!baseLink && allowDeferredBaseLink.current) {

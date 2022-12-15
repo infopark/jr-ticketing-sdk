@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import * as Scrivito from "scrivito";
 
 import { callApiGet } from "../../api/portalApiCalls";
@@ -12,7 +12,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
   const { addError, userId } = useTenantContext();
 
-  useCallback(() => {
+  useEffect(() => {
     if (!userId) {
       return;
     }
