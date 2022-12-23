@@ -156,7 +156,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       const localUiSchema = { ...ticketUiSchema };
 
       Object.entries(ticketSchema.properties).forEach(([attribute, schema]: [string, any]) => {
-        if (ticketUiSchema[attribute]["ui:widget"] !== "hidden" || schema["default"]) {
+        if (ticketUiSchema[attribute]?.["ui:widget"] !== "hidden" || schema["default"]) {
           localSchema.properties[attribute] = schema;
         }
         Object.entries(schema as object).forEach(([key, value]) => {
