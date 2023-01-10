@@ -2,11 +2,12 @@ import * as React from "react";
 import * as Scrivito from "scrivito";
 
 import i18n from "../../config/i18n";
+import { Keyable } from "../../utils/types";
 import { TenantContextProvider, useTenantContext } from "../TenantContextProvider";
 import { SortableContainer } from "./SortableContainer";
 
-function transformPropertiesToArray(input, uiSchema) {
-  const fieldList = Object.entries(input).map(([key, schema]: [string, any]) => ({
+function transformPropertiesToArray(input: Keyable, uiSchema: Keyable) {
+  const fieldList = Object.entries(input).map(([key, schema]: [string, Keyable]) => ({
     ...schema,
     name: key,
     showCreate: schema["ui:regular"] || (uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : false),
@@ -24,7 +25,7 @@ function transformPropertiesToArray(input, uiSchema) {
   return fieldList;
 }
 
-function fromPropertiesDefinitionToSchema(inputList) {
+function fromPropertiesDefinitionToSchema(inputList: Keyable[]) {
   const uiSchema = {};
   inputList.forEach((item) => {
     const { name, showCreate, showDetails } = item;
@@ -49,7 +50,7 @@ const TicketFormConfigDialog = Scrivito.connect(() => (
 ));
 
 const TicketFormConfigDialogContent = Scrivito.connect(() => {
-  const [orderedObjs, setOrderedObjs] = React.useState<Array<any>>([]);
+  const [orderedObjs, setOrderedObjs] = React.useState<Keyable[]>([]);
   const { ticketSchema, ticketUiSchema, customAttributes } = useTenantContext();
   React.useEffect(() => {
     if (ticketSchema && ticketUiSchema) {
@@ -59,18 +60,18 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
     }
   }, [ticketSchema, ticketUiSchema]);
 
-  const updateField = (field, changes) => {
-    const newObjs = orderedObjs.map((item: any) =>
+  const updateField = (field: Keyable, changes: Keyable) => {
+    const newObjs = orderedObjs.map((item: Keyable) =>
       item.name === field.name ? { ...item, ...changes } : item
     );
     updateSchema(newObjs);
   };
 
-  const onSortEnd = (nextOrder, _oldIndex, _newIndex) => {
+  const onSortEnd = (nextOrder: Keyable[], _oldIndex: unknown, _newIndex: unknown) => {
     updateSchema(nextOrder);
   };
 
-  const updateSchema = (orderedItems) => {
+  const updateSchema = (orderedItems: Keyable[]) => {
     setOrderedObjs(orderedItems);
     const { uiSchema } = fromPropertiesDefinitionToSchema(orderedItems);
     Scrivito.load(() => {
@@ -84,6 +85,7 @@ const TicketFormConfigDialogContent = Scrivito.connect(() => {
           uiSchema: JSON.stringify(uiSchema),
         });
       } else {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         (Scrivito.getClass("TicketFormConfiguration") as any).onAllSites().create({
           uiSchema: JSON.stringify(uiSchema),
         });
@@ -116,7 +118,7 @@ function SortableObjList({
   return (
     <div id="scrivito_obj_sorting_sortable">
       <SortableContainer
-        ids={objs.map((obj) => obj.name)}
+        ids={objs.map((obj: Keyable) => obj.name)}
         items={objs}
         onSortEnd={onSortEnd}
         disabled={false}

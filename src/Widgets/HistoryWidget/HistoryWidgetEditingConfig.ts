@@ -10,7 +10,7 @@ Scrivito.provideEditingConfig("HistoryWidget", {
     [
       "links",
       (links) => {
-        if ((links as any).length < 1) {
+        if ((links as unknown[]).length < 1) {
           return {
             message: "At least 1 link required",
             severity: "error",

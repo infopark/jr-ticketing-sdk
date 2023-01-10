@@ -6,8 +6,9 @@ import { callApiGet } from "../api/portalApiCalls";
 import getUserData from "../api/getUserData";
 import i18n from "../config/i18n";
 import addI18nBundles from "../config/addI18nBundles";
+import { Keyable } from "../utils/types";
 
-const TenantContext = React.createContext({} as any);
+const TenantContext = React.createContext({} as Keyable);
 
 const TicketAttributes = {
   "title": {
@@ -32,16 +33,14 @@ const TicketAttributes = {
   }
 };
 
-export function TenantContextProvider(props) {
-  const [customAttributes, setCustomAttributes] = React.useState<any>();
-  const [ticketSchema, setTicketSchema] = useState<any>();
-  const [ticketUiSchema, setTicketUiSchema] = useState<any>();
+export function TenantContextProvider({ children }) {
+  const [customAttributes, setCustomAttributes] = React.useState<Keyable>();
+  const [ticketSchema, setTicketSchema] = useState<Keyable>();
+  const [ticketUiSchema, setTicketUiSchema] = useState<Keyable>();
 
-  const [userData, setUserData] = useState(undefined as any);
-  const [userId, setUserId] = useState(null as any);
-  const [error, setError] = useState(null as any);
-
-  const instanceId = process.env.SCRIVITO_TENANT;
+  const [userData, setUserData] = useState<Keyable>();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [error, setError] = useState<Keyable | null>(null);
 
   useEffect(() => {
     loadUserInfo();
@@ -158,7 +157,7 @@ export function TenantContextProvider(props) {
         removeError,
       }}
     >
-      {props.children}
+      {children}
     </TenantContext.Provider>
   );
 }

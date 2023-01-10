@@ -1,5 +1,4 @@
 import React from "react";
-import * as Scrivito from "scrivito";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 import { parseDate } from "../../../utils/dateUtils";

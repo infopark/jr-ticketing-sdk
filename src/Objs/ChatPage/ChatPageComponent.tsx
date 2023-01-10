@@ -16,16 +16,17 @@ import MessageArea from "./Components/MessageArea";
 import TicketDetails from "./Components/TicketDetails";
 import CombinedTicketNav from "./Components/CombinedTicketNav";
 import i18n from "../../config/i18n";
+import { Keyable } from "../../utils/types";
 
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
 Scrivito.provideComponent("ChatPage", ({ page }) => {
-  const [chatContent, setChatContent] = useState();
-  const [activeTicket, setActiveTicket] = useState(undefined as any);
-  const [attachments, setAttachments] = useState([]);
-  const [status, setStatus] = useState("idle");
-  const [mode, setMode] = useState("chat");
-  const ws = useRef(null as any);
+  const [chatContent, setChatContent] = useState<Keyable[]>();
+  const [activeTicket, setActiveTicket] = useState<Keyable>();
+  const [attachments, setAttachments] = useState<Keyable[]>([]);
+  const [status, setStatus] = useState<string>("idle");
+  const [mode, setMode] = useState<string>("chat");
+  const ws = useRef<Keyable | null>(null);
   const wsApiUrl = process.env.WS_API_BASE_URL;
   const stage = process.env.API_DEPLOYMENT_STAGE;
 
@@ -39,7 +40,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       ws.current = new WebSocket(`${wsApiUrl}/${stage}`);
       ws.current.onopen = () => {
         wsOpened = true;
-        ws.current.send(
+        ws.current?.send(
           JSON.stringify({
             action: "registerTicketId",
             ticketId: ticketid,
@@ -52,7 +53,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
         refreshTicket(effectStatus);
       };
       ws.current.onerror = () => {
-        if (!wsOpened) {
+        if (!wsOpened && ws.current) {
           ws.current.onclose = null;
         }
       };
@@ -235,7 +236,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
   }
 
   Scrivito.load(() => {
-    if (!isInVisitedPages(page)) {
+    if (page && !isInVisitedPages(page)) {
       addToVisitedPages(page);
     }
   });
@@ -250,7 +251,6 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
           mode={mode}
           toggleMode={toggleMode}
           viewModes={viewModes}
-          originObject={(page as any).parent()}
         />
         {(mode === "chat" || mode === "attachments") && chatContent && (
           <CommunicationTree

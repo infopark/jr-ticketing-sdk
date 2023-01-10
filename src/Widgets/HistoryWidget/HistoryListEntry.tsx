@@ -7,6 +7,7 @@ import documentationIcon from "../../assets/images/icons/documentation.svg";
 import helpdeskIcon from "../../assets/images/icons/helpdesk_black.svg";
 import i18n from "../../config/i18n";
 import { callApiGet } from "../../api/portalApiCalls";
+import { Keyable } from "../../utils/types";
 
 const HistoryListEntry = ({ link, title, pageType, query }) => {
   const [ticketName, setTicketName] = useState(null);
@@ -29,13 +30,13 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
   }, []);
 
   useEffect(() => {
-    const ticketUpdate = {
+    const ticketUpdate: Keyable = {
       canceled: false,
-    } as any;
+    };
 
     if (!title && pageType === "ChatPage") {
       const search = new URLSearchParams(query);
-      const params = {} as any;
+      const params: Keyable = {};
       search.forEach((value, key) => {
         params[key] = value;
       });
@@ -55,15 +56,15 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
   const typeMapping = {
     TrainingPage: {
       icon: academyIcon,
-      name: i18n.t("Academy Page" as any),
+      name: i18n.t("Academy Page"),
     },
     TrainingHomePage: {
       icon: academyIcon,
-      name: i18n.t("Academy Page" as any),
+      name: i18n.t("Academy Page"),
     },
     ChatPage: {
       icon: helpdeskIcon,
-      name: i18n.t("Helpdesk Ticket" as any),
+      name: i18n.t("Helpdesk Ticket"),
     },
     DocumentationPage: {
       icon: documentationIcon,
