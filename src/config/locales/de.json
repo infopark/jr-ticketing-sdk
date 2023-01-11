@@ -39,8 +39,6 @@
   "responsible": "Zuständig",
   "client": "Kunde",
   "preview": "Vorschau",
-  "download": "Download",
-  "delete": "Löschen",
   "done": "Fertig",
   "Created, not sent": "Angelegt, nicht versendet",
   "Sent": "Versendet",
@@ -134,5 +132,9 @@
     "message_placeholder": "Ihre Nachricht ...",
     "processing_file": "Die Datei wird bearbeitet ...",
     "submit": "Nachricht abschicken"
+  },
+  "Message": {
+    "delete_attachment": "Löschen",
+    "download_attachment": "Download"
   }
 }

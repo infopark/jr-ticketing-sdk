@@ -12,6 +12,12 @@ import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { callApiPost } from "../../../api/portalApiCalls";
 
+type Attachment = {
+  filename: string;
+  extension: string;
+  s3_url: string;
+}
+
 function Message({
   message,
   sender,
@@ -20,6 +26,22 @@ function Message({
   refreshCallback,
   isClosed,
 }) {
+  const images: Attachment[] = [];
+  const files: Attachment[] = [];
+
+  message.attachments && message.attachments.forEach((file) => {
+    const attachment: Attachment = {
+      filename: file.filename,
+      extension: file.filename.split(".").pop(),
+      s3_url: file.s3_url,
+    }
+    if (isImageFormat(attachment.extension)) {
+      images.push(attachment);
+    } else {
+      files.push(attachment);
+    }
+  })
+
   return (
     <div
       className={classNames({
@@ -58,112 +80,88 @@ function Message({
               )}
             </div>
           )}
-          {message.attachments && (
-            <Attachment
+          {files.map((attachment) => (
+            <MessageFile
+              key={attachment.filename}
               message={message}
-              refreshCallback={refreshCallback}
+              attachment={attachment}
+              onDelete={() => {}}
               isClosed={isClosed}
             />
-          )}
+          ))}
+          {images.map((attachment) => (
+            <MessageImage
+              key={attachment.filename}
+              message={message}
+              attachment={attachment}
+              onDelete={() => {}}
+              isClosed={isClosed}
+            />
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-// TODO remove handleDeleteAttachment and button
-const Attachment = ({ message, refreshCallback, isClosed }) => {
-  const handleDeleteAttachment = async (msg) => {
-    const cdnData = {
-      path: msg.attachment,
-    };
-    const cdnResponse = await callApiPost("delete-cdn-object", cdnData);
-    if (
-      cdnResponse.failedRequest ||
-      cdnResponse.status !== "fileDeleteSuccess"
-    ) {
-      return;
-    }
-    if (message.text) {
-      const tmData = {
-        attachment: "",
-      };
-      await callApiPost(`update-ticketmessage/${msg.ticketmessageid}`, tmData);
-    } else {
-      await callApiPost(`delete-ticketmessage/${msg.ticketmessageid}`, {});
-    }
-    refreshCallback();
-  };
+// TODO onDelete
 
-  if (message.attachments.length === 0) {
-    return null;
-  }
+// TODO merge MessageImage and Message File into MessageAttachment
 
-  console.log(message.attachments);
-  const attachment = message.attachments[0];
+function MessageImage({ message, attachment, onDelete, isClosed }) {
+  return (
+    <div className="collapsebox">
+      <button
+        className="btn btn-secondary float_right attachment-delete image"
+        onClick={() => onDelete(message)}
+        type="button"
+        disabled={isClosed}
+      >
+        {i18n.t("Message.delete_attachment")}
+      </button>
+      <a
+        href={attachment.s3_url}
+        target="_blank"
+        className="btn btn-secondary float_right image"
+        download
+        rel="noreferrer"
+      >
+        {i18n.t("Message.download_attachment")}
+      </a>
+      <img
+        src={attachment.s3_url}
+        className="attachment_img"
+        alt="img"
+      />
+    </div>
+  );
+}
 
-  const fileName = attachment.filename;
-  const fileExt = fileName.split(".").pop();
-  const isImage = isImageFormat(fileExt);
-  const fileIcon = matchExtension(fileExt);
+function MessageFile({ message, attachment, onDelete, isClosed }) {
+  const fileIcon = matchExtension(attachment.extension);
 
   return (
-    <>
-      <div className="collapsebox">
-        {isImage && (
-          <>
-            <button
-              className="btn btn-secondary float_right attachment-delete image"
-              onClick={() => handleDeleteAttachment(message)}
-              type="button"
-              disabled={isClosed}
-            >
-              {i18n.t("delete")}
-            </button>
-            <a
-              href={attachment.s3_url}
-              target="_blank"
-              className="btn btn-secondary float_right image"
-              download
-              rel="noreferrer"
-            >
-              {i18n.t("download")}
-            </a>
-            <img
-              src={attachment.s3_url}
-              className="attachment_img"
-              alt="img"
-            />
-          </>
-        )}
-        {!isImage && fileName && (
-          <>
-            <img src={fileIcon} alt="" className="nav_img" />
-            <small className="color_text">{fileName}</small>
-            <button
-              className="btn btn-secondary float_right attachment-delete"
-              onClick={(event) => {
-                event.preventDefault();
-                handleDeleteAttachment(message);
-              }}
-              type="button"
-            >
-              {i18n.t("delete")}
-            </button>
-            <a
-              href={attachment.s3_url}
-              target="_blank"
-              className="btn btn-secondary float_right image"
-              download
-              rel="noreferrer"
-            >
-              {i18n.t("download")}
-            </a>
-          </>
-        )}
-      </div>
-    </>
+    <div className="collapsebox">
+      <img src={fileIcon} alt="" className="nav_img" />
+      <small className="color_text">{attachment.filename}</small>
+      <button
+        className="btn btn-secondary float_right attachment-delete"
+        onClick={() => onDelete(message)}
+        type="button"
+      >
+        {i18n.t("Message.delete_attachment")}
+      </button>
+      <a
+        href={attachment.s3_url}
+        target="_blank"
+        className="btn btn-secondary float_right image"
+        download
+        rel="noreferrer"
+      >
+        {i18n.t("Message.download_attachment")}
+      </a>
+    </div>
   );
-};
+}
 
 export default Message;

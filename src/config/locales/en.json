@@ -39,8 +39,6 @@
   "responsible": "Responsible",
   "client": "Client",
   "preview": "Preview",
-  "download": "Download",
-  "delete": "Delete",
   "done": "Done",
   "Created, not sent": "Created, not sent",
   "Sent": "Sent",
@@ -133,5 +131,9 @@
     "message_placeholder": "Your Message...",
     "processing_file": "Processing file ...",
     "submit": "Post Message"
+  },
+  "Message": {
+    "delete_attachment": "Delete",
+    "download_attachment": "Download"
   }
 }
