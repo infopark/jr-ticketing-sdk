@@ -22,6 +22,13 @@
     "comma-dangle": "off",
     "@typescript-eslint/comma-dangle": ["warn", "only-multiline"],
     "semi": "off",
-    "@typescript-eslint/semi": "warn"
+    "@typescript-eslint/semi": "warn",
+    "react/prop-types": 0,
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unused-vars": [
+      1,
+      { "args": "all", "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
+    ]
   }
 }

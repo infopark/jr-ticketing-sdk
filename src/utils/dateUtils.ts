@@ -8,15 +8,6 @@ import {
   DEFAULT_TIME_FORMAT,
 } from "./constants";
 
-const localeMap = {
-  en: "en-GB",
-  "en-US": "en-US",
-  "en-AU": "en-AU",
-  "en-GB": "en-GB",
-  de: "de-DE",
-  "de-DE": "de-DE",
-};
-
 const localeObjMap = {
   en: enGB,
   "en-US": enUS,
@@ -35,7 +26,7 @@ const formatsMap = {
 const getDateObject = (date) =>
   !(date instanceof Date) ? parseISO(date) : date;
 
-const getFormat = (format, locale) => {
+const getFormat = (format: string) => {
   let mappedFormat = formatsMap[format];
   if (mappedFormat) {
     mappedFormat = formatsMap[DEFAULT_DATE_FORMAT];
@@ -46,13 +37,13 @@ const getFormat = (format, locale) => {
   return mappedFormat;
 };
 
-const getLocale = (locale) => localeObjMap[locale] || enGB;
+const getLocale = (locale: string) => localeObjMap[locale] || enGB;
 
 const parseDate = (date, format = DEFAULT_DATE_FORMAT) => {
   const language = i18n.language;
 
   const dateObject = getDateObject(date);
-  const mappedFormat = getFormat(format, language);
+  const mappedFormat = getFormat(format);
   const localeObject = getLocale(language);
   const parsedDate = formatDate(dateObject, mappedFormat, {
     locale: localeObject,

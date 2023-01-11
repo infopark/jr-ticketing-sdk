@@ -5,14 +5,13 @@ import Loader from "../../Components/Loader";
 import { ticketsListSorters } from "../../utils/listSorters";
 import i18n from "../../config/i18n";
 
-import TicketEntry from "./TicketEntry";
+import TicketEntry, { Ticket } from "./TicketEntry";
 import TicketListHeadEntry from "./TicketListHeadEntry";
 
 function TicketList({
   ticketList,
   sortKey,
   baseLink,
-  widgetId,
   loading,
   ticketsListFilters,
   filterKey,
@@ -33,13 +32,13 @@ function TicketList({
     );
   }
 
-  const sortedList = ticketsListSorters[sortKey].sorter(ticketList);
-  const filteredList = ticketsListFilters[filterKey].filter(sortedList);
+  const sortedList: Ticket[] = ticketsListSorters[sortKey].sorter(ticketList);
+  const filteredList: Ticket[] = ticketsListFilters[filterKey].filter(sortedList);
 
   return (
     <>
       <TicketListHeadEntry />
-      {filteredList.map((ticket, index) => {
+      {filteredList.map((ticket: Ticket, index: number) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
           query: `ticketid=${ticket.id}`,

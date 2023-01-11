@@ -20,11 +20,11 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
 
   const messageOrAttachment = message || file;
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
-  const handleKeys = (e) => {
+  const handleKeys = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.keyCode === 13 || e.keyCode === 8) {
       const numberOfLineBreaks = (message.match(/\n/g) || []).length;
       const newHeight = 45 + numberOfLineBreaks * 20;
@@ -32,7 +32,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     }
   };
 
-  const handleSendMessage = async (msg) => {
+  const handleSendMessage = async (msg: string) => {
     if (!isClosed) {
       const msgData = {
         text: newlinesToBreaks(msg),

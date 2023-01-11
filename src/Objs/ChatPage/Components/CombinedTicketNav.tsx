@@ -7,7 +7,6 @@ function CombinedTicketNav({
   mode,
   toggleMode,
   viewModes,
-  originObject,
 }) {
   return (
     <div className="scroll_header animate">

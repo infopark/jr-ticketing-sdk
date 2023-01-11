@@ -7,19 +7,16 @@ import { parseDate } from "../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../utils/constants";
 import stripHtmlTags from "../../utils/stripHtmlTags";
 
-interface ticketEntryProps {
-  ticket: {
-    id: string;
-    title: string;
-    type: string;
-    status: string;
-    // description: string;
-    number: number;
-    attachmentcount: number;
-    created_at: string;
-    updated_at: string;
-  };
-  targetLink: Scrivito.Link;
+export interface Ticket {
+  id: string;
+  title: string;
+  type: string;
+  status: string;
+  // description: string;
+  number: number;
+  attachmentcount: number;
+  created_at: string;
+  updated_at: string;
 }
 
 function AttachmentFlag({ count }) {
@@ -34,7 +31,10 @@ function AttachmentFlag({ count }) {
 function TicketEntry({
   ticket,
   targetLink,
-}: ticketEntryProps) {
+}: {
+  ticket: Ticket,
+  targetLink: Scrivito.Link
+}) {
   const creationDate = parseDate(ticket.created_at, DEFAULT_DATE_FORMAT);
 
   return (

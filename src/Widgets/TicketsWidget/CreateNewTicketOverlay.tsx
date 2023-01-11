@@ -11,6 +11,7 @@ import Modal from "react-overlays/Modal";
 import { callApiPost } from "../../api/portalApiCalls";
 import FooterButtons from "./FooterButtons";
 import { useTenantContext } from "../../Components/TenantContextProvider";
+import { Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
   const [files, setFiles] = useState<object[]>([]);
@@ -20,7 +21,7 @@ const CustomAttachment = function({ id, value, onChange }) {
   }
 
   function uploadFile(fileList: FileList) {
-    Array.from(fileList).forEach(async (file: any) => {
+    Array.from(fileList).forEach(async (file: Keyable) => {
       const fileObject = {
         name: file.name,
         loading: true,
@@ -41,7 +42,7 @@ const CustomAttachment = function({ id, value, onChange }) {
 
       const uploadResult = await fetch(signedResult.url, {
         method: "PUT",
-        body: file,
+        body: file as BodyInit,
       });
 
       if (uploadResult.status >= 200 && uploadResult.status < 300) {
@@ -54,7 +55,7 @@ const CustomAttachment = function({ id, value, onChange }) {
     });
   }
 
-  function removeUpload(file) {
+  function removeUpload(file: object) {
     setFiles(files.filter(f => f !== file));
   }
 
@@ -68,13 +69,13 @@ const CustomAttachment = function({ id, value, onChange }) {
             id={id}
             name={id}
             value=""
-            onChange={(e: any) => uploadFile(e.target.files)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => e.target.files && uploadFile(e.target.files)}
             hidden
             multiple
           />
         </label>
       </div>
-      {files.map((file: any) => (
+      {files.map((file: Keyable) => (
         <div className="attachment_file mb-0" key={file.name}>
           <div className="dots">
             {file.name}
@@ -95,7 +96,15 @@ const widgets: RegistryWidgetsType = {
   FileWidget: CustomAttachment
 };
 
-function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
+function CreateNewTicketOverlay({
+  isOpen,
+  close,
+  chatPage
+}: {
+  isOpen: boolean,
+  close: React.MouseEventHandler<HTMLElement>,
+  chatPage: Scrivito.Obj
+}) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
 
@@ -160,7 +169,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
         if (uiSchema["ui:widget"] !== "hidden" || schema["default"]) {
           localSchema.properties[attribute] = schema;
         }
-        Object.entries(schema as object).forEach(([key, value]) => {
+        Object.entries(schema).forEach(([key, value]) => {
           if (key.startsWith("ui:")) {
             localUiSchema[attribute] ||= {};
             localUiSchema[attribute][key] = value;
@@ -177,7 +186,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
     <Modal
       show={isOpen}
       onHide={
-        ((event) => {
+        ((event: React.MouseEvent<HTMLElement, MouseEvent>) => {
           close(event);
         }) as any
       }

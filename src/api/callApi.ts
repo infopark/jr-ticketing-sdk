@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { Keyable } from "../utils/types";
 
 const METHODS_WITH_BODY = ["POST", "PUT", "PATCH"];
 
-async function callApi(method, url, data = {}) {
-  const options: any = {
+async function callApi(method: string, url: string, data: Keyable = {}): Promise<Keyable> {
+  const options: Keyable = {
     method: method,
     url: url,
     withCredentials: true,
@@ -16,8 +17,11 @@ async function callApi(method, url, data = {}) {
   try {
     const response = await axios.request(options);
     return response.data;
-  } catch (error: any) {
-    return checkIamAuthRedirect(error.response);
+  } catch (error) {
+    if (error instanceof AxiosError && error.response) {
+      return checkIamAuthRedirect(error.response);
+    }
+    throw error;
   }
 }
 
@@ -28,7 +32,7 @@ const IAM_MISSING_AUTH_CODE_LEGACY = "auth.missing";
 const IAM_REDIRECT_TIMEOUT_MS = 5000; // within 5 seconds, second of consecutive iam redirects blocked
 const LS_LAST_REDIRECT_TIMESTAMP = "last-iam-redirect-timestamp";
 
-function checkIamAuthRedirect(response) {
+function checkIamAuthRedirect(response: AxiosResponse) {
   const responseStatus = response && response.status;
   const synthResponse = {
     failedRequest: true,
