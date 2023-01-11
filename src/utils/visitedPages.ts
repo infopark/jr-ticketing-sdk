@@ -37,7 +37,7 @@ const getEssentialObjInfo = (obj: Scrivito.Obj): ObjInfo | null => {
   return { id, url, query, title, pageType, language };
 };
 
-const getVisitedPages = (obj: Scrivito.Obj): string | void | null => {
+const getVisitedPages = (obj: Scrivito.Obj | null): string | void | null => {
   if (!obj) {
     return null;
   }
