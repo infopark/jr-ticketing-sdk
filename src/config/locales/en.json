@@ -3,7 +3,6 @@
   "navigation_header": "contents",
   "running_ticket": "Running Tickets in Helpdesk",
   "tickets_waiting_for_you": "Tickets waiting for your action",
-  "create_new_ticket": "Create Ticket",
   "back_to_portal": "Back to Portal",
   "new_ticket": "New",
   "change_avatar": "Change Profile Image",
@@ -58,10 +57,7 @@
   "edit": "Edit",
   "back": "< Back",
   "save": "Save",
-  "post message": "Post Message",
-  "attach file": "Attach File",
   "Close Ticket": "Close Ticket",
-  "your message ...": "Your Message...",
   "Thank you for your message!": "Thank you for your Message!",
   "A ticket has been created.": "A Ticket has been created.",
   "We will answer you as soon as possible.": "We will answer you as soon as possible.",
@@ -89,8 +85,6 @@
   "Go to mainpage": "Go to mainpage",
   "Time locale": "Time locale",
   "No tickets available.": "No tickets available.",
-  "Processing file…": "Processing file…",
-  "Failed": "Failed",
   "Create": "Create",
   "ID": "ID",
   "Status": "Status",
@@ -124,5 +118,20 @@
       "question": "question",
       "null": "-"
     }
+  },
+  "CreateNewTicketOverlay": {
+    "attach_file": "Attach File",
+    "create_new_ticket": "Create Ticket",
+    "file_too_big": "File is too big",
+    "file_upload_failed": "File upload failed",
+    "processing_file": "Processing file ..."
+  },
+  "MessageArea": {
+    "attach_file": "Attach File",
+    "file_too_big": "File is too big",
+    "file_upload_failed": "File upload failed",
+    "message_placeholder": "Your Message...",
+    "processing_file": "Processing file ...",
+    "submit": "Post Message"
   }
 }

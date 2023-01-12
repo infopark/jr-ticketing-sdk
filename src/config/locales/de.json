@@ -3,7 +3,6 @@
   "navigation_header": "Inhalte",
   "running_ticket": "Laufende Tickets im Helpdesk",
   "tickets_waiting_for_you": "Tickets warten auf deine Antwort",
-  "create_new_ticket": "Ticket anlegen",
   "back_to_portal": "Zurück zum Portal",
   "new_ticket": "Neu",
   "change_avatar": "Bild ändern",
@@ -58,10 +57,7 @@
   "edit": "Bearbeiten",
   "back": "< Zurück",
   "save": "Speichern",
-  "post message": "Nachricht abschicken",
-  "attach file": "Datei anhängen",
   "Close Ticket": "Ticket schließen",
-  "your message ...": "Ihre Nachricht ...",
   "Thank you for your message!": "Danke für Ihre Nachricht!",
   "A ticket has been created.": "Ein Ticket wurde angelegt",
   "We will answer you as soon as possible.": "Wir werden Ihnen so schnell wie möglich antworten.",
@@ -89,8 +85,6 @@
   "Go to mainpage": "Zurück zur Hauptseite",
   "Time locale": "Zeitgebietsschema",
   "No tickets available.": "Keine Tickets vorhanden.",
-  "Processing file…": "Die Datei wird bearbeitet ...",
-  "Failed": "Gescheitert",
   "Create": "Anlegen",
   "ID": "ID",
   "Status": "Status",
@@ -124,5 +118,21 @@
       "question": "Frage",
       "null": "-"
     }
+  },
+  "CreateNewTicket": {
+    "attach_file": "Datei anhängen",
+    "create_new_ticket": "Ticket anlegen",
+    "file_too_big": "Die Datei ist zu groß",
+    "file_upload_failed": "Upload fehlgeschlagen",
+    "processing_file": "Die Datei wird bearbeitet ...",
+    "upload_failed": "Gescheitert"
+  },
+  "MessageArea": {
+    "attach_file": "Datei anhängen",
+    "file_too_big": "Die Datei ist zu groß",
+    "file_upload_failed": "Upload fehlgeschlagen",
+    "message_placeholder": "Ihre Nachricht ...",
+    "processing_file": "Die Datei wird bearbeitet ...",
+    "submit": "Nachricht abschicken"
   }
 }
