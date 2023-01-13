@@ -67,7 +67,6 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
         ticketList={ticketList}
         sortKey={sortKey}
         baseLink={baseLink}
-        widgetId={widget.id()}
         ticketsListFilters={ticketsListFilters}
         filterKey={filterKey}
       />
