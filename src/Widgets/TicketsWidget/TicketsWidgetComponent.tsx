@@ -45,7 +45,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       <CreateNewTicket
         className={boxClassName}
         chatPage={chatPage}
-        text={i18n.t("create_new_ticket")}
+        text={i18n.t("CreateNewTicket.create_new_ticket")}
       />
       <TicketNumberBox
         todoBox={false}

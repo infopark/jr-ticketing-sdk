@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import * as Scrivito from "scrivito";
+import classNames from "classnames";
+import { isEmpty } from "lodash-es";
+import Modal from "react-overlays/Modal";
 
 import { RegistryWidgetsType } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv6";
@@ -7,11 +10,11 @@ import Form from "@rjsf/core";
 
 import i18n from "../../config/i18n";
 import Loader from "../../Components/Loader";
-import Modal from "react-overlays/Modal";
 import { callApiPost } from "../../api/portalApiCalls";
 import FooterButtons from "./FooterButtons";
 import { useTenantContext } from "../../Components/TenantContextProvider";
-import { Keyable } from "../../utils/types";
+import { MAX_ATTACHMENT_SIZE } from "../../utils/constants";
+import { FileObject, Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
   const [files, setFiles] = useState<object[]>([]);
@@ -21,20 +24,31 @@ const CustomAttachment = function({ id, value, onChange }) {
   }
 
   function uploadFile(fileList: FileList) {
+    const filenames = [...value];
+
     Array.from(fileList).forEach(async (file: Keyable) => {
-      const fileObject = {
+      const size = file.size || 0;
+      const fileObject: FileObject = {
         name: file.name,
+        filename: "",
         loading: true,
-        error: false
+        error: ""
       };
       setFiles(files => [...files, fileObject]);
+
+      if (size > MAX_ATTACHMENT_SIZE) {
+        fileObject.error = "file_too_big";
+        fileObject.loading = false;
+        updateFiles(fileObject);
+        return;
+      }
 
       const signedResult = await callApiPost("signed-upload-url", {
         filename: file.name,
       });
 
       if (signedResult.failedRequest) {
-        fileObject.error = true;
+        fileObject.error = "file_upload_failed";
         fileObject.loading = false;
         updateFiles(fileObject);
         return;
@@ -46,9 +60,10 @@ const CustomAttachment = function({ id, value, onChange }) {
       });
 
       if (uploadResult.status >= 200 && uploadResult.status < 300) {
-        onChange([...value, signedResult.filename]);
+        filenames.push(signedResult.filename);
+        onChange(filenames);
       } else {
-        fileObject.error = true;
+        fileObject.error = "file_upload_failed";
       }
       fileObject.loading = false;
       updateFiles(fileObject);
@@ -63,7 +78,7 @@ const CustomAttachment = function({ id, value, onChange }) {
     <div>
       <div className="mb-1">
         <label htmlFor={id} className="btn btn-secondary btn-sm px-2 py-1 with-btn-lnf">
-          {i18n.t("attach file")}
+          {i18n.t("CreateNewTicket.attach_file")}
           <input
             type="file"
             id={id}
@@ -77,11 +92,11 @@ const CustomAttachment = function({ id, value, onChange }) {
       </div>
       {files.map((file: Keyable) => (
         <div className="attachment_file mb-0" key={file.name}>
-          <div className="dots">
+          <div className={classNames("dots", { loading: file.loading })}>
             {file.name}
             {" "}
-            {file.loading && i18n.t("Processing file…")}
-            {file.error && i18n.t("Failed")}
+            {file.loading && i18n.t("CreateNewTicket.processing_file")}
+            {!isEmpty(file.error) && i18n.t(`CreateNewTicket.${file.error}`)}
           </div>
           <div className="delete_file pointer" onClick={() => removeUpload(file)}>
             x
@@ -202,7 +217,7 @@ function CreateNewTicketOverlay({
           )}
           <div className="ticket-modal-form">
             <div className="overlay_content scroll_content">
-              <h2>{i18n.t("create_new_ticket")}</h2>
+              <h2>{i18n.t("CreateNewTicket.create_new_ticket")}</h2>
               <div className="inline_form">
                 <Form
                   formData={formData}
