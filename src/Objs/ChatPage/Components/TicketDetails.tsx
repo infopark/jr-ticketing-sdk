@@ -9,6 +9,7 @@ import PageContentWrapper from "./PageContentWrapper";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
+import { Keyable } from "../../../utils/types";
 
 const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
   const {
@@ -112,7 +113,7 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
               {ticketSchema.properties[name].title || name}
             </dt>
             <dd className="flex_order_2 item_label_content">
-              {translateValue(name, ticket[name])}
+              {translateValue(name, ticket[name], ticketSchema.properties[name])}
             </dd>
           </dl>
         ))}
@@ -129,11 +130,29 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
   );
 };
 
-function translateValue(name, value) {
-  if (Array.isArray(value)) {
-    return value.map((v) => translateValue(name, v)).join(", ");
+function translateValue(name: string, value: string | undefined, schema: Keyable) {
+  if (schema.type === "array" && Array.isArray(value)) {
+    return value.map((v) => translateValue(name, v, schema.items)).join(", ");
   } else if (value) {
-    return i18n.t(`Ticket.${name}.${value}`, value);
+    switch (schema.type) {
+      case "string":
+        if (schema.enum) {
+          return i18n.t(`Ticket.${name}.${value}`);
+        }
+        switch (schema.format) {
+          case "uri":
+          case "data-url":
+            return <a href={value} target="_blank" rel="noreferrer">{value}</a>;
+          case "email":
+            return <a href={`mailto:${value}`} target="_blank" rel="noreferrer">{value}</a>;
+        }
+        break;
+      case "integer":
+        return parseInt(value);
+      case "float":
+        return parseFloat(value);
+    }
+    return value;
   }
   return "-";
 }

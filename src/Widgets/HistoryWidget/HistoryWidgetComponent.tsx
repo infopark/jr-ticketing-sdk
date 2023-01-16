@@ -6,7 +6,7 @@ import HistoryListEntry from "./HistoryListEntry";
 Scrivito.provideComponent("HistoryWidget", (({ widget }) => {
   const currentPage = Scrivito.currentPage();
   const links = widget.get("links");
-  const visitedPagesString = getVisitedPages(currentPage);
+  const visitedPagesString = currentPage && getVisitedPages(currentPage);
   const visitedPages = JSON.parse(visitedPagesString as any);
   const headline = visitedPages.length ? "headline" : "initialHeadline";
   return (
