@@ -10,21 +10,17 @@ import { matchExtension } from "../../../utils/fileExtension";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
-import { callApiPost } from "../../../api/portalApiCalls";
 
 type Attachment = {
   filename: string;
   extension: string;
   s3_url: string;
-}
+};
 
 function Message({
   message,
   sender,
   isUsersMessage,
-  isAttachmentsMode,
-  refreshCallback,
-  isClosed,
 }) {
   const images: Attachment[] = [];
   const files: Attachment[] = [];
@@ -34,13 +30,13 @@ function Message({
       filename: file.filename,
       extension: file.filename.split(".").pop(),
       s3_url: file.s3_url,
-    }
+    };
     if (isImageFormat(attachment.extension)) {
       images.push(attachment);
     } else {
       files.push(attachment);
     }
-  })
+  });
 
   return (
     <div
@@ -83,42 +79,26 @@ function Message({
           {files.map((attachment) => (
             <MessageFile
               key={attachment.filename}
-              message={message}
               attachment={attachment}
-              onDelete={() => {}}
-              isClosed={isClosed}
             />
           ))}
           {images.map((attachment) => (
             <MessageImage
               key={attachment.filename}
-              message={message}
               attachment={attachment}
-              onDelete={() => {}}
-              isClosed={isClosed}
             />
           ))}
         </div>
       </div>
     </div>
   );
-};
-
-// TODO onDelete
+}
 
 // TODO merge MessageImage and Message File into MessageAttachment
 
-function MessageImage({ message, attachment, onDelete, isClosed }) {
+function MessageImage({ attachment }) {
   return (
     <div className="collapsebox">
-      <button
-        className="btn btn-secondary float_right attachment-delete image"
-        onClick={() => onDelete(message)}
-        type="button"
-        disabled={isClosed}
-      >
-        {i18n.t("Message.delete_attachment")}
-      </button>
       <a
         href={attachment.s3_url}
         target="_blank"
@@ -137,20 +117,13 @@ function MessageImage({ message, attachment, onDelete, isClosed }) {
   );
 }
 
-function MessageFile({ message, attachment, onDelete, isClosed }) {
+function MessageFile({ attachment }) {
   const fileIcon = matchExtension(attachment.extension);
 
   return (
     <div className="collapsebox">
       <img src={fileIcon} alt="" className="nav_img" />
       <small className="color_text">{attachment.filename}</small>
-      <button
-        className="btn btn-secondary float_right attachment-delete"
-        onClick={() => onDelete(message)}
-        type="button"
-      >
-        {i18n.t("Message.delete_attachment")}
-      </button>
       <a
         href={attachment.s3_url}
         target="_blank"
