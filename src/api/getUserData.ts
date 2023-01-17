@@ -1,5 +1,5 @@
-import { callApiGet } from "./portalApiCalls";
+import TicketingApi from "./TicketingApi";
 
-const getUserData = async () => await callApiGet("userinfo");
+const getUserData = async () => await TicketingApi.get("userinfo");
 
 export default getUserData;

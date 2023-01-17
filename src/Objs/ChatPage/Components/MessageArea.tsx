@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import { isEmpty } from "lodash-es";
 
-import { callApiPost } from "../../../api/portalApiCalls";
+import TicketingApi from "../../../api/TicketingApi";
 import { MAX_ATTACHMENT_SIZE } from "../../../utils/constants";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
@@ -46,15 +46,15 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     };
 
 
-    callApiPost(`tickets/${ticketId}/messages`, msgData).then((response) => {
-      setTextareaHeight(85);
-      setFiles([]);
-      setMessage("");
-      if (!response.failedRequest) {
-        refreshCallback();
-      }
-      return response;
-    });
+    const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData })
+
+    setTextareaHeight(85);
+    setFiles([]);
+    setMessage("");
+
+    if (!response.failedRequest) {
+      refreshCallback();
+    }
   };
 
   function updateFiles(fileObject) {
@@ -85,8 +85,10 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
         return;
       }
 
-      const signedResult = await callApiPost("signed-upload-url", {
-        filename: file.name,
+      const signedResult = await TicketingApi.post("signed-upload-url", {
+        data: {
+          filename: file.name,
+        }
       });
 
       if (signedResult.failedRequest) {

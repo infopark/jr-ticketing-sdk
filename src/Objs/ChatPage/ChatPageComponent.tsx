@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import * as Scrivito from "scrivito";
 
-import { callApiGet } from "../../api/portalApiCalls";
+import TicketingApi from "../../api/TicketingApi";
 import Loader from "../../Components/Loader";
 import { isInVisitedPages, addToVisitedPages } from "../../utils/visitedPages";
 import CommunicationTree from "./Components/CommunicationTree";
@@ -48,8 +48,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
           JSON.stringify({
             action: "registerTicketId",
             ticketId: ticketid,
-            instanceId:
-              process.env.API_INSTANCE_ID || "00000000000000000000000000000000",
+            instanceId: process.env.API_INSTANCE_ID,
           })
         );
       };
@@ -84,7 +83,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       const ticketid = urlParams.get("ticketid");
       const ticket =
         ticketid && (
-          await callApiGet(`tickets/${ticketid}?include=messages`)
+          await TicketingApi.get(`tickets/${ticketid}?include=messages`)
             .then((data) => {
               if (data.failedRequest || effectStatus.canceled) {
                 return TICKET_NOT_FOUND;
@@ -104,7 +103,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       if (wasTicketCreatedLessThanMsAgo(ticket, 1000)) {
         // ask again about the ticket details, it was created just now
         setTimeout(() => {
-          callApiGet(`tickets/${ticketid}`)
+          TicketingApi.get(`tickets/${ticketid}`)
             .then((data) => {
               if (data.failedRequest) {
                 return;

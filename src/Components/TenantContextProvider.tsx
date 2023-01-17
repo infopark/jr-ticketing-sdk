@@ -2,8 +2,8 @@ import * as Scrivito from "scrivito";
 import React, { useState, useEffect, useCallback } from "react";
 import { isEmpty } from "lodash-es";
 
-import { callApiGet } from "../api/portalApiCalls";
 import getUserData from "../api/getUserData";
+import TicketingApi from "../api/TicketingApi";
 import i18n from "../config/i18n";
 import addI18nBundles from "../config/addI18nBundles";
 import { Keyable } from "../utils/types";
@@ -81,7 +81,7 @@ export function TenantContextProvider({ children }) {
   };
 
   const loadConfiguration = async () => {
-    const instance = await callApiGet("instance");
+    const instance = await TicketingApi.get("instance");
 
     setCustomAttributes(instance.custom_attributes);
     addI18nBundles(instance.locales);
