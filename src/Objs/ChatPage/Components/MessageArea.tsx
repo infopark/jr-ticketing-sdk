@@ -119,19 +119,6 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   return (
     <div className="sdk sdk-chat-page">
       <section className="message_box">
-        {files.map((file: Keyable) => (
-          <div className="attachment_file mb-0" key={file.name}>
-            <div className={classNames("dots", { loading: file.loading })}>
-              {file.name}
-              {" "}
-              {file.loading && i18n.t("MessageArea.processing_file")}
-              {!isEmpty(file.error) && i18n.t(`MessageArea.${file.error}`)}
-            </div>
-            <div className="delete_file pointer" onClick={() => removeUpload(file)}>
-              x
-            </div>
-          </div>
-        ))}
         <div className="flex_grid">
           <div className="textfield">
             <textarea
@@ -172,6 +159,19 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
             </button>
           </div>
         </div>
+        {files.map((file: Keyable) => (
+          <div className="attachment_file mb-0" key={file.name}>
+            <div className={classNames("dots", { loading: file.loading })}>
+              {file.name}
+              {" "}
+              {file.loading && i18n.t("MessageArea.processing_file")}
+              {!isEmpty(file.error) && i18n.t(`MessageArea.${file.error}`)}
+            </div>
+            <div className="delete_file pointer" onClick={() => removeUpload(file)}>
+              x
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );

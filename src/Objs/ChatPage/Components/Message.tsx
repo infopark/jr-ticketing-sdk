@@ -65,17 +65,15 @@ function Message({
           <span className="time_stamp">
             {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
           </span>
-          {!isAttachmentsMode && (
-            <div>
-              {parse(
-                sanitizeHtml(newlinesToBreaks(message.text), {
-                  allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-                    "img",
-                  ]),
-                })
-              )}
-            </div>
-          )}
+          <div>
+            {parse(
+              sanitizeHtml(newlinesToBreaks(message.text), {
+                allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+                  "img",
+                ]),
+              })
+            )}
+          </div>
           {files.map((attachment) => (
             <MessageFile
               key={attachment.filename}

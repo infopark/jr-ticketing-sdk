@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useCallback,
   useRef,
-  useMemo,
 } from "react";
 import * as Scrivito from "scrivito";
 
@@ -14,16 +13,21 @@ import { isInVisitedPages, addToVisitedPages } from "../../utils/visitedPages";
 import CommunicationTree from "./Components/CommunicationTree";
 import MessageArea from "./Components/MessageArea";
 import TicketDetails from "./Components/TicketDetails";
-import CombinedTicketNav from "./Components/CombinedTicketNav";
+import TicketHeader from "./Components/TicketHeader";
+import TicketNav from "./Components/TicketNav";
 import i18n from "../../config/i18n";
 import { Keyable } from "../../utils/types";
 
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
+const viewModes = {
+  details: { name: "details", clickable: true },
+  chat: { name: "chat", clickable: true },
+};
+
 Scrivito.provideComponent("ChatPage", ({ page }) => {
   const [chatContent, setChatContent] = useState<Keyable[]>();
-  const [activeTicket, setActiveTicket] = useState<Keyable>();
-  const [attachments, setAttachments] = useState<Keyable[]>([]);
+  const [ticket, setTicket] = useState<Keyable>();
   const [status, setStatus] = useState<string>("idle");
   const [mode, setMode] = useState<string>("chat");
   const ws = useRef<Keyable | null>(null);
@@ -88,10 +92,6 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
               const ticketData = data;
               const { messages } = ticketData;
               setChatContent(messages);
-              const messageAttachments = messages.filter(
-                (message) => message.attachments
-              );
-              setAttachments(messageAttachments);
               return ticketData;
             })
             .finally(() => setStatus("idle")));
@@ -99,7 +99,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
       if (effectStatus.canceled) {
         return;
       }
-      setActiveTicket(ticket);
+      setTicket(ticket);
 
       if (wasTicketCreatedLessThanMsAgo(ticket, 1000)) {
         // ask again about the ticket details, it was created just now
@@ -113,7 +113,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
             })
             .then((result) => {
               if (result && !effectStatus.canceled) {
-                setActiveTicket(result);
+                setTicket(result);
               }
             });
         }, 3500);
@@ -140,15 +140,6 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     document.body.classList.toggle("savepoint", mode === "details");
   }, [mode]);
 
-  const viewModes = useMemo(
-    () => ({
-      details: { name: "details", clickable: true },
-      chat: { name: "chat", clickable: true },
-      attachments: { name: "attachments", clickable: attachments.length > 0 },
-      // activities: { name: "activities", clickable: activities.length > 0 },
-    }),
-    [attachments.length]
-  );
 
   const refreshCallback = async () => {
     setStatus("uploading");
@@ -201,7 +192,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     setMode(mod);
   };
 
-  if (activeTicket === TICKET_NOT_FOUND) {
+  if (ticket === TICKET_NOT_FOUND) {
     return (
       <div className="container">
         <div className="text-center pt-5">
@@ -227,7 +218,7 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     );
   }
 
-  if (!activeTicket) {
+  if (!ticket) {
     return (
       <div className="sdk white-bg-loader">
         <Loader />
@@ -241,37 +232,29 @@ Scrivito.provideComponent("ChatPage", ({ page }) => {
     }
   });
 
-  const isTicketClosed = activeTicket.status === "closed";
+  const isTicketClosed = ticket.status === "closed";
 
   return (
     <>
       <div className="col-lg-12 sdk sdk-ticket-details">
-        <CombinedTicketNav
-          ticket={activeTicket}
-          mode={mode}
-          toggleMode={toggleMode}
-          viewModes={viewModes}
-        />
-        {(mode === "chat" || mode === "attachments") && chatContent && (
+        <div className="scroll_header animate">
+          <TicketHeader ticket={ticket} />
+          <TicketNav mode={mode} toggleMode={toggleMode} viewModes={viewModes} />
+        </div>
+        {mode === "chat" && chatContent && (
           <CommunicationTree
-            comm={activeTicket.messages}
+            messages={ticket.messages}
             status={status}
             mode={mode}
-            refreshCallback={refreshCallback}
-            isClosed={isTicketClosed}
           />
         )}
         {mode === "details" && (
-          <TicketDetails
-            ticket={activeTicket}
-            refreshCallback={refreshCallback}
-            isClosed={isTicketClosed}
-          />
+          <TicketDetails ticket={ticket}/>
         )}
       </div>
       {mode === "chat" && (
         <MessageArea
-          ticketId={activeTicket.id}
+          ticketId={ticket.id}
           refreshCallback={refreshCallback}
           isClosed={isTicketClosed}
         />
