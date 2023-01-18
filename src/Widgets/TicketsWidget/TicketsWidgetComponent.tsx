@@ -7,10 +7,12 @@ import TicketNumberBox from "./TicketNumberBox";
 import CreateNewTicket from "./CreateNewTicket";
 import { useTenantContext } from "../../Components/TenantContextProvider";
 import i18n from "../../config/i18n";
+import useWS from "../../utils/useWS";
 
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
   const { addError, userId } = useTenantContext();
+  const msg = useWS("users", userId);
 
   useEffect(() => {
     if (!userId) {
@@ -28,7 +30,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       .catch((error) => {
         addError("Error loading ticket list", "TicketListComponent", error);
       });
-  }, [addError, userId]);
+  }, [msg, addError, userId]);
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
   const helpdeskPage = helpdeskPages.first();

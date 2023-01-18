@@ -7,6 +7,7 @@ import TicketingApi from "../api/TicketingApi";
 import i18n from "../config/i18n";
 import addI18nBundles from "../config/addI18nBundles";
 import { Keyable } from "../utils/types";
+import ws from "../utils/ws";
 
 const TenantContext = React.createContext({} as Keyable);
 
@@ -34,6 +35,7 @@ const TicketAttributes = {
 };
 
 export function TenantContextProvider({ children }) {
+  const [instance, setInstance] = React.useState<Keyable>();
   const [customAttributes, setCustomAttributes] = React.useState<Keyable>();
   const [ticketSchema, setTicketSchema] = useState<Keyable>();
   const [ticketUiSchema, setTicketUiSchema] = useState<Keyable>();
@@ -83,8 +85,11 @@ export function TenantContextProvider({ children }) {
   const loadConfiguration = async () => {
     const instance = await TicketingApi.get("instance");
 
+    setInstance(instance);
     setCustomAttributes(instance.custom_attributes);
     addI18nBundles(instance.locales);
+
+    ws.init(instance.id);
   };
 
   const setTicketSchemaForInstance = (properties) => {
@@ -145,6 +150,7 @@ export function TenantContextProvider({ children }) {
   return (
     <TenantContext.Provider
       value={{
+        instance,
         customAttributes,
         ticketSchema,
         ticketUiSchema,
