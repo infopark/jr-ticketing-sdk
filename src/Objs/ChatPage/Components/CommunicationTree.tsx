@@ -18,11 +18,9 @@ const unknownUser = {
 };
 
 const CommunicationTree = ({
-  comm,
+  messages,
   status,
   mode,
-  refreshCallback,
-  isClosed,
 }) => {
   const { userData } = useTenantContext();
   const messagesEndRef = useRef(null as any);
@@ -30,11 +28,6 @@ const CommunicationTree = ({
     messagesEndRef.current &&
       messagesEndRef.current.scrollIntoView({ behavior: "auto" });
   };
-
-  const isAttachmentsMode = mode === "attachments";
-  const communications = isAttachmentsMode
-    ? comm.filter((message) => message.attachments)
-    : comm;
 
   useEffect(() => {
     scrollToBottom();
@@ -50,11 +43,8 @@ const CommunicationTree = ({
     <PageContentWrapper>
       <InnerPageContentWrapper additionalBoxClass="min_hight_box">
         <CommunicationDayTree
-          communications={communications}
+          messages={messages}
           loggedUserData={userData || {}}
-          isAttachmentsMode={isAttachmentsMode}
-          refreshCallback={refreshCallback}
-          isClosed={isClosed}
         />
         <Placeholder show={status === "uploading"} />
         <div ref={messagesEndRef} />
@@ -66,13 +56,10 @@ const CommunicationTree = ({
 export default CommunicationTree;
 
 const CommunicationDayTree = ({
-  communications,
+  messages,
   loggedUserData,
-  isAttachmentsMode,
-  refreshCallback,
-  isClosed,
 }) => {
-  const days = groupBy(communications, (message) =>
+  const days = groupBy(messages, (message) =>
     parseDate(message.created_at, DEFAULT_DATE_FORMAT)
   );
   const loggedUserId = loggedUserData.id;
@@ -87,7 +74,7 @@ const CommunicationDayTree = ({
       const requestedUsers = { [loggedUserData.id]: true };
       const pendingRequests = [] as any[];
 
-      for (const message of communications) {
+      for (const message of messages) {
         const { user_id } = message;
         if (!requestedUsers[user_id]) {
           requestedUsers[user_id] = true;
@@ -115,57 +102,49 @@ const CommunicationDayTree = ({
       setSenders(mappedUsers);
     };
     getMessageSenders();
-  }, [loggedUserData, communications]);
+  }, [loggedUserData, messages]);
 
   return (
     <div className="com_tree max_width_element">
       {Object.entries(days).map(([day, dailyMessages]) => (
-        <React.Fragment key={day}>
-          <GroupDate day={day} />
-          <DailyMessages
-            messages={dailyMessages}
-            senders={senders}
-            loggedUser={loggedUserId}
-            isAttachmentsMode={isAttachmentsMode}
-            refreshCallback={refreshCallback}
-            isClosed={isClosed}
-          />
-        </React.Fragment>
+        <DailyMessages
+          key={day}
+          day={day}
+          messages={dailyMessages}
+          senders={senders}
+          loggedUser={loggedUserId}
+        />
       ))}
     </div>
   );
 };
 
-const GroupDate = ({ day }) => (
-  <div className="com_date text_center light">
-    <span className="date_bg">{day}</span>
-    <span className="time_line"></span>
-  </div>
-);
-
 const DailyMessages = ({
+  day,
   messages,
   senders,
   loggedUser,
-  isAttachmentsMode,
-  refreshCallback,
-  isClosed,
-}) =>
-  messages.map((message) => {
-    const isUsersMessage = loggedUser === message.userid;
-    return (
-      <Message
-        key={message.id}
-        message={message}
-        sender={senders[message.userid] || senders.unknown}
-        isUsersMessage={isUsersMessage}
-        isAttachmentsMode={isAttachmentsMode}
-        refreshCallback={refreshCallback}
-        isClosed={isClosed}
-      />
-    );
-  });
-
+}) => {
+  return (
+    <>
+      <div className="com_date text_center light">
+        <span className="date_bg">{day}</span>
+        <span className="time_line"></span>
+      </div>
+      {messages.map((message) => {
+        const isUsersMessage = loggedUser === message.userid;
+        return (
+          <Message
+            key={message.id}
+            message={message}
+            sender={senders[message.userid] || senders.unknown}
+            isUsersMessage={isUsersMessage}
+          />
+        );
+      })}
+    </>
+  );
+};
 
 const Placeholder = ({ show }) => {
   if (!show) {

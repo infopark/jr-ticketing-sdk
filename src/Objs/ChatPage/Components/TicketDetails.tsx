@@ -1,19 +1,18 @@
 import React from "react";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
+
 import { parseDate } from "../../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
 import i18n from "../../../config/i18n";
-import { callApiPut } from "../../../api/portalApiCalls";
 import PageContentWrapper from "./PageContentWrapper";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
 import InnerPageContentWrapper from "./InnerPageContentWrapper";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { Keyable } from "../../../utils/types";
 
-const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
+const TicketDetails = ({ ticket }) => {
   const {
-    id,
     title,
     number,
     type,
@@ -22,18 +21,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
     messages,
   } = ticket;
   const description = messages[0] ? messages[0].text : "";
-
-  const handleCloseTicket = async (id) => {
-    if (!isClosed) {
-      const data = {
-        status: "closed",
-      };
-      const response = await callApiPut(`tickets/${id}`, data);
-      if (!response.failedRequest) {
-        refreshCallback();
-      }
-    }
-  };
 
   const { ticketSchema, ticketUiSchema } = useTenantContext();
 
@@ -118,14 +105,6 @@ const TicketDetails = ({ ticket, refreshCallback, isClosed }) => {
           </dl>
         ))}
       </InnerPageContentWrapper>
-      <button
-        className="btn btn-secondary"
-        onClick={() => handleCloseTicket(id)}
-        disabled={isClosed}
-        type="button"
-      >
-        {i18n.t("Close Ticket")}
-      </button>
     </PageContentWrapper>
   );
 };
