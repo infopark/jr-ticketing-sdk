@@ -6,4 +6,4 @@ export type FileObject = {
   filename: string;
   loading: boolean;
   error: string;
-}
+};
