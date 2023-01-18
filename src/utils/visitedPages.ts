@@ -12,7 +12,7 @@ const fakeLocalStorage = {
 
 const storage = typeof window !== "undefined" ? window.localStorage : fakeLocalStorage;
 
-const trackedPageTypes = ["TrainingPage", "ChatPage"];
+const trackedPageTypes = ["TrainingPage", "TicketPage"];
 
 interface ObjInfo {
   id: string;
@@ -71,7 +71,7 @@ const addToVisitedPages = (obj: Scrivito.Obj) => {
   const visitedArray = JSON.parse(visited as string);
   const localisedVisitedArray =
     lang && visitedArray && visitedArray.filter((o) => (o && o.language) === lang);
-  if (!(!objInfo?.query && objInfo?.pageType === "ChatPage")) {
+  if (!(!objInfo?.query && objInfo?.pageType === "TicketPage")) {
     localisedVisitedArray.unshift(objInfo);
   }
 

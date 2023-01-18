@@ -6,7 +6,7 @@ import {
   metadataValidations,
 } from "../_metadataEditingConfig";
 
-Scrivito.provideEditingConfig("ChatPage", {
+Scrivito.provideEditingConfig("TicketPage", {
   title: "Chat Page",
   attributes: {
     ...metadataEditingConfigAttributes,

@@ -1,7 +1,7 @@
 import * as Scrivito from "scrivito";
 import metadataAttributes from "../_metadataAttributes";
 
-const ChatPage = Scrivito.provideObjClass("ChatPage", {
+const TicketPage = Scrivito.provideObjClass("TicketPage", {
   attributes: {
     title: "string",
     formId: "string",
@@ -11,4 +11,4 @@ const ChatPage = Scrivito.provideObjClass("ChatPage", {
   extractTextAttributes: ["body"],
 });
 
-export default ChatPage as any;
+export default TicketPage as any;
