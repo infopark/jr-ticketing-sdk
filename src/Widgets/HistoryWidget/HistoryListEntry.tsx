@@ -6,8 +6,8 @@ import academyIcon from "../../assets/images/icons/academy.svg";
 import documentationIcon from "../../assets/images/icons/documentation.svg";
 import helpdeskIcon from "../../assets/images/icons/helpdesk_black.svg";
 import i18n from "../../config/i18n";
-import { callApiGet } from "../../api/portalApiCalls";
 import { Keyable } from "../../utils/types";
+import TicketingApi from "../../api/TicketingApi";
 
 const HistoryListEntry = ({ link, title, pageType, query }) => {
   const [ticketName, setTicketName] = useState(null);
@@ -15,7 +15,7 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
   const setTicketData = useCallback((ticketUpdate) => {
     async function setTicketFromId({ ticketId, canceled }) {
       try {
-        const ticketResponse = await callApiGet(`tickets/${ticketId}`);
+        const ticketResponse = await TicketingApi.get(`tickets/${ticketId}`);
         if (canceled) {
           return;
         }
