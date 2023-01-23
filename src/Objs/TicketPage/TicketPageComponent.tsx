@@ -3,7 +3,6 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  useRef,
 } from "react";
 import * as Scrivito from "scrivito";
 
@@ -17,6 +16,7 @@ import TicketHeader from "./Components/TicketHeader";
 import TicketNav from "./Components/TicketNav";
 import i18n from "../../config/i18n";
 import { Keyable } from "../../utils/types";
+import useWS from "../../utils/useWS";
 
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
@@ -30,52 +30,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
   const [ticket, setTicket] = useState<Keyable>();
   const [status, setStatus] = useState<string>("idle");
   const [mode, setMode] = useState<string>("chat");
-  const ws = useRef<Keyable | null>(null);
-  const wsApiUrl = process.env.WS_API_BASE_URL;
-  const stage = process.env.API_DEPLOYMENT_STAGE;
-
-  const createWebsocket = useCallback(
-    (effectStatus) => {
-      let wsOpened = false;
-      const refreshTicket = getTicket;
-      const urlParams = new URLSearchParams(window.location.search);
-      const ticketid = urlParams.get("ticketid");
-
-      ws.current = new WebSocket(`${wsApiUrl}/${stage}`);
-      ws.current.onopen = () => {
-        wsOpened = true;
-        ws.current?.send(
-          JSON.stringify({
-            action: "registerTicketId",
-            ticketId: ticketid,
-            instanceId: process.env.API_INSTANCE_ID,
-          })
-        );
-      };
-      ws.current.onmessage = () => {
-        refreshTicket(effectStatus);
-      };
-      ws.current.onerror = () => {
-        if (!wsOpened && ws.current) {
-          ws.current.onclose = null;
-        }
-      };
-      ws.current.onclose = createWebsocket;
-    },
-    [wsApiUrl, stage]
-  );
-
-  // TODO websockets
-  // useEffect(() => {
-  //   const effectStatus = { canceled: false };
-  //   createWebsocket(effectStatus);
-
-  //   return () => {
-  //     effectStatus.canceled = true;
-  //     ws.current.onclose = null;
-  //     ws.current.close();
-  //   };
-  // }, [createWebsocket]);
+  const msg = useWS("tickets", ticket?.id);
 
   const getTicket = async (effectStatus) => {
     try {
@@ -133,7 +88,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     return () => {
       effectStatus.canceled = true;
     };
-  }, [getTicketCallback, history]);
+  }, [msg, getTicketCallback, history]);
 
   useEffect(() => {
     document.body.classList.toggle("savepoint", mode === "details");

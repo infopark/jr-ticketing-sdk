@@ -6,6 +6,7 @@ import { createTicketsListFilters } from "../../utils/listFilters";
 import TicketList from "./TicketList";
 import TicketListBoxHeader from "./TicketListBoxHeader";
 import { useTenantContext } from "../../Components/TenantContextProvider";
+import useWS from "../../utils/useWS";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [loading, setLoading] = useState(true);
@@ -14,6 +15,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [filterKey, setFilterKey] = useState("active");
   const allowDeferredBaseLink = useRef(true);
   const { addError, userId } = useTenantContext();
+  const msg = useWS("users", userId);
 
   useEffect(() => {
     if (!userId) {
@@ -30,7 +32,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
         addError("Error loading ticket list", "TicketListWidget", error);
       })
       .finally(() => setLoading(false));
-  }, [addError, userId]);
+  }, [msg, addError, userId]);
 
   const baseLink = widget.get("link");
   if (!baseLink && allowDeferredBaseLink.current) {
