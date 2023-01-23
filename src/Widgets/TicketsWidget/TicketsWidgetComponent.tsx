@@ -37,7 +37,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const chatPage = Scrivito.Obj.where(
     "_objClass",
     "equals",
-    "ChatPage"
+    "TicketPage"
   ).first();
 
   return (

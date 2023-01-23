@@ -25,7 +25,7 @@ const viewModes = {
   chat: { name: "chat", clickable: true },
 };
 
-Scrivito.provideComponent("ChatPage", ({ page }) => {
+Scrivito.provideComponent("TicketPage", ({ page }) => {
   const [chatContent, setChatContent] = useState<Keyable[]>();
   const [ticket, setTicket] = useState<Keyable>();
   const [status, setStatus] = useState<string>("idle");

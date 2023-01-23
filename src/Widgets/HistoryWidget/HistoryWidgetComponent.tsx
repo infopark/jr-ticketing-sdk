@@ -29,7 +29,7 @@ Scrivito.provideComponent("HistoryWidget", (({ widget }) => {
                     url,
                     title,
                   });
-                  if (!query && pageType === "ChatPage") {
+                  if (!query && pageType === "TicketPage") {
                     return null;
                   }
                   return (

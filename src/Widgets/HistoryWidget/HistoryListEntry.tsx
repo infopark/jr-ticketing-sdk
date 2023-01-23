@@ -34,7 +34,7 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
       canceled: false,
     };
 
-    if (!title && pageType === "ChatPage") {
+    if (!title && pageType === "TicketPage") {
       const search = new URLSearchParams(query);
       const params: Keyable = {};
       search.forEach((value, key) => {
@@ -62,7 +62,7 @@ const HistoryListEntry = ({ link, title, pageType, query }) => {
       icon: academyIcon,
       name: i18n.t("Academy Page"),
     },
-    ChatPage: {
+    TicketPage: {
       icon: helpdeskIcon,
       name: i18n.t("Helpdesk Ticket"),
     },
