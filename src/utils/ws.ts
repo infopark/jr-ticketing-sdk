@@ -1,5 +1,7 @@
 type Callback = (msg: string) => void;
 
+let delay = 1;
+
 class WS {
   private url: string;
   private ws: WebSocket | undefined;
@@ -19,19 +21,23 @@ class WS {
   _init() {
     this.close();
 
-    this.ws = new WebSocket(`${this.url}/ticketing/${this.instanceId}`);
+    const ws = new WebSocket(`${this.url}/ticketing/${this.instanceId}`);
 
-    this.ws.addEventListener("close", () => {
+    ws.addEventListener("close", () => {
       setTimeout(() => {
+        if (delay < 60) delay = delay * 2;
         this._init();
-      }, 1000);
+      }, delay * 1000);
     });
 
-    this.ws.addEventListener("message", (event: MessageEvent) => {
+    ws.addEventListener("message", (event: MessageEvent) => {
       const data = JSON.parse(event.data);
 
       switch (data.cmd) {
         case "READY": {
+          this.ws = ws;
+          delay = 1;
+
           Object.keys(this.listeners).forEach(channel => {
             this.ws?.send(JSON.stringify({
               cmd: "SUBSCRIBE",
@@ -44,7 +50,7 @@ class WS {
         case "DATA": {
           this.listeners[data.channel]?.forEach((callback) => {
             callback(data.payload);
-          })
+          });
           break;
         }
       }
@@ -82,7 +88,7 @@ class WS {
       }));
 
       delete this.listeners[channel];
-    }
+    };
   }
 }
 

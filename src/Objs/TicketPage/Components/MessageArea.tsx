@@ -46,7 +46,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     };
 
 
-    const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData })
+    const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
     setTextareaHeight(85);
     setFiles([]);
