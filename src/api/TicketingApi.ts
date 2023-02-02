@@ -10,10 +10,10 @@ const ticketingPath = [ticketingStage, "ticketing", process.env.SCRIVITO_TENANT]
 
 /** @public */
 async function get(endpoint: string, options?): Promise<any> {
-  const path = `/${ticketingPath}/${endpoint}`;
+  const url = `${process.env.JR_API_LOCATION}/${ticketingPath}/${endpoint}`;
 
   try {
-    const response: any = await callApi("get", path);
+    const response: any = await callApi("get", url);
 
     return response.data;
   } catch (e) {
@@ -23,10 +23,10 @@ async function get(endpoint: string, options?): Promise<any> {
 
 /** @public */
 async function post(endpoint: string, options?): Promise<any> {
-  const path = `/${ticketingPath}/${endpoint}`;
+  const url = `${process.env.JR_API_LOCATION}/${ticketingPath}/${endpoint}`;
 
   try {
-    const response: any = await callApi("post", path, options.data);
+    const response: any = await callApi("post", url, options.data);
 
     return response.data;
   } catch (e) {
@@ -36,10 +36,10 @@ async function post(endpoint: string, options?): Promise<any> {
 
 /** @public */
 async function put(endpoint: string, options?): Promise<any> {
-  const path = `/${ticketingPath}/${endpoint}`;
+  const url = `${process.env.JR_API_LOCATION}/${ticketingPath}/${endpoint}`;
 
   try {
-    const response: any = await callApi("put", path, options.data);
+    const response: any = await callApi("put", url, options.data);
 
     return response.data;
   } catch (e) {
