@@ -11,8 +11,6 @@ const isLocalhost = () => {
   return false;
 };
 
-const CDN_BASE_PATH = process.env.CUSTOMER_PORTAL_SDK_CDN_URL || window.location.origin;
-
 const MAX_ATTACHMENT_SIZE = 20000000;
 
 export {
@@ -21,7 +19,6 @@ export {
   DEFAULT_TIME_FORMAT,
   ISO_DATE_TIME_FORMAT,
   PISA_DATE_TIME_FORMAT,
-  CDN_BASE_PATH,
   MAX_ATTACHMENT_SIZE,
   isLocalhost,
 };
