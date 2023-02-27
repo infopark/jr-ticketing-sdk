@@ -12,7 +12,7 @@ module.exports = {
     index: "./src/index.ts",
     ScrivitoExtensions: "./src/Components/ScrivitoExtensions/index.ts",
     ScrivitoEditing: "./src/ScrivitoEditing/index.ts",
-    cssBundle: "./src/assets/stylesheets/main.scss",
+    // cssBundle: "./src/assets/stylesheets/main.scss",
   },
   module: {
     rules: [

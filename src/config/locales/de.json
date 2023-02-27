@@ -86,7 +86,9 @@
   },
   "Ticket": {
     "labels": {
+      "id": "ID",
       "created_at": "Erstellt am",
+      "updated_at": "Updated at",
       "title": "Titel",
       "message": {
         "text": "Nachricht",
@@ -124,10 +126,15 @@
     "file_upload_failed": "Upload fehlgeschlagen",
     "message_placeholder": "Ihre Nachricht ...",
     "processing_file": "Die Datei wird bearbeitet ...",
-    "submit": "Nachricht abschicken"
+    "submit": "Nachricht abschicken",
+    "go_to_last_message": "Go to most recent message"
   },
   "Message": {
     "delete_attachment": "Löschen",
     "download_attachment": "Download"
+  },
+  "TicketListWidget": {
+    "title": "Meine Tickets",
+    "header": "({{count}} von {{total}} Tickets Insgesamt)"
   }
 }

@@ -1,9 +1,7 @@
 import React from "react";
-import classNames from "classnames";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
-import i18n from "../../../config/i18n";
 import { DEFAULT_TIME_FORMAT } from "../../../utils/constants";
 import { isImageFormat } from "../../../utils/isImage";
 import { matchExtension } from "../../../utils/fileExtension";
@@ -11,6 +9,7 @@ import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import ticketingUrl from "../../../api/ticketingUrl";
+import attachmentImg from "../../../assets/images/icons/file.svg";
 
 type Attachment = {
   filename: string;
@@ -20,13 +19,11 @@ type Attachment = {
 
 function Message({
   message,
-  sender,
-  isUsersMessage,
 }) {
   const images: Attachment[] = [];
   const files: Attachment[] = [];
 
-  message.attachments && message.attachments.forEach((file) => {
+  message.attachments?.forEach((file) => {
     const attachment: Attachment = {
       ...file,
       extension: file.filename.split(".").pop(),
@@ -39,78 +36,83 @@ function Message({
   });
 
   return (
-    <div
-      className={classNames({
-        left_com: isUsersMessage,
-        right_com: !isUsersMessage,
-      })}
-    >
+    <>
       <span className="person_list_img">
         <span className="wrapper_img_profil">
-          {
-            <img
-              src={sender.avatar_url || noUserImg}
-              alt="User avatar"
-              className="img_cover"
-            />
-          }
+          <img
+            src={message.user.avatar_url || noUserImg}
+            alt="User avatar"
+            className="img_cover"
+          />
         </span>
       </span>
 
-      <div className="com_content">
-        <div className="box_bg_white box">
-          <h4>
-            {sender.first_name} {sender.last_name}
-          </h4>
-          <span className="time_stamp">
-            {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
-          </span>
-          <div>
-            {parse(
-              sanitizeHtml(newlinesToBreaks(message.text), {
-                allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-                  "img",
-                ]),
-              })
-            )}
-          </div>
-          {files.map((attachment) => (
-            <MessageFile
-              key={attachment.filename}
-              attachment={attachment}
-            />
+      <div className="name_time_stamp_wrapper">
+        <h5>
+          {[message.user.first_name, message.user.last_name].filter(e => !!e).join(" ")}
+        </h5>
+        <span className="time_stamp">
+          {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
+        </span>
+      </div>
+
+      <p>
+        {parse(
+          sanitizeHtml(newlinesToBreaks(message.text), {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+              "img",
+            ]),
+          })
+        )}
+      </p>
+
+      <div className="img-attachment-area">
+        <div className="row">
+          {files.map((attachment, index) => (
+            <div className="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3" key={`${index}-${attachment.filename}`}>
+              <MessageFile
+                key={attachment.filename}
+                attachment={attachment}
+              />
+            </div>
           ))}
-          {images.map((attachment) => (
-            <MessageImage
-              key={attachment.filename}
-              attachment={attachment}
-            />
+          {images.map((attachment, index) => (
+            <div className="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3" key={`${index}-${attachment.filename}`}>
+              <MessageImage
+                key={attachment.filename}
+                attachment={attachment}
+              />
+            </div>
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
-// TODO merge MessageImage and Message File into MessageAttachment
+// TODO merge MessageImage and MessageFile into MessageAttachment
 
 function MessageImage({ attachment }) {
   return (
-    <div className="collapsebox">
-      <a
+    <div className="img-attachment card" data-bs-toggle="modal">
+      <a className="btn btn-download"
         href={`${ticketingUrl()}/attachments/${attachment.key}`}
         target="_blank"
-        className="btn btn-secondary float_right image"
         download
         rel="noreferrer"
       >
-        {i18n.t("Message.download_attachment")}
+        <i className="fa fa-download" />
       </a>
-      <img
-        src={attachment.s3_url}
-        className="attachment_img"
-        alt="img"
-      />
+      <div className="card-bkgrd-img" style={{ backgroundImage: `url(${attachment.s3_url})` }} />
+      <div className="card-body">
+        <div className="card-body-descr-container" data-bs-toggle="modal">
+          <div className="card-body-descr-container">
+            <p className="card-text dots">
+              {decodeURIComponent(attachment.filename)}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -119,18 +121,25 @@ function MessageFile({ attachment }) {
   const fileIcon = matchExtension(attachment.extension);
 
   return (
-    <div className="collapsebox">
-      <img src={fileIcon} alt="" className="nav_img" />
-      <small className="color_text">{attachment.filename}</small>
-      <a
+    <div className="img-attachment card">
+      <a className="btn btn-download"
         href={`${ticketingUrl()}/attachments/${attachment.key}`}
         target="_blank"
-        className="btn btn-secondary float_right image"
         download
         rel="noreferrer"
       >
-        {i18n.t("Message.download_attachment")}
+        <i className="fa fa-download" />
       </a>
+      <div className="card-bkgrd-img" style={{ backgroundImage: `url(${attachmentImg})` }} title="attachment icon"></div>
+      <div className="card-body">
+        <div className="card-body-descr-container">
+          <div className="card-body-descr-container">
+            <p className="card-text dots">
+              {decodeURIComponent(attachment.filename)}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -9,8 +9,10 @@ import TicketEntry, { Ticket } from "./TicketEntry";
 import TicketListHeadEntry from "./TicketListHeadEntry";
 
 function TicketList({
-  ticketList,
+  active,
+  handleSort,
   sortKey,
+  ticketList,
   baseLink,
   loading,
   ticketsListFilters,
@@ -26,8 +28,12 @@ function TicketList({
   if (ticketList.length === 0) {
     return (
       <>
-        <TicketListHeadEntry />
-        <div className="text-center">{i18n.t("No tickets available.")}</div>
+        <TicketListHeadEntry
+          active={active}
+          handleSort={handleSort}
+          sortKey={sortKey}
+        />
+        <div className="text-center">{ i18n.t("No tickets available.") }</div>
       </>
     );
   }
@@ -37,7 +43,11 @@ function TicketList({
 
   return (
     <>
-      <TicketListHeadEntry />
+      <TicketListHeadEntry
+        active={active}
+        handleSort={handleSort}
+        sortKey={sortKey}
+      />
       {filteredList.map((ticket: Ticket, index: number) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
