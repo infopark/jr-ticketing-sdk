@@ -1,11 +1,10 @@
 {
   "name": "jr-ticketing-sdk",
-  "version": "0.0.17",
-  "description": "Library for JustRelate Customer Portal apps",
+  "version": "0.1.0",
+  "description": "JustRelate Portal Ticketing integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "install": "[ -f ./dist/index.js ] || ([ -f ./src/index.ts ] && webpack)",
     "test": "jest",
     "eslint": "eslint src/",
     "eslint-fix": "eslint src/ --fix",
