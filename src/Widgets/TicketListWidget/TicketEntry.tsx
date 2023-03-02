@@ -6,22 +6,17 @@ import i18n from "../../config/i18n";
 import { parseDate } from "../../utils/dateUtils";
 import { DEFAULT_DATE_FORMAT } from "../../utils/constants";
 import stripHtmlTags from "../../utils/stripHtmlTags";
-import { useUserData } from "../../Components/UserDataContext";
 
-interface ticketEntryProps {
-  ticket: {
-    id: string;
-    title: string;
-    type: string;
-    status: string;
-    // description: string;
-    number: number;
-    attachmentcount: number;
-    created_at: string;
-    updated_at: string;
-  };
-  targetLink: Scrivito.Link;
-  statusDictionary: object;
+export interface Ticket {
+  id: string;
+  title: string;
+  type: string;
+  status: string;
+  // description: string;
+  number: number;
+  attachmentcount: number;
+  created_at: string;
+  updated_at: string;
 }
 
 function AttachmentFlag({ count }) {
@@ -36,14 +31,11 @@ function AttachmentFlag({ count }) {
 function TicketEntry({
   ticket,
   targetLink,
-  statusDictionary,
-}: ticketEntryProps) {
-  const { userData } = useUserData();
-  const creationDate = parseDate(
-    ticket.created_at,
-    DEFAULT_DATE_FORMAT,
-    userData && userData.timelocale
-  );
+}: {
+  ticket: Ticket,
+  targetLink: Scrivito.Link
+}) {
+  const creationDate = parseDate(ticket.created_at, DEFAULT_DATE_FORMAT);
 
   return (
     <div className="row ticket_list">

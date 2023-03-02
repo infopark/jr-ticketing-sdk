@@ -15,6 +15,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import * as React from "react";
+import { Keyable } from "../../utils/types";
 
 export function SortableContainer({
   items,
@@ -125,7 +126,7 @@ function SortableItem({
   );
 }
 
-const Item = React.forwardRef((props: any, ref: any) => {
+const ItemComponent = (props: Keyable, ref: React.Ref<HTMLDivElement>) => {
   const { attributes, listeners, style, useDragHandle } = props;
 
   return useDragHandle ? (
@@ -135,9 +136,11 @@ const Item = React.forwardRef((props: any, ref: any) => {
       {props.children}
     </div>
   );
-});
+};
 
-const ItemWithDragHandle = React.forwardRef((props: any, ref: any) => {
+const Item = React.forwardRef(ItemComponent);
+
+const ItemWithDragHandleComponent = (props: Keyable, ref: React.Ref<HTMLDivElement>) => {
   const { attributes, listeners, style } = props;
 
   return (
@@ -146,4 +149,6 @@ const ItemWithDragHandle = React.forwardRef((props: any, ref: any) => {
       {props.children}
     </div>
   );
-})
+};
+
+const ItemWithDragHandle = React.forwardRef(ItemWithDragHandleComponent);

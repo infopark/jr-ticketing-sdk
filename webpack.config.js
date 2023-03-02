@@ -1,11 +1,17 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+// Please use the same version that is also used by the transpiler (e.g. "target" of tsconfig)
+const ecmascriptTarget = 'es2015';
+
 module.exports = {
   cache: true,
+  node: false,
+  target: ['web', ecmascriptTarget],
   entry: {
     index: "./src/index.ts",
     ScrivitoExtensions: "./src/Components/ScrivitoExtensions/index.ts",
+    ScrivitoEditing: "./src/ScrivitoEditing/index.ts",
     cssBundle: "./src/assets/stylesheets/main.scss",
   },
   module: {
@@ -70,7 +76,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     publicPath: path.resolve(__dirname, "dist"),
     libraryTarget: "umd",
-    library: "jr-customer-portal-sdk",
+    library: "jr-ticketing-sdk",
     globalObject: "this",
   },
   mode: "production",

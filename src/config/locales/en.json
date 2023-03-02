@@ -3,19 +3,13 @@
   "navigation_header": "contents",
   "running_ticket": "Running Tickets in Helpdesk",
   "tickets_waiting_for_you": "Tickets waiting for your action",
-  "create_new_ticket": "Create Ticket",
   "back_to_portal": "Back to Portal",
-  "Dashboard": "Dashboard",
   "new_ticket": "New",
   "change_avatar": "Change Profile Image",
   "edit_profile": "Edit",
   "profile": "Profile",
   "user_avatar": "User Avatar",
   "profile_your_data": "Your Data",
-  "sign_out": "Sign out",
-  "open_profile_page": "Profile",
-  "show_all_pisasales_courses": "< PisaSales Academy",
-  "show_all_scrivito_courses": "< Scrivito Academy",
   "main_menu": "Back to Portal",
   "decided": "Decided",
   "new ticket": "New Ticket",
@@ -26,8 +20,6 @@
   "search for ticket": "Search for Ticket",
   "Please enter a subject": "Please specify the subject of your request.",
   "Please describe your request in a few sentences": "Please describe your request in a few sentences.",
-  "Progress": "Progress",
-  "Ticket Type": "Ticket Type",
   "You need to select a service request type": "You need to select a service request type.",
   "in progress": "In Progress",
   "chat": "Messages",
@@ -45,8 +37,6 @@
   "responsible": "Responsible",
   "client": "Client",
   "preview": "Preview",
-  "download": "Download",
-  "delete": "Delete",
   "done": "Done",
   "Created, not sent": "Created, not sent",
   "Sent": "Sent",
@@ -63,10 +53,6 @@
   "edit": "Edit",
   "back": "< Back",
   "save": "Save",
-  "post message": "Post Message",
-  "attach file": "Attach File",
-  "Close Ticket": "Close Ticket",
-  "your message ...": "Your Message...",
   "Thank you for your message!": "Thank you for your Message!",
   "A ticket has been created.": "A Ticket has been created.",
   "We will answer you as soon as possible.": "We will answer you as soon as possible.",
@@ -77,18 +63,7 @@
   "reverseByProgress": "Highest Progress First",
   "creation-error": "During the ticket creation an error has occured. Please try again.",
   "all": "All",
-  "Language": "Language",
-  "en": "English",
-  "en-GB": "English",
-  "en-US": "English",
-  "en-AU": "English",
-  "de": "Deutsch",
-  "de-DE": "Deutsch",
   "Documentation": "Documentation",
-  "Useful Links": "Useful Links",
-  "cookie-info-title": "Info on Cookies in JustRelate Portal",
-  "cookie-info-text": "JustRelate Portal uses cookies and other technologies ('Cookies') exclusively for the proper functioning of the service, and no personal information or statistics are gathered.",
-  "cookie-confirm": "Confirm",
   "active": "Active",
   "Ticket Subject": "Subject",
   "Description": "Description",
@@ -100,30 +75,58 @@
   "Ticket you are looking for was either deleted or its address is wrong.": "Ticket you are looking for was either deleted or its address is wrong.",
   "Go to mainpage": "Go to mainpage",
   "Time locale": "Time locale",
-  "Attachment": "Attachment",
-  "Provide a supplementary attachment": "Provide a supplementary attachment",
   "No tickets available.": "No tickets available.",
-  "Subject cannot be empty": "Subject cannot be empty",
-  "Subject must be 80 characters or less": "Please limit the subject to 80 characters",
-  "Description cannot be empty": "Description cannot be empty",
-  "Please upload files up to 20 MB": "You can attach a file up to 20 MB in size",
-  "The size of your attachment exceeds 20 MB": "The size of your attachment exceeds 20 MB",
-  "Processing file…": "Processing file…",
   "Create": "Create",
-  "Please report an issue of this type only": "Please report an issue of this type only",
   "ID": "ID",
   "Status": "Status",
-  "Created": "Created",
-  "Created on": "Created on",
   "TicketFormConfigDialog": {
     "fieldname": "Field name:",
-    "isVisible": "Visible?"
+    "showInCreateForm": "Show in create form",
+    "showInDetails": "Show in details"
   },
-  "CreateNewTicket": {
-    "title": "Title",
-    "message": {
-      "text": "Text",
-      "attachment": "Attachment"
+  "Ticket": {
+    "labels": {
+      "created_at": "Created on",
+      "title": "Title",
+      "message": {
+        "text": "Message",
+        "attachments": "Attachments"
+      },
+      "number": "Ticket Number",
+      "status": "Status",
+      "type": "Ticket Type"
+    },
+    "status": {
+      "new": "new",
+      "open": "open",
+      "waiting": "waiting",
+      "closed": "closed",
+      "null": "-"
+    },
+    "type": {
+      "problem": "problem",
+      "task": "task",
+      "question": "question",
+      "null": "-"
     }
+  },
+  "CreateNewTicketOverlay": {
+    "attach_file": "Attach File",
+    "create_new_ticket": "Create Ticket",
+    "file_too_big": "File is too big",
+    "file_upload_failed": "File upload failed",
+    "processing_file": "Processing file ..."
+  },
+  "MessageArea": {
+    "attach_file": "Attach File",
+    "file_too_big": "File is too big",
+    "file_upload_failed": "File upload failed",
+    "message_placeholder": "Your Message...",
+    "processing_file": "Processing file ...",
+    "submit": "Post Message"
+  },
+  "Message": {
+    "delete_attachment": "Delete",
+    "download_attachment": "Download"
   }
 }

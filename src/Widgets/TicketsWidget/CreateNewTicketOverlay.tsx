@@ -1,75 +1,127 @@
 import React, { useState } from "react";
 import * as Scrivito from "scrivito";
+import classNames from "classnames";
+import { isEmpty } from "lodash-es";
+import Modal from "react-overlays/Modal";
 
-import { WidgetProps, RegistryWidgetsType } from "@rjsf/utils";
+import { RegistryWidgetsType } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv6";
 import Form from "@rjsf/core";
-import { merge } from "lodash-es";
 
+import i18n from "../../config/i18n";
 import Loader from "../../Components/Loader";
-import Modal from "react-overlays/Modal";
-import { translate } from "../../utils/translate";
-import { callApiPost } from "../../api/portalApiCalls";
-import { getUserUuid } from "../../Components/Auth/utils";
+import TicketingApi from "../../api/TicketingApi";
 import FooterButtons from "./FooterButtons";
 import { useTenantContext } from "../../Components/TenantContextProvider";
+import { MAX_ATTACHMENT_SIZE } from "../../utils/constants";
+import { FileObject, Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
-  const [file, setFile] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState<object[]>([]);
 
-  const onChangeHandler = (e) => {
-    const uploadFile = e.target.files[0];
+  function updateFiles(fileObject) {
+    setFiles((files) => files.map((f) => f === fileObject ? fileObject : f));
+  }
 
-    onChange(null);
-    setFile(null);
+  function uploadFile(fileList: FileList) {
+    const filenames = [...value];
 
-    if (!uploadFile) {
-      return;
-    }
+    Array.from(fileList).forEach(async (file: Keyable) => {
+      const size = file.size || 0;
+      const fileObject: FileObject = {
+        name: file.name,
+        filename: "",
+        loading: true,
+        error: ""
+      };
+      setFiles(files => [...files, fileObject]);
 
-    setLoading(true);
-
-    callApiPost("signed-upload-url", {
-      filename: uploadFile.name,
-    }).then(async (response) => {
-      if (response.failedRequest) {
-        setLoading(false);
+      if (size > MAX_ATTACHMENT_SIZE) {
+        fileObject.error = "file_too_big";
+        fileObject.loading = false;
+        updateFiles(fileObject);
         return;
       }
-      await fetch(response.url, {
-        method: "PUT",
-        body: uploadFile,
+
+      const signedResult = await TicketingApi.post("signed-upload-url", {
+        data: {
+          filename: file.name,
+        }
       });
 
-      onChange(response.filename);
-      setFile(uploadFile);
-      setLoading(false);
+      if (signedResult.failedRequest) {
+        fileObject.error = "file_upload_failed";
+        fileObject.loading = false;
+        updateFiles(fileObject);
+        return;
+      }
+
+      const uploadResult = await fetch(signedResult.url, {
+        method: "PUT",
+        body: file as BodyInit,
+      });
+
+      if (uploadResult.status >= 200 && uploadResult.status < 300) {
+        filenames.push(signedResult.filename);
+        onChange(filenames);
+      } else {
+        fileObject.error = "file_upload_failed";
+      }
+      fileObject.loading = false;
+      updateFiles(fileObject);
     });
-  };
+  }
+
+  function removeUpload(file: object) {
+    setFiles(files.filter(f => f !== file));
+  }
 
   return (
     <div>
       <div className="mb-1">
-        <input id={id} name={id} type="file" onChange={onChangeHandler} />
+        <label htmlFor={id} className="btn btn-secondary btn-sm px-2 py-1 with-btn-lnf">
+          {i18n.t("CreateNewTicket.attach_file")}
+          <input
+            type="file"
+            id={id}
+            name={id}
+            value=""
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => e.target.files && uploadFile(e.target.files)}
+            hidden
+            multiple
+          />
+        </label>
       </div>
-      {loading && (
-        <small>{translate("Processing file…")}</small>
-      )}
-      {file && (
-        <ul className="file-info">
-          <li><strong>{file.name}</strong> ({[file.type, `${file.size} bytes`].filter(e => !!e).join(", ")})</li>
-        </ul>
-      )}
+      {files.map((file: Keyable) => (
+        <div className="attachment_file mb-0" key={file.name}>
+          <div className={classNames("dots", { loading: file.loading })}>
+            {file.name}
+            {" "}
+            {file.loading && i18n.t("CreateNewTicket.processing_file")}
+            {!isEmpty(file.error) && i18n.t(`CreateNewTicket.${file.error}`)}
+          </div>
+          <div className="delete_file pointer" onClick={() => removeUpload(file)}>
+            x
+          </div>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 const widgets: RegistryWidgetsType = {
   FileWidget: CustomAttachment
 };
 
-function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
+function CreateNewTicketOverlay({
+  isOpen,
+  close,
+  chatPage
+}: {
+  isOpen: boolean,
+  close: React.MouseEventHandler<HTMLElement>,
+  chatPage: Scrivito.Obj
+}) {
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
 
@@ -77,7 +129,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
     <div className="sdk_mute_bg_2" {...props} />
   );
 
-  const userUUID = getUserUuid();
+  const { userId } = useTenantContext();
 
   const onSubmitForm = async () => {
     setLoading(true);
@@ -86,9 +138,9 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       const ticketAttributes = {};
       const messageAttributes = {
         text: formData["message.text"],
-        attachments: [{
-          filename: formData["message.attachment"],
-        }]
+        attachments: formData["message.attachments"]?.map(attachment => ({
+          filename: attachment,
+        }))
       };
 
       Object.entries(formData).forEach(([name, value]) => {
@@ -96,11 +148,13 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
           ticketAttributes[name] = value;
         }
       });
-      const newTicket = await callApiPost("tickets", {
-        ...ticketAttributes,
-        message: messageAttributes,
-        requester_id: userUUID,
-        status: "new",
+      const newTicket = await TicketingApi.post("tickets", {
+        data: {
+          ...ticketAttributes,
+          message: messageAttributes,
+          requester_id: userId,
+          status: "new",
+        }
       });
 
       if (newTicket.failedRequest) {
@@ -112,7 +166,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
       Scrivito.navigateTo(chatPage, {
         ticketid: newTicket.id,
       });
-    } catch (_error) {
+    } catch (error) {
       setLoading(false);
       setShowError(true);
     }
@@ -121,37 +175,37 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
   const [schema, setSchema] = React.useState({});
   const [uiSchema, setUiSchema] = React.useState({});
   const [formData, setFormData] = React.useState({});
-  const { ticketSchema } = useTenantContext();
-  React.useEffect(() => {
-    Scrivito.load(() => {
-      const [obj] = Scrivito.Obj.onAllSites()
-        .where("_objClass", "equals", "TicketFormConfiguration")
-        .take(1);
-      return obj;
-    }).then((obj) => {
-      const localUiSchema = JSON.parse(obj?.get("uiSchema") as string || "{}");
-      const localSchema = JSON.parse(obj?.get("formSchema") as string || "{}");
+  const { ticketSchema, ticketUiSchema } = useTenantContext();
 
-      Object.entries(ticketSchema.properties).forEach(([attribute, schema]) => {
-        Object.entries(schema as object).forEach(([key, value]) => {
+  React.useEffect(() => {
+    if (ticketSchema && ticketUiSchema) {
+      const localSchema = { ...ticketSchema, properties: {} };
+      const localUiSchema = { ...ticketUiSchema };
+
+      Object.entries(ticketSchema.properties).forEach(([attribute, schema]: [string, any]) => {
+        // Don't render hidden attributes unless they have a default value
+        const uiSchema = ticketUiSchema[attribute] || {};
+        if (uiSchema["ui:widget"] !== "hidden" || schema["default"]) {
+          localSchema.properties[attribute] = schema;
+        }
+        Object.entries(schema).forEach(([key, value]) => {
           if (key.startsWith("ui:")) {
-            localUiSchema[attribute] = localUiSchema[attribute] || {};
+            localUiSchema[attribute] ||= {};
             localUiSchema[attribute][key] = value;
           }
         });
       });
 
+      setSchema(localSchema);
       setUiSchema(localUiSchema);
-      setSchema(merge(ticketSchema, localSchema));
-      setFormData(localSchema.formData);
-    });
-  }, []);
+    }
+  }, [ticketSchema, ticketUiSchema]);
 
   return (
     <Modal
       show={isOpen}
       onHide={
-        ((event) => {
+        ((event: React.MouseEvent<HTMLElement, MouseEvent>) => {
           close(event);
         }) as any
       }
@@ -167,7 +221,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
           )}
           <div className="ticket-modal-form">
             <div className="overlay_content scroll_content">
-              <h2>{translate("create_new_ticket")}</h2>
+              <h2>{i18n.t("CreateNewTicket.create_new_ticket")}</h2>
               <div className="inline_form">
                 <Form
                   formData={formData}
@@ -185,7 +239,7 @@ function CreateNewTicketOverlay({ isOpen, close, chatPage }) {
                   className="alert alert-danger box radius mt-4"
                   role="alert"
                 >
-                  {translate("creation-error")}
+                  {i18n.t("creation-error")}
                 </div>
               )}
             </div>

@@ -3,20 +3,18 @@ import * as Scrivito from "scrivito";
 
 import Loader from "../../Components/Loader";
 import { ticketsListSorters } from "../../utils/listSorters";
-import { translate } from "../../utils/translate";
+import i18n from "../../config/i18n";
 
-import TicketEntry from "./TicketEntry";
+import TicketEntry, { Ticket } from "./TicketEntry";
 import TicketListHeadEntry from "./TicketListHeadEntry";
 
 function TicketList({
   ticketList,
   sortKey,
   baseLink,
-  widgetId,
   loading,
   ticketsListFilters,
   filterKey,
-  statusDictionary,
 }) {
   if (loading) {
     return (
@@ -29,18 +27,18 @@ function TicketList({
     return (
       <>
         <TicketListHeadEntry />
-        <div className="text-center">{translate("No tickets available.")}</div>
+        <div className="text-center">{i18n.t("No tickets available.")}</div>
       </>
     );
   }
 
-  const sortedList = ticketsListSorters[sortKey].sorter(ticketList);
-  const filteredList = ticketsListFilters[filterKey].filter(sortedList);
+  const sortedList: Ticket[] = ticketsListSorters[sortKey].sorter(ticketList);
+  const filteredList: Ticket[] = ticketsListFilters[filterKey].filter(sortedList);
 
   return (
     <>
       <TicketListHeadEntry />
-      {filteredList.map((ticket, index) => {
+      {filteredList.map((ticket: Ticket, index: number) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
           query: `ticketid=${ticket.id}`,
@@ -51,7 +49,6 @@ function TicketList({
             ticket={ticket}
             targetLink={targetLink}
             key={index}
-            statusDictionary={statusDictionary}
           />
         );
       })}

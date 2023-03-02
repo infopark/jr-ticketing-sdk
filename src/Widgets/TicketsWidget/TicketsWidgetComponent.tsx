@@ -1,34 +1,36 @@
 import React, { useState, useEffect } from "react";
 import * as Scrivito from "scrivito";
-import { translate } from "../../utils/translate";
-import { callApiGet } from "../../api/portalApiCalls";
-import useAPIError from "../../utils/useAPIError";
+
+import TicketingApi from "../../api/TicketingApi";
 import { createDefaultTicketListFilter } from "../../utils/listFilters";
 import TicketNumberBox from "./TicketNumberBox";
 import CreateNewTicket from "./CreateNewTicket";
-import { getUserUuid } from "../../Components/Auth/utils";
-import { useTenantLocalization } from "../../Components/TenantContextProvider";
+import { useTenantContext } from "../../Components/TenantContextProvider";
+import i18n from "../../config/i18n";
+import useWS from "../../utils/useWS";
 
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = useState(0);
-  const { addError } = useAPIError();
-  const userUUID = getUserUuid();
-  const { isTicketStatusClosed } = useTenantLocalization();
+  const { addError, userId } = useTenantContext();
+  const msg = useWS("users", userId);
 
   useEffect(() => {
-    callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
+    if (!userId) {
+      return;
+    }
+
+    TicketingApi.get(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
-          const defaultFilter =
-            createDefaultTicketListFilter(isTicketStatusClosed);
+          const defaultFilter = createDefaultTicketListFilter();
           const filteredResponse = defaultFilter.filter(response);
           setRunningTickets(filteredResponse.length);
         }
       })
       .catch((error) => {
-        addError("TICKET_LIST, ", error, "TicketListComponent");
+        addError("Error loading ticket list", "TicketListComponent", error);
       });
-  }, [addError, userUUID, isTicketStatusClosed]);
+  }, [msg, addError, userId]);
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
   const helpdeskPage = helpdeskPages.first();
@@ -37,7 +39,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const chatPage = Scrivito.Obj.where(
     "_objClass",
     "equals",
-    "ChatPage"
+    "TicketPage"
   ).first();
 
   return (
@@ -45,14 +47,14 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       <CreateNewTicket
         className={boxClassName}
         chatPage={chatPage}
-        text={translate("create_new_ticket")}
+        text={i18n.t("CreateNewTicket.create_new_ticket")}
       />
       <TicketNumberBox
         todoBox={false}
         number={runningTickets}
         link={link}
         className={boxClassName}
-        text={translate("running_ticket")}
+        text={i18n.t("running_ticket")}
       />
     </Scrivito.WidgetTag>
   );

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { translate } from "../../utils/translate";
+import i18n from "../../config/i18n";
 
 function TicketListHeadEntry() {
   return (
@@ -9,21 +9,21 @@ function TicketListHeadEntry() {
         <div className="ticket_header radius">
           <div className="row">
             <div className="col-md-3">
-              <div className="ticket-box">{translate("ID")}</div>
+              <div className="ticket-box">{i18n.t("ID")}</div>
             </div>
 
             <div className="col-md-3">
-              <div className="ticket-box">{translate("Description")}</div>
+              <div className="ticket-box">{i18n.t("Description")}</div>
             </div>
 
             <div className="col-md-3">
               <div className="ticket-box ticket-status-title">
-                {translate("Status")}
+                {i18n.t("Status")}
               </div>
             </div>
 
             <div className="col-md-3">
-              <div className="ticket-box">{translate("Created")}</div>
+              <div className="ticket-box">{i18n.t("Created")}</div>
             </div>
           </div>
         </div>

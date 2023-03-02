@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as Scrivito from "scrivito";
-import { callApiGet } from "../../api/portalApiCalls";
-import useAPIError from "../../utils/useAPIError";
-import {
-  createTicketsListFilters,
-  isTicketListFilterDisabled,
-} from "../../utils/listFilters";
+
+import TicketingApi from "../../api/TicketingApi";
+import { createTicketsListFilters } from "../../utils/listFilters";
 import TicketList from "./TicketList";
 import TicketListBoxHeader from "./TicketListBoxHeader";
-import { getUserUuid } from "../../Components/Auth/utils";
-import { useTenantLocalization } from "../../Components/TenantContextProvider";
-import { getDictionary } from "../../utils/translate";
+import { useTenantContext } from "../../Components/TenantContextProvider";
+import useWS from "../../utils/useWS";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [loading, setLoading] = useState(true);
@@ -18,28 +14,25 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [sortKey, setSortKey] = useState("byCreationDate");
   const [filterKey, setFilterKey] = useState("active");
   const allowDeferredBaseLink = useRef(true);
-  const { tenantLocalization, isTicketStatusClosed } = useTenantLocalization();
-  const statusDictionary = getDictionary(tenantLocalization);
-  const { addError } = useAPIError();;
+  const { addError, userId } = useTenantContext();
+  const msg = useWS("users", userId);
 
-  const getTicketsByNewest = useCallback(() => {
-    const userUUID = getUserUuid();
-    callApiGet(`tickets?filter[requester_id][eq]=${userUUID}`)
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
+    TicketingApi.get(`tickets?filter[requester_id][eq]=${userId}`)
       .then((response) => {
         if (!response.failedRequest) {
           setTicketList(response);
         }
       })
       .catch((error) => {
-        addError("TICKET_LIST, ", error, "TicketListWidget");
+        addError("Error loading ticket list", "TicketListWidget", error);
       })
       .finally(() => setLoading(false));
-  }, [addError]);
-
-  // initial load tickets
-  useEffect(() => {
-    getTicketsByNewest();
-  }, [getTicketsByNewest]);
+  }, [msg, addError, userId]);
 
   const baseLink = widget.get("link");
   if (!baseLink && allowDeferredBaseLink.current) {
@@ -56,18 +49,8 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     setFilterKey(event.target.value);
   };
 
-  const ticketsListFilters = createTicketsListFilters(
-    ticketList,
-    statusDictionary,
-    isTicketStatusClosed
-  );
-
+  const ticketsListFilters = createTicketsListFilters(ticketList);
   const filterDisabled = false;
-  // const filterDisabled = isTicketListFilterDisabled(
-  //   ticketsListFilters,
-  //   ticketList,
-  //   isTicketStatusClosed
-  // );
 
   return (
     <Scrivito.WidgetTag className="ticket-list-widget sdk">
@@ -86,10 +69,8 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
         ticketList={ticketList}
         sortKey={sortKey}
         baseLink={baseLink}
-        widgetId={widget.id()}
         ticketsListFilters={ticketsListFilters}
         filterKey={filterKey}
-        statusDictionary={statusDictionary}
       />
     </Scrivito.WidgetTag>
   );

@@ -4,7 +4,6 @@ const TicketFormConfiguration: any = Scrivito.provideObjClass(
   "TicketFormConfiguration",
   {
     attributes: {
-      formSchema: "string",
       uiSchema: "string",
     },
   }

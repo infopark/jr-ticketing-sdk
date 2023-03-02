@@ -3,19 +3,13 @@
   "navigation_header": "Inhalte",
   "running_ticket": "Laufende Tickets im Helpdesk",
   "tickets_waiting_for_you": "Tickets warten auf deine Antwort",
-  "create_new_ticket": "Ticket anlegen",
   "back_to_portal": "Zurück zum Portal",
-  "Dashboard": "Dashboard",
   "new_ticket": "Neu",
   "change_avatar": "Bild ändern",
   "edit_profile": "Bearbeiten",
   "profile": "Profil",
   "user_avatar": "Benutzeravatar",
   "profile_your_data": "Ihre Benutzerdaten",
-  "sign_out": "Abmelden",
-  "open_profile_page": "Profil",
-  "show_all_pisasales_courses": "< PisaSales Academy",
-  "show_all_scrivito_courses": "< Scrivito Academy",
   "main_menu": "Zurück zum Portal",
   "decided": "Entschieden",
   "new ticket": "Neues Ticket",
@@ -26,8 +20,6 @@
   "search for ticket": "Ticket suchen",
   "Please enter a subject": "Bitte geben Sie das Thema Ihres Anliegens an.",
   "Please describe your request in a few sentences": "Bitte beschreiben Sie Ihre Anfrage in ein paar Sätzen.",
-  "Progress": "Fortschritt",
-  "Ticket Type": "Ticket-Typ",
   "You need to select a service request type": "Sie müssen einen Service-Anfrage-Typ auswählen.",
   "in progress": "In Arbeit",
   "chat": "Nachrichten",
@@ -45,8 +37,6 @@
   "responsible": "Zuständig",
   "client": "Kunde",
   "preview": "Vorschau",
-  "download": "Download",
-  "delete": "Löschen",
   "done": "Fertig",
   "Created, not sent": "Angelegt, nicht versendet",
   "Sent": "Versendet",
@@ -63,10 +53,6 @@
   "edit": "Bearbeiten",
   "back": "< Zurück",
   "save": "Speichern",
-  "post message": "Nachricht abschicken",
-  "attach file": "Datei anhängen",
-  "Close Ticket": "Ticket schließen",
-  "your message ...": "Ihre Nachricht ...",
   "Thank you for your message!": "Danke für Ihre Nachricht!",
   "A ticket has been created.": "Ein Ticket wurde angelegt",
   "We will answer you as soon as possible.": "Wir werden Ihnen so schnell wie möglich antworten.",
@@ -77,18 +63,7 @@
   "reverseByProgress": "Höchster Fortschritt zuerst",
   "creation-error": "Während der Verarbeitung ist ein Fehler aufgetreten. Bitte versuche Sie es noch mal.",
   "all": "Alle",
-  "Language": "Sprache",
-  "en": "English",
-  "en-GB": "English",
-  "en-US": "English",
-  "en-AU": "English",
-  "de": "Deutsch",
-  "de-DE": "Deutsch",
   "Documentation": "Dokumentation",
-  "Useful Links": "Nützliche Links",
-  "cookie-info-title": "Info über Cookies in JustRelate Portal",
-  "cookie-info-text": "JustRelate Portal verwendet Cookies und andere Technologien ('Cookies') ausschließlich für das ordnungsgemäße Funktionieren des Portal-Dienstes, und es werden hiermit keine persönlichen Informationen oder Statistiken gesammelt.",
-  "cookie-confirm": "Bestätigen",
   "active": "Aktiv",
   "Ticket Subject": "Thema",
   "Description": "Beschreibung",
@@ -100,30 +75,59 @@
   "Ticket you are looking for was either deleted or its address is wrong.": "Das Ticket, wonach Sie suchen, wurde entweder gelöscht oder ist anders gekennzeichnet!",
   "Go to mainpage": "Zurück zur Hauptseite",
   "Time locale": "Zeitgebietsschema",
-  "Attachment": "Anhang",
-  "Provide a supplementary attachment": "Einen Anhang hinzufügen",
   "No tickets available.": "Keine Tickets vorhanden.",
-  "Subject cannot be empty": "Thema darf nicht leer sein",
-  "Subject must be 80 characters or less": "Bitte beschränken Sie das Thema auf 80 Zeichen",
-  "Description cannot be empty": "Beschreibung darf nicht leer sein",
-  "Please upload files up to 20 MB": "Sie können eine Datei bis zu einer Größe von 20 MB anhängen",
-  "The size of your attachment exceeds 20 MB": "Die Größer Ihres Anhangs überschreitet 20 MB",
-  "Processing file…": "Die Datei wird bearbeitet ...",
   "Create": "Anlegen",
-  "Please report an issue of this type only": "Bitte melden Sie nur ein Problem dieser Art",
   "ID": "ID",
   "Status": "Status",
-  "Created": "Erstellt",
-  "Created on": "Erstellt am",
   "TicketFormConfigDialog": {
     "fieldname": "Feldname:",
-    "isVisible": "Sichtbar?"
+    "showInCreateForm": "Im Formular anzeigen",
+    "showInDetails": "In Details anzeigen"
+  },
+  "Ticket": {
+    "labels": {
+      "created_at": "Erstellt am",
+      "title": "Titel",
+      "message": {
+        "text": "Nachricht",
+        "attachments": "Anhänge"
+      },
+      "number": "Ticketnummer",
+      "status": "Status",
+      "type": "Ticket-Typ"
+    },
+    "status": {
+      "new": "neu",
+      "open": "offen",
+      "waiting": "wartend",
+      "closed": "geschlossen",
+      "null": "-"
+    },
+    "type": {
+      "problem": "Problem",
+      "task": "Aufgabe",
+      "question": "Frage",
+      "null": "-"
+    }
   },
   "CreateNewTicket": {
-    "title": "Title",
-    "message": {
-      "text": "Text",
-      "attachment": "Attachment"
-    }
+    "attach_file": "Datei anhängen",
+    "create_new_ticket": "Ticket anlegen",
+    "file_too_big": "Die Datei ist zu groß",
+    "file_upload_failed": "Upload fehlgeschlagen",
+    "processing_file": "Die Datei wird bearbeitet ...",
+    "upload_failed": "Gescheitert"
+  },
+  "MessageArea": {
+    "attach_file": "Datei anhängen",
+    "file_too_big": "Die Datei ist zu groß",
+    "file_upload_failed": "Upload fehlgeschlagen",
+    "message_placeholder": "Ihre Nachricht ...",
+    "processing_file": "Die Datei wird bearbeitet ...",
+    "submit": "Nachricht abschicken"
+  },
+  "Message": {
+    "delete_attachment": "Löschen",
+    "download_attachment": "Download"
   }
 }

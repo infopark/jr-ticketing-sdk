@@ -1,11 +1,29 @@
 import * as Scrivito from "scrivito";
 import { some } from "lodash-es";
 
-const storage = typeof window !== "undefined" ? window.localStorage : {getItem: () => {}, setItem: () => {}};
+const fakeLocalStorage = {
+  getItem: () => {
+    // Do nothing
+  },
+  setItem: () => {
+    // Do nothing
+  }
+};
 
-const trackedPageTypes = ["TrainingPage", "ChatPage"];
+const storage = typeof window !== "undefined" ? window.localStorage : fakeLocalStorage;
 
-const getEssentialObjInfo = (obj) => {
+const trackedPageTypes = ["TrainingPage", "TicketPage"];
+
+interface ObjInfo {
+  id: string;
+  url: string;
+  query: string;
+  title: string | null;
+  pageType: string;
+  language: string | null;
+}
+
+const getEssentialObjInfo = (obj: Scrivito.Obj): ObjInfo | null => {
   if (!obj) {
     return null;
   }
@@ -14,12 +32,12 @@ const getEssentialObjInfo = (obj) => {
   const pageType = obj && obj.objClass();
   const query = window.location.search;
   const url = query ? `${baseUrl}${query}` : baseUrl;
-  const title = obj && obj.get("title");
+  const title = obj && obj.get("title") as string;
   const language = obj && obj.siteId();
   return { id, url, query, title, pageType, language };
 };
 
-const getVisitedPages = (obj) => {
+const getVisitedPages = (obj: Scrivito.Obj | null): string | void | null => {
   if (!obj) {
     return null;
   }
@@ -33,27 +51,27 @@ const getVisitedPages = (obj) => {
   }
   return storage.getItem("visitedPages");
 };
-const isInVisitedPages = (obj) => {
+const isInVisitedPages = (obj: Scrivito.Obj) => {
   if (!obj) {
     return null;
   }
   const objInfo = getEssentialObjInfo(obj);
-  const visitedArray = JSON.parse(getVisitedPages(obj) as any);
+  const visitedArray = JSON.parse(getVisitedPages(obj) as string);
   return some(visitedArray, objInfo);
 };
 
-const addToVisitedPages = (obj) => {
+const addToVisitedPages = (obj: Scrivito.Obj) => {
   if (!obj) {
     return null;
   }
   const currentPage = Scrivito.currentPage();
   const lang = currentPage && currentPage.siteId();
-  const objInfo = getEssentialObjInfo(obj) as any;
+  const objInfo = getEssentialObjInfo(obj);
   const visited = getVisitedPages(obj);
-  const visitedArray = JSON.parse(visited as any);
+  const visitedArray = JSON.parse(visited as string);
   const localisedVisitedArray =
     lang && visitedArray && visitedArray.filter((o) => (o && o.language) === lang);
-  if (!(!objInfo.query && objInfo.pageType === "ChatPage")) {
+  if (!(!objInfo?.query && objInfo?.pageType === "TicketPage")) {
     localisedVisitedArray.unshift(objInfo);
   }
 
