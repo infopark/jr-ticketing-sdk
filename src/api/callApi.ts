@@ -3,6 +3,9 @@ import { Keyable } from "../utils/types";
 
 const METHODS_WITH_BODY = ["POST", "PUT", "PATCH"];
 
+/**
+ * @deprecated The function callApi will be removed soon.
+ */
 async function callApi(method: string, url: string, data: Keyable = {}): Promise<Keyable> {
   const options: Keyable = {
     method: method,

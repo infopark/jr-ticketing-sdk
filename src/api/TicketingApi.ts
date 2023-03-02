@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from "lodash-es";
-
-import { callApi } from "./callApi";
+import { unstable_JrRestApi } from "scrivito";
 
 const ticketingStage = process.env.JR_TICKETING_STAGE || "";
 const ticketingPath = [ticketingStage, "ticketing", process.env.SCRIVITO_TENANT]
@@ -10,10 +9,10 @@ const ticketingPath = [ticketingStage, "ticketing", process.env.SCRIVITO_TENANT]
 
 /** @public */
 async function get(endpoint: string, options?): Promise<any> {
-  const url = `${process.env.JR_API_LOCATION}/${ticketingPath}/${endpoint}`;
+  const path = `${ticketingPath}/${endpoint}`;
 
   try {
-    const response: any = await callApi("get", url);
+    const response: any = await unstable_JrRestApi.get(path, options);
 
     return response.data;
   } catch (e) {
@@ -23,10 +22,10 @@ async function get(endpoint: string, options?): Promise<any> {
 
 /** @public */
 async function post(endpoint: string, options?): Promise<any> {
-  const url = `${process.env.JR_API_LOCATION}/${ticketingPath}/${endpoint}`;
+  const path = `${ticketingPath}/${endpoint}`;
 
   try {
-    const response: any = await callApi("post", url, options.data);
+    const response: any = await unstable_JrRestApi.post(path, options);
 
     return response.data;
   } catch (e) {
@@ -36,10 +35,10 @@ async function post(endpoint: string, options?): Promise<any> {
 
 /** @public */
 async function put(endpoint: string, options?): Promise<any> {
-  const url = `${process.env.JR_API_LOCATION}/${ticketingPath}/${endpoint}`;
+  const path = `${ticketingPath}/${endpoint}`;
 
   try {
-    const response: any = await callApi("put", url, options.data);
+    const response: any = await unstable_JrRestApi.put(path, options);
 
     return response.data;
   } catch (e) {
