@@ -10,6 +10,7 @@ import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import ticketingUrl from "../../../api/ticketingUrl";
 import attachmentImg from "../../../assets/images/icons/file.svg";
+import { Keyable } from "../../../utils/types";
 
 type Attachment = {
   filename: string;
@@ -20,28 +21,13 @@ type Attachment = {
 function Message({
   message,
 }) {
-  const images: Attachment[] = [];
-  const files: Attachment[] = [];
-
-  message.attachments?.forEach((file) => {
-    const attachment: Attachment = {
-      ...file,
-      extension: file.filename.split(".").pop(),
-    };
-    if (isImageFormat(attachment.extension)) {
-      images.push(attachment);
-    } else {
-      files.push(attachment);
-    }
-  });
-
   return (
     <>
       <span className="person_list_img">
         <span className="wrapper_img_profil">
           <img
             src={message.user.avatar_url || noUserImg}
-            alt="User avatar"
+            alt={`${[message.user.first_name, message.user.last_name].join(" ")}'s avatar`}
             className="img_cover"
           />
         </span>
@@ -68,17 +54,9 @@ function Message({
 
       <div className="img-attachment-area">
         <div className="row">
-          {files.map((attachment, index) => (
+          {message.attachments?.map((attachment: Keyable, index: number) => (
             <div className="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3" key={`${index}-${attachment.filename}`}>
-              <MessageFile
-                key={attachment.filename}
-                attachment={attachment}
-              />
-            </div>
-          ))}
-          {images.map((attachment, index) => (
-            <div className="col-6 col-sm-4 col-md-3 col-lg-4 col-xl-3" key={`${index}-${attachment.filename}`}>
-              <MessageImage
+              <MessageAttachment
                 key={attachment.filename}
                 attachment={attachment}
               />
@@ -90,35 +68,10 @@ function Message({
   );
 }
 
-// TODO merge MessageImage and MessageFile into MessageAttachment
-
-function MessageImage({ attachment }) {
-  return (
-    <div className="img-attachment card" data-bs-toggle="modal">
-      <a className="btn btn-download"
-        href={`${ticketingUrl()}/attachments/${attachment.key}`}
-        target="_blank"
-        download
-        rel="noreferrer"
-      >
-        <i className="fa fa-download" />
-      </a>
-      <div className="card-bkgrd-img" style={{ backgroundImage: `url(${attachment.s3_url})` }} />
-      <div className="card-body">
-        <div className="card-body-descr-container" data-bs-toggle="modal">
-          <div className="card-body-descr-container">
-            <p className="card-text dots">
-              {decodeURIComponent(attachment.filename)}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MessageFile({ attachment }) {
-  const fileIcon = matchExtension(attachment.extension);
+function MessageAttachment({ attachment }) {
+  const coverImage = isImageFormat(attachment.filename.split(".").pop())
+    ? attachment.s3_url
+    : (matchExtension(attachment.filename.split(".").pop()) || attachmentImg);
 
   return (
     <div className="img-attachment card">
@@ -130,7 +83,7 @@ function MessageFile({ attachment }) {
       >
         <i className="fa fa-download" />
       </a>
-      <div className="card-bkgrd-img" style={{ backgroundImage: `url(${attachmentImg})` }} title="attachment icon"></div>
+      <div className="card-bkgrd-img" style={{ backgroundImage: `url(${coverImage})` }} title="attachment icon"></div>
       <div className="card-body">
         <div className="card-body-descr-container">
           <div className="card-body-descr-container">

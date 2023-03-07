@@ -88,7 +88,7 @@
     "labels": {
       "id": "ID",
       "created_at": "Erstellt am",
-      "updated_at": "Updated at",
+      "updated_at": "Zuletzt geändert am",
       "title": "Titel",
       "message": {
         "text": "Nachricht",
@@ -127,7 +127,7 @@
     "message_placeholder": "Ihre Nachricht ...",
     "processing_file": "Die Datei wird bearbeitet ...",
     "submit": "Nachricht abschicken",
-    "go_to_last_message": "Go to most recent message"
+    "go_to_last_message": "Zur letzten Nachricht"
   },
   "Message": {
     "delete_attachment": "Löschen",
@@ -135,6 +135,6 @@
   },
   "TicketListWidget": {
     "title": "Meine Tickets",
-    "header": "({{count}} von {{total}} Tickets Insgesamt)"
+    "header": "({{count}} von {{total}} Tickets insgesamt)"
   }
 }
