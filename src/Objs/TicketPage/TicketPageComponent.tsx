@@ -3,6 +3,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import * as Scrivito from "scrivito";
 
@@ -13,23 +14,15 @@ import CommunicationTree from "./Components/CommunicationTree";
 import MessageArea from "./Components/MessageArea";
 import TicketDetails from "./Components/TicketDetails";
 import TicketHeader from "./Components/TicketHeader";
-import TicketNav from "./Components/TicketNav";
 import i18n from "../../config/i18n";
 import { Keyable } from "../../utils/types";
 import useWS from "../../utils/useWS";
 
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
-const viewModes = {
-  details: { name: "details", clickable: true },
-  chat: { name: "chat", clickable: true },
-};
-
 Scrivito.provideComponent("TicketPage", ({ page }) => {
-  const [chatContent, setChatContent] = useState<Keyable[]>();
   const [ticket, setTicket] = useState<Keyable>();
   const [status, setStatus] = useState<string>("idle");
-  const [mode, setMode] = useState<string>("chat");
   const msg = useWS("tickets", ticket?.id);
 
   const getTicket = async (effectStatus) => {
@@ -38,15 +31,12 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
       const ticketid = urlParams.get("ticketid");
       const ticket =
         ticketid && (
-          await TicketingApi.get(`tickets/${ticketid}?include=messages`)
+          await TicketingApi.get(`tickets/${ticketid}?include=messages,messages.user`)
             .then((data) => {
               if (data.failedRequest || effectStatus.canceled) {
                 return TICKET_NOT_FOUND;
               }
-              const ticketData = data;
-              const { messages } = ticketData;
-              setChatContent(messages);
-              return ticketData;
+              return data;
             })
             .finally(() => setStatus("idle")));
 
@@ -90,39 +80,11 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     };
   }, [msg, getTicketCallback, history]);
 
-  useEffect(() => {
-    document.body.classList.toggle("savepoint", mode === "details");
-  }, [mode]);
-
-
   const refreshCallback = async () => {
     setStatus("uploading");
     getTicketCallback({ canceled: false });
     setStatus("idle");
   };
-
-  const applyRememberedScrollPosition = useCallback(() => {
-    const scrollPosition = parseInt(
-      window.sessionStorage.getItem(`chat-page-${mode}-scroll-position`)!,
-      10
-    );
-    if (!isNaN(scrollPosition)) {
-      window.scrollTo(0, scrollPosition);
-    }
-  }, [mode]);
-
-  const removeRememberedScrollPositions = useCallback(() => {
-    Object.keys(viewModes).forEach((viewMode) => {
-      window.sessionStorage.removeItem(`chat-page-${viewMode}-scroll-position`);
-    });
-  }, [viewModes]);
-
-  useEffect(applyRememberedScrollPosition, [applyRememberedScrollPosition]);
-
-  useEffect(
-    () => removeRememberedScrollPositions,
-    [removeRememberedScrollPositions]
-  );
 
   useEffect(() => {
     saveScrollPosition();
@@ -133,40 +95,37 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     };
   }, []);
 
-  const rememberScrollPosition = () => {
-    const scrollPosition = window.sessionStorage.getItem("scroll-position");
-    window.sessionStorage.setItem(
-      `chat-page-${mode}-scroll-position`,
-      scrollPosition!
-    );
-  };
+  const onScrollLast = useCallback(() => {
+    setStatus("uploading");
 
-  const toggleMode = (mod) => {
-    rememberScrollPosition();
-    setMode(mod);
-  };
+    setTimeout(() => {
+      setStatus(status);
+    });
+  }, []);
 
   if (ticket === TICKET_NOT_FOUND) {
     return (
-      <div className="container">
-        <div className="text-center pt-5">
-          <h1 className="hero-bold">{i18n.t("Ticket not found!")}</h1>
-        </div>
-        <div className="text-center">
-          <h2 className="hero-small light">
-            {i18n.t(
-              "Ticket you are looking for was either deleted or its address is wrong."
-            )}
-          </h2>
-        </div>
-        <div className="text-center">
-          <Scrivito.LinkTag
-            to={Scrivito.Obj.root()}
-            className="btn btn-primary"
-          >
-            {i18n.t("Go to mainpage")}
-            <i className="fa fa-angle-right ml-1" aria-hidden="true" />
-          </Scrivito.LinkTag>
+      <div className="col-lg-12 jr-ticketing-sdk sdk-ticket-details">
+        <div className="container">
+          <div className="text-center pt-5">
+            <h1 className="hero-bold">{i18n.t("Ticket not found!")}</h1>
+          </div>
+          <div className="text-center">
+            <h2 className="hero-small light">
+              {i18n.t(
+                "Ticket you are looking for was either deleted or its address is wrong."
+              )}
+            </h2>
+          </div>
+          <div className="text-center">
+            <Scrivito.LinkTag
+              to={Scrivito.Obj.root()}
+              className="btn btn-primary"
+            >
+              {i18n.t("Go to mainpage")}
+              <i className="fa fa-angle-right ml-1" aria-hidden="true" />
+            </Scrivito.LinkTag>
+          </div>
         </div>
       </div>
     );
@@ -174,7 +133,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
 
   if (!ticket) {
     return (
-      <div className="sdk white-bg-loader">
+      <div className="jr-ticketing-sdk white-bg-loader">
         <Loader />
       </div>
     );
@@ -189,31 +148,34 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
   const isTicketClosed = ticket.status === "closed";
 
   return (
-    <>
-      <div className="col-lg-12 sdk sdk-ticket-details">
-        <div className="scroll_header animate">
-          <TicketHeader ticket={ticket} />
-          <TicketNav mode={mode} toggleMode={toggleMode} viewModes={viewModes} />
+    <div className="col-lg-12 jr-ticketing-sdk sdk-ticket-details">
+      <TicketHeader ticket={ticket} />
+
+      <div className="content_padding">
+        <div className="page_content">
+          <div className="wrapper_box min_hight_box">
+            <div className="row">
+              <div className="col-lg-4 order-lg-2">
+                <TicketDetails ticket={ticket} />
+              </div>
+              <div className="col-lg-8 order-lg-1">
+                <CommunicationTree
+                  messages={ticket.messages}
+                  status={status}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        {mode === "chat" && chatContent && (
-          <CommunicationTree
-            messages={ticket.messages}
-            status={status}
-            mode={mode}
-          />
-        )}
-        {mode === "details" && (
-          <TicketDetails ticket={ticket}/>
-        )}
       </div>
-      {mode === "chat" && (
-        <MessageArea
-          ticketId={ticket.id}
-          refreshCallback={refreshCallback}
-          isClosed={isTicketClosed}
-        />
-      )}
-    </>
+
+      <MessageArea
+        ticketId={ticket.id}
+        refreshCallback={refreshCallback}
+        isClosed={isTicketClosed}
+        onScrollLast={onScrollLast}
+      />
+    </div>
   );
 });
 

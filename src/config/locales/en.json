@@ -86,7 +86,9 @@
   },
   "Ticket": {
     "labels": {
+      "id": "ID",
       "created_at": "Created on",
+      "updated_at": "Updated at",
       "title": "Title",
       "message": {
         "text": "Message",
@@ -123,10 +125,15 @@
     "file_upload_failed": "File upload failed",
     "message_placeholder": "Your Message...",
     "processing_file": "Processing file ...",
-    "submit": "Post Message"
+    "submit": "Post Message",
+    "go_to_last_message": "Go to most recent message"
   },
   "Message": {
     "delete_attachment": "Delete",
     "download_attachment": "Download"
+  },
+  "TicketListWidget": {
+    "title": "Meine Tickets",
+    "header": "({{count}} of {{total}} tickets)"
   }
 }

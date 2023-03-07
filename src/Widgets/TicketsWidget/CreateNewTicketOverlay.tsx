@@ -30,6 +30,7 @@ const CustomAttachment = function({ id, value, onChange }) {
       const size = file.size || 0;
       const fileObject: FileObject = {
         name: file.name,
+        size: file.size,
         filename: "",
         loading: true,
         error: ""
@@ -79,7 +80,7 @@ const CustomAttachment = function({ id, value, onChange }) {
   return (
     <div>
       <div className="mb-1">
-        <label htmlFor={id} className="btn btn-secondary btn-sm px-2 py-1 with-btn-lnf">
+        <label htmlFor={id} className="file-upload">
           {i18n.t("CreateNewTicket.attach_file")}
           <input
             type="file"
@@ -87,21 +88,36 @@ const CustomAttachment = function({ id, value, onChange }) {
             name={id}
             value=""
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => e.target.files && uploadFile(e.target.files)}
-            hidden
             multiple
           />
+          <small>Sie können eine Datei bis zu einer Größe von 20 MB anhängen</small>
         </label>
       </div>
-      {files.map((file: Keyable) => (
-        <div className="attachment_file mb-0" key={file.name}>
-          <div className={classNames("dots", { loading: file.loading })}>
-            {file.name}
-            {" "}
-            {file.loading && i18n.t("CreateNewTicket.processing_file")}
-            {!isEmpty(file.error) && i18n.t(`CreateNewTicket.${file.error}`)}
-          </div>
-          <div className="delete_file pointer" onClick={() => removeUpload(file)}>
-            x
+
+      {files.map((file: Keyable, index: number) => (
+        <div className="file-loading-card" key={`${index}-${file.name}`}>
+          <div className="card">
+            <div className="card-body">
+              <div className="inline-nowrap-area">
+                <i className="fa-regular fa-file pe-2" />
+                <h5 className="card-title dots">
+                  {decodeURIComponent(file.name)}
+                </h5>
+
+                <p className="card-text">{Math.round(file.size / 1024)}KB</p>
+
+                {file.loading && (
+                  <div className="progress">
+                    <div className="progress-bar" role="progressbar" style={{ width: "25%" }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100} />
+                  </div>
+                )}
+
+                {!isEmpty(file.error) && i18n.t(`CreateNewTicket.${file.error}`)}
+              </div>
+              <button className="btn" type="button" aria-label="Delete" onClick={() => removeUpload(file)}>
+                <i className="fa-regular fa-circle-xmark" />
+              </button>
+            </div>
           </div>
         </div>
       ))}
@@ -126,7 +142,7 @@ function CreateNewTicketOverlay({
   const [showError, setShowError] = useState(false);
 
   const renderBackdrop = (props) => (
-    <div className="sdk_mute_bg_2" {...props} />
+    <div className="mute_bg_2" {...props} />
   );
 
   const { userId } = useTenantContext();
@@ -212,7 +228,7 @@ function CreateNewTicketOverlay({
       renderBackdrop={renderBackdrop}
       autoFocus={false}
     >
-      <div className="sdk">
+      <div className="jr-ticketing-sdk sdk">
         <section id="overlay" className="ticket-modal-section">
           {loading && (
             <div className="sdk loader_overlay">
