@@ -107,7 +107,7 @@
   },
   "CreateNewTicket": {
     "attach_file": "Datei anhängen",
-    "create_new_ticket": "Ticket anlegen",
+    "create_new_ticket": "Ticket im Helpdesk anlegen",
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "processing_file": "Die Datei wird bearbeitet ...",
