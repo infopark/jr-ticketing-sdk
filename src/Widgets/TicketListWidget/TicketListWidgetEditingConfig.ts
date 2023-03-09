@@ -7,10 +7,8 @@ Scrivito.provideEditingConfig("TicketListWidget", {
       title: "Link zu chat page",
     },
   },
-  properties: ["headline", "link"],
-  initialContent: {
-    headline: "Lorem Ipsum",
-  },
+  properties: ["link"],
+  initialContent: {},
   validations: [
     [
       "link",

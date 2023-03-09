@@ -7,6 +7,7 @@ class WS {
   private ws: WebSocket | undefined;
   private listeners: { [key: string]: Callback[] };
   private instanceId: string | undefined;
+  private timer: NodeJS.Timer | undefined;
 
   constructor (url: string) {
     this.url = url;
@@ -20,6 +21,16 @@ class WS {
 
   _init() {
     this.close();
+
+    if (!this.timer) {
+      this.timer = setInterval(() => {
+        Object.values(this.listeners).forEach((callbacks) => {
+          callbacks.forEach((callback) => {
+            callback("dummy");
+          });
+        });
+      }, 1*60*1000);
+    }
 
     const ws = new WebSocket(`${this.url}/ticketing/${this.instanceId}`);
 
@@ -35,6 +46,10 @@ class WS {
 
       switch (data.cmd) {
         case "READY": {
+          if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = undefined;
+          }
           this.ws = ws;
           delay = 1;
 

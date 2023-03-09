@@ -41,8 +41,8 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     Scrivito.load(() => widget.get("link"));
   }
 
-  const handleSort = (event) => {
-    setSortKey(event.target.value);
+  const handleSort = (key) => {
+    setSortKey(key);
   };
 
   const handleFilter = (event) => {
@@ -53,25 +53,29 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const filterDisabled = false;
 
   return (
-    <Scrivito.WidgetTag className="ticket-list-widget sdk">
-      <TicketListBoxHeader
-        widget={widget}
-        handleSort={handleSort}
-        sortKey={sortKey}
-        active={!loading && !!baseLink}
-        ticketsListFilters={ticketsListFilters}
-        filterKey={filterKey}
-        handleFilter={handleFilter}
-        filterDisabled={filterDisabled}
-      />
-      <TicketList
-        loading={loading || !baseLink}
-        ticketList={ticketList}
-        sortKey={sortKey}
-        baseLink={baseLink}
-        ticketsListFilters={ticketsListFilters}
-        filterKey={filterKey}
-      />
+    <Scrivito.WidgetTag className="row jr-ticketing-sdk">
+      <div className="col-lg-12 pt-2 mt-1">
+        <TicketListBoxHeader
+          widget={widget}
+          active={!loading && !!baseLink}
+          ticketsListFilters={ticketsListFilters}
+          filterKey={filterKey}
+          handleFilter={handleFilter}
+          filterDisabled={filterDisabled}
+          count={ticketList.length}
+          total={ticketList.length}
+        />
+        <TicketList
+          handleSort={handleSort}
+          sortKey={sortKey}
+          active={!loading && !!baseLink}
+          loading={loading || !baseLink}
+          ticketList={ticketList}
+          baseLink={baseLink}
+          ticketsListFilters={ticketsListFilters}
+          filterKey={filterKey}
+        />
+      </div>
     </Scrivito.WidgetTag>
   );
 }) as any);

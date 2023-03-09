@@ -7,7 +7,7 @@ function CreateNewTicket({ className, chatPage, text }) {
   return (
     <div className={`${className} box space_box text_center`}>
       <div
-        className="brand_bg radius equal_target h-100"
+        className="box_bg_white radius equal_target h-100"
         onClick={() => {
           setOverlayOpen(true);
         }}

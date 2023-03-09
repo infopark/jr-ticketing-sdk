@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { isEmpty } from "lodash-es";
 
@@ -9,11 +9,30 @@ import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import i18n from "../../../config/i18n";
 import { FileObject, Keyable } from "../../../utils/types";
 
-const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
+const MessageArea = ({ ticketId, refreshCallback, isClosed, onScrollLast }) => {
   const { userId } = useTenantContext();
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<FileObject[]>([]);
   const [textareaHeight, setTextareaHeight] = useState<number>(85);
+  const [showScroller, setShowScroller] = useState(false);
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      const scrollMax = window.document.body.scrollHeight - window.document.body.offsetHeight;
+      setShowScroller(window.scrollY + window.document.body.scrollTop < scrollMax);
+    };
+
+    window.addEventListener("resize", scrollHandler);
+    window.addEventListener("scroll", scrollHandler);
+    window.document.body.addEventListener("scroll", scrollHandler);
+    scrollHandler();
+
+    return () => {
+      window.removeEventListener("resize", scrollHandler);
+      window.removeEventListener("scroll", scrollHandler);
+      window.document.body.removeEventListener("scroll", scrollHandler);
+    }
+  }, []);
 
   const filesError = files.some((f: Keyable) => !isEmpty(f.error));
 
@@ -45,7 +64,6 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
       attachments: attachments
     };
 
-
     const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
     setTextareaHeight(85);
@@ -72,6 +90,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
       const size = file.size || 0;
       const fileObject: FileObject = {
         name: file.name,
+        size: file.size,
         filename: "",
         loading: true,
         error: ""
@@ -119,63 +138,83 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   }
 
   return (
-    <div className="sdk sdk-chat-page">
-      <section className="message_box">
-        <div className="flex_grid">
-          <div className="textfield">
-            <textarea
-              className="form-control dialog_text_area resize-ta"
-              placeholder={i18n.t("MessageArea.message_placeholder")}
-              value={message}
-              onChange={handleChange}
-              onKeyUp={handleKeys}
-              style={{ height: textareaHeight, minHeight: "85px" }}
-              disabled={isClosed}
-            />
-          </div>
-          <div className="textfield_btn">
-            <label
-              htmlFor="fileUpload"
-              className={`btn btn-secondary with-btn-lnf${
-                isClosed ? " disabled" : ""
-              }`}
-            >
-              {i18n.t("MessageArea.attach_file")}
-              <input
-                type="file"
-                id="fileUpload"
-                name="fileUpload"
-                onChange={onFileChange}
-                disabled={isClosed}
-                hidden
-                multiple
-              />
-            </label>
-            <button
-              className="btn btn-primary btn_outline float_right"
-              onClick={onSubmit}
-              disabled={isClosed || !message || filesError}
-              type="button"
-            >
-              {i18n.t("MessageArea.submit")}
-            </button>
-          </div>
+    <section className="message_box">
+      {showScroller && (
+        <div className="position-absolute-center-btn-wrapper">
+          <button className="btn btn-secondary" type="button" onClick={() => onScrollLast()}>
+            <i className="fa-solid fa-arrow-down pe-2" />
+            {i18n.t("MessageArea.go_to_last_message")}
+          </button>
         </div>
-        {files.map((file: Keyable) => (
-          <div className="attachment_file mb-0" key={file.name}>
-            <div className={classNames("dots", { loading: file.loading })}>
-              {file.name}
-              {" "}
-              {file.loading && i18n.t("MessageArea.processing_file")}
-              {!isEmpty(file.error) && i18n.t(`MessageArea.${file.error}`)}
+      )}
+
+      <div className="flex_grid">
+        <div className="textfield">
+          <textarea className="form-control dialog_text_area resize-ta"
+            placeholder={i18n.t("MessageArea.message_placeholder")}
+            value={message}
+            onChange={handleChange}
+            onKeyUp={handleKeys}
+            style={{ height: textareaHeight, minHeight: "85px" }}
+          />
+
+          {files.map((file: Keyable, index: number) => (
+            <div className="file-loading-card" key={`${index}-${file.filename}`}>
+              <div className="card">
+                <div className="card-body">
+                  <div className="inline-nowrap-area">
+                    <i className="fa-regular fa-file pe-2" />
+                    <h5 className="card-title dots">
+                      {decodeURIComponent(file.name)}
+                    </h5>
+
+                    <p className="card-text">{Math.round(file.size / 1024)}KB</p>
+
+                    {file.loading && (
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{ width: "25%" }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100} />
+                      </div>
+                    )}
+
+                    {!isEmpty(file.error) && i18n.t(`MessageArea.${file.error}`)}
+                  </div>
+                  <button className="btn" type="button" aria-label="Delete" onClick={() => removeUpload(file)}>
+                    <i className="fa-regular fa-circle-xmark" />
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="delete_file pointer" onClick={() => removeUpload(file)}>
-              x
-            </div>
-          </div>
-        ))}
-      </section>
-    </div>
+          ))}
+        </div>
+        <div className="textfield_btn">
+          <label
+            htmlFor="fileUpload"
+            className={`btn btn-secondary with-btn-lnf${
+              isClosed ? " disabled" : ""
+            }`}
+          >
+            {i18n.t("MessageArea.attach_file")}
+            <input
+              type="file"
+              id="fileUpload"
+              name="fileUpload"
+              onChange={onFileChange}
+              disabled={isClosed}
+              hidden
+              multiple
+            />
+          </label>
+
+          <button className="btn btn-primary float-lg-right"
+            type="button"
+            onClick={onSubmit}
+            disabled={isClosed || !message || filesError}
+          >
+            {i18n.t("MessageArea.submit")}
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 export default MessageArea;
