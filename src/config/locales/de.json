@@ -57,14 +57,8 @@
   "A ticket has been created.": "Ein Ticket wurde angelegt",
   "We will answer you as soon as possible.": "Wir werden Ihnen so schnell wie möglich antworten.",
   "You may add comments and attachments below.": "Sie können unten Kommentare und Anhänge hinzufügen.",
-  "byCreationDate": "Neuestes zuerst",
-  "reverseByCreationDate": "Ältestes zuerst",
-  "byProgress": "Geringster Fortschritt zuerst",
-  "reverseByProgress": "Höchster Fortschritt zuerst",
   "creation-error": "Während der Verarbeitung ist ein Fehler aufgetreten. Bitte versuche Sie es noch mal.",
-  "all": "Alle",
   "Documentation": "Dokumentation",
-  "active": "Aktiv",
   "Ticket Subject": "Thema",
   "Description": "Beschreibung",
   "Ticket title": "Tickettitel",
@@ -77,7 +71,6 @@
   "Time locale": "Zeitgebietsschema",
   "No tickets available.": "Keine Tickets vorhanden.",
   "Create": "Anlegen",
-  "ID": "ID",
   "Status": "Status",
   "TicketFormConfigDialog": {
     "fieldname": "Feldname:",
@@ -94,7 +87,7 @@
         "text": "Nachricht",
         "attachments": "Anhänge"
       },
-      "number": "Ticketnummer",
+      "number": "ID",
       "status": "Status",
       "type": "Ticket-Typ"
     },
@@ -135,6 +128,14 @@
   },
   "TicketListWidget": {
     "title": "Meine Tickets",
-    "header": "({{count}} von {{total}} Tickets insgesamt)"
+    "header": "({{count}} von {{total}} Tickets insgesamt)",
+    "filters": {
+      "all": "Alle",
+      "active": "Aktiv",
+      "new": "Neu",
+      "open": "Offen",
+      "waiting": "Wartend",
+      "closed": "Geschlossen"
+    }
   }
 }
