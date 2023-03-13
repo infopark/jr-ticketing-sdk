@@ -3,24 +3,13 @@ import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
 import { DEFAULT_TIME_FORMAT } from "../../../utils/constants";
-import { isImageFormat } from "../../../utils/isImage";
-import { matchExtension } from "../../../utils/fileExtension";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
-import ticketingUrl from "../../../api/ticketingUrl";
-import attachmentImg from "../../../assets/images/icons/file.svg";
 import { Keyable } from "../../../utils/types";
+import MessageAttachment from "./MessageAttachment";
 
-type Attachment = {
-  filename: string;
-  extension: string;
-  s3_url: string;
-};
-
-function Message({
-  message,
-}) {
+function Message({ message }) {
   return (
     <>
       <span className="person_list_img">
@@ -65,35 +54,6 @@ function Message({
         </div>
       </div>
     </>
-  );
-}
-
-function MessageAttachment({ attachment }) {
-  const coverImage = isImageFormat(attachment.filename.split(".").pop())
-    ? attachment.s3_url
-    : (matchExtension(attachment.filename.split(".").pop()) || attachmentImg);
-
-  return (
-    <div className="img-attachment card">
-      <a className="btn btn-download"
-        href={`${ticketingUrl()}/attachments/${attachment.key}`}
-        target="_blank"
-        download
-        rel="noreferrer"
-      >
-        <i className="fa fa-download" />
-      </a>
-      <div className="card-bkgrd-img" style={{ backgroundImage: `url(${coverImage})` }} title="attachment icon"></div>
-      <div className="card-body">
-        <div className="card-body-descr-container">
-          <div className="card-body-descr-container">
-            <p className="card-text dots">
-              {decodeURIComponent(attachment.filename)}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 

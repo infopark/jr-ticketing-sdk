@@ -1,19 +1,17 @@
 import * as React from "react";
-import * as Scrivito from "scrivito";
 
 import i18n from "../../config/i18n";
 
 function TicketListBoxHeader({
   widget,
   active,
-  ticketsListFilters,
+  ticketFilters,
   filterKey,
   handleFilter,
-  filterDisabled,
   count,
   total
 }) {
-  const filterKeys = Object.keys(ticketsListFilters);
+  const filterKeys = Object.keys(ticketFilters);
 
   return (
     <div className="row ticket_list">
@@ -22,7 +20,9 @@ function TicketListBoxHeader({
           <div className="d-md-flex align-items-center justify-content-between">
             <div className="d-md-flex align-items-center mb-3 mb-md-0">
               <span className="d-inline-flex me-2">{i18n.t("TicketListWidget.title")}</span>
-              <span className="d-inline-flex"><i>{i18n.t("TicketListWidget.header", { count, total })}</i></span>
+              <span className="d-inline-flex">
+                <i>{i18n.t("TicketListWidget.header", { count, total })}</i>
+              </span>
             </div>
             <form>
               <div className="input-group">
@@ -33,13 +33,13 @@ function TicketListBoxHeader({
                 <select
                   className="form-select"
                   onChange={(event) => handleFilter(event)}
-                  disabled={!active || filterDisabled}
+                  disabled={!active}
                   value={filterKey}
                   aria-label="filter"
                 >
-                  {filterKeys.map((item) => (
-                    <option value={item} key={`option_${item}_${widget.id()}`}>
-                      {i18n.t(item as any)}
+                  {filterKeys.map((name) => (
+                    <option value={name} key={name}>
+                      {i18n.t(`TicketListWidget.filters.${name}`)}
                     </option>
                   ))}
                 </select>
@@ -51,4 +51,5 @@ function TicketListBoxHeader({
     </div>
   );
 }
-export default Scrivito.connect(TicketListBoxHeader);
+
+export default TicketListBoxHeader;

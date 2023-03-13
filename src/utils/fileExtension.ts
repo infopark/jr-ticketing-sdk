@@ -1,6 +1,7 @@
-import txtIcon from "../assets/images/icons/txt.svg";
-import pdfIcon from "../assets/images/icons/pdf.svg";
 import fileIcon from "../assets/images/icons/file.svg";
+import pdfIcon from "../assets/images/icons/pdf.svg";
+import wordIcon from "../assets/images/icons/word.svg";
+import zipIcon from "../assets/images/icons/zip.svg";
 
 const getFileExtension = (fileName) => {
   if (!fileName || !fileName.split(".").length) {
@@ -9,7 +10,12 @@ const getFileExtension = (fileName) => {
   return fileName.split(".").pop().toLowerCase();
 };
 
-const knownFileTypes = { txt: txtIcon, pdf: pdfIcon };
+const knownFileTypes = {
+  doc: wordIcon,
+  docx: wordIcon,
+  pdf: pdfIcon,
+  zip: zipIcon,
+};
 
 const matchExtension = (ext: string) => {
   const imgExts = ["jpg", "jpeg", "png", "svg", "tiff", "gif"];

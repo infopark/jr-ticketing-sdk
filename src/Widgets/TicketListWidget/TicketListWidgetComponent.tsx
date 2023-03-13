@@ -2,16 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import * as Scrivito from "scrivito";
 
 import TicketingApi from "../../api/TicketingApi";
-import { createTicketsListFilters } from "../../utils/listFilters";
-import TicketList from "./TicketList";
-import TicketListBoxHeader from "./TicketListBoxHeader";
 import { useTenantContext } from "../../Components/TenantContextProvider";
 import useWS from "../../utils/useWS";
+
+import TicketList from "./TicketList";
+import TicketListBoxHeader from "./TicketListBoxHeader";
+import { ticketFilters } from "./utils";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [loading, setLoading] = useState(true);
   const [ticketList, setTicketList] = useState([]);
-  const [sortKey, setSortKey] = useState("byCreationDate");
+  const [sortKey, setSortKey] = useState("byNumber");
   const [filterKey, setFilterKey] = useState("active");
   const allowDeferredBaseLink = useRef(true);
   const { addError, userId } = useTenantContext();
@@ -49,30 +50,25 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     setFilterKey(event.target.value);
   };
 
-  const ticketsListFilters = createTicketsListFilters(ticketList);
-  const filterDisabled = false;
-
   return (
     <Scrivito.WidgetTag className="row jr-ticketing-sdk">
       <div className="col-lg-12 pt-2 mt-1">
         <TicketListBoxHeader
           widget={widget}
           active={!loading && !!baseLink}
-          ticketsListFilters={ticketsListFilters}
+          ticketFilters={ticketFilters}
           filterKey={filterKey}
           handleFilter={handleFilter}
-          filterDisabled={filterDisabled}
           count={ticketList.length}
           total={ticketList.length}
         />
         <TicketList
           handleSort={handleSort}
           sortKey={sortKey}
-          active={!loading && !!baseLink}
           loading={loading || !baseLink}
           ticketList={ticketList}
           baseLink={baseLink}
-          ticketsListFilters={ticketsListFilters}
+          ticketFilters={ticketFilters}
           filterKey={filterKey}
         />
       </div>
