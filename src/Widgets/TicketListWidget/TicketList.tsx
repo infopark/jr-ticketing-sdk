@@ -2,20 +2,19 @@ import * as React from "react";
 import * as Scrivito from "scrivito";
 
 import Loader from "../../Components/Loader";
-import { ticketsListSorters } from "../../utils/listSorters";
 import i18n from "../../config/i18n";
 
 import TicketEntry, { Ticket } from "./TicketEntry";
 import TicketListHeadEntry from "./TicketListHeadEntry";
+import { ticketSorters } from "./utils";
 
 function TicketList({
-  active,
   handleSort,
   sortKey,
   ticketList,
   baseLink,
   loading,
-  ticketsListFilters,
+  ticketFilters,
   filterKey,
 }) {
   if (loading) {
@@ -29,7 +28,6 @@ function TicketList({
     return (
       <>
         <TicketListHeadEntry
-          active={active}
           handleSort={handleSort}
           sortKey={sortKey}
         />
@@ -38,13 +36,12 @@ function TicketList({
     );
   }
 
-  const sortedList: Ticket[] = ticketsListSorters[sortKey].sorter(ticketList);
-  const filteredList: Ticket[] = ticketsListFilters[filterKey].filter(sortedList);
+  const sortedList: Ticket[] = ticketSorters[sortKey].sort(ticketList);
+  const filteredList: Ticket[] = ticketFilters[filterKey].filter(sortedList);
 
   return (
     <>
       <TicketListHeadEntry
-        active={active}
         handleSort={handleSort}
         sortKey={sortKey}
       />

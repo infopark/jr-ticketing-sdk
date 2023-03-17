@@ -56,18 +56,6 @@ const TicketDetails = ({ ticket }) => {
               </dl>
               <dl className="mb-3">
                 <dt className="flex_order_1 bold">
-                  {i18n.t("Ticket.labels.message.text")}
-                </dt>
-                <dd className="flex_order_2 item_label_content">
-                  {parse(
-                    sanitizeHtml(newlinesToBreaks(description), {
-                      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
-                    })
-                  )}
-                </dd>
-              </dl>
-              <dl className="mb-3">
-                <dt className="flex_order_1 bold">
                   {i18n.t("Ticket.labels.type")}
                 </dt>
                 <dd className="flex_order_2 item_label_content">
