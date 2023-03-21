@@ -113,8 +113,10 @@
     "processing_file": "Die Datei wird bearbeitet ...",
     "upload_failed": "Gescheitert"
   },
+  "TicketHeader": {
+    "back": "zurück"
+  },
   "MessageArea": {
-    "attach_file": "Datei anhängen",
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "message_placeholder": "Ihre Nachricht ...",
@@ -126,6 +128,9 @@
     "delete_attachment": "Löschen",
     "download_attachment": "Download"
   },
+  "TicketPage": {
+    "latest_message": "Latest message"
+  },
   "TicketListWidget": {
     "title": "Meine Tickets",
     "header": "({{count}} von {{total}} Tickets insgesamt)",
@@ -136,7 +141,9 @@
       "open": "Offen",
       "waiting": "Wartend",
       "closed": "Geschlossen"
-    }
+    },
+    "empty": "kein Ticket vorhanden",
+    "show_previous_messages": "show previous messages"
   },
   "formats": {
     "relative": {

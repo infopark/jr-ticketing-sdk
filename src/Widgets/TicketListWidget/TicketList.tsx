@@ -45,6 +45,19 @@ function TicketList({
         handleSort={handleSort}
         sortKey={sortKey}
       />
+      {filteredList.length <= 0 && (
+        <div className="row ticket_list">
+          <div className="col-xl-12">
+            <div className="box_bg_white radius">
+              <div className="box block text_center my-4">
+                <p>
+                  {i18n.t("TicketListWidget.empty")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {filteredList.map((ticket: Ticket, index: number) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
