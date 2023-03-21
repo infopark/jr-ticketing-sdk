@@ -80,8 +80,8 @@
   "Ticket": {
     "labels": {
       "id": "ID",
-      "created_at": "Erstellt am",
-      "updated_at": "Zuletzt geändert am",
+      "created_at": "Erstellt",
+      "updated_at": "Aktualisiert",
       "title": "Titel",
       "message": {
         "text": "Nachricht",

@@ -60,7 +60,7 @@ function TicketEntry({
               <span className="col-md-2">
                 <span className="ticket-box dots">
                   <span className="d-md-none">
-                    {i18n.t("Created on")}
+                    {i18n.t("Ticket.labels.created_at")}
                   </span>
                   &nbsp;
                   <span>
@@ -72,7 +72,7 @@ function TicketEntry({
               <span className="col-md-2">
                 <span className="ticket-box dots">
                   <span className="d-md-none">
-                    {i18n.t("Updated on")}
+                    {i18n.t("Ticket.labels.updated_at")}
                   </span>
                   &nbsp;
                   <span>
