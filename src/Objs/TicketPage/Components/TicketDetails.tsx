@@ -1,12 +1,9 @@
 import React from "react";
-import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
-import { parseDate } from "../../../utils/dateUtils";
-import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
 import i18n from "../../../config/i18n";
+import { formatRelative } from "../../../utils/dateUtils";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
-import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { Keyable } from "../../../utils/types";
 import { Accordion } from "react-bootstrap";
 
@@ -16,10 +13,7 @@ const TicketDetails = ({ ticket }) => {
     number,
     type,
     created_at,
-    messages,
   } = ticket;
-  const description = messages[0] ? messages[0].text : "";
-
   const { ticketSchema, ticketUiSchema } = useTenantContext();
 
   if (!ticketSchema || !ticketUiSchema) {
@@ -73,10 +67,7 @@ const TicketDetails = ({ ticket }) => {
                 {i18n.t("Ticket.labels.created_at")}
               </dt>
               <dd className="flex_order_2 item_label_content">
-                {parseDate(
-                  created_at,
-                  DEFAULT_DATE_FORMAT,
-                )}
+                {formatRelative(created_at)}
               </dd>
             </dl>
             {customAttributes.map((name: string, index: number) => (

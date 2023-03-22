@@ -81,8 +81,8 @@
   "Ticket": {
     "labels": {
       "id": "ID",
-      "created_at": "Created on",
-      "updated_at": "Last updated at",
+      "created_at": "Created",
+      "updated_at": "Last updated",
       "title": "Title",
       "message": {
         "text": "Message",
@@ -136,6 +136,24 @@
       "open": "Open",
       "waiting": "Waiting",
       "closed": "Closed"
+    }
+  },
+  "formats": {
+    "relative": {
+      "lastWeek": "'last' eeee p",
+      "yesterday": "'yesterday at' p",
+      "today": "'today at' p",
+      "tomorrow": "'tomorrow at' p",
+      "nextWeek": "eeee 'at' p",
+      "other": "Pp"
+    },
+    "relative_with_prefix": {
+      "lastWeek": "'last' eeee p",
+      "yesterday": "'yesterday at' p",
+      "today": "'today at' p",
+      "tomorrow": "'tomorrow at' p",
+      "nextWeek": "'on' eeee 'at' p",
+      "other": "'on' Pp"
     }
   }
 }

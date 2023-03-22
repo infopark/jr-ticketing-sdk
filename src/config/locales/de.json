@@ -107,7 +107,7 @@
   },
   "CreateNewTicket": {
     "attach_file": "Datei anhängen",
-    "create_new_ticket": "Ticket im Helpdesk anlegen",
+    "create_new_ticket": "Ticket anlegen",
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "processing_file": "Die Datei wird bearbeitet ...",
@@ -136,6 +136,24 @@
       "open": "Offen",
       "waiting": "Wartend",
       "closed": "Geschlossen"
+    }
+  },
+  "formats": {
+    "relative": {
+      "lastWeek": "'letzten' eeee 'um' p",
+      "yesterday": "'gestern um' p",
+      "today": "'heute um' p",
+      "tomorrow": "'morgen um' p",
+      "nextWeek": "eeee 'um' p",
+      "other": "Pp"
+    },
+    "relative_with_prefix": {
+      "lastWeek": "'letzten' eeee 'um' p",
+      "yesterday": "'gestern um' p",
+      "today": "'heute um' p",
+      "tomorrow": "'morgen um' p",
+      "nextWeek": "'am' eeee 'um' p",
+      "other": "'am' Pp"
     }
   }
 }

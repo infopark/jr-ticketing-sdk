@@ -1,4 +1,4 @@
-import { format as formatDate, parseISO } from "date-fns";
+import { format as formatDate, formatRelative as formatRelativeOrig, parseISO } from "date-fns";
 import { enUS, enAU, enGB, de } from "date-fns/locale";
 
 import i18n from "../config/i18n";
@@ -51,4 +51,13 @@ const parseDate = (date, format = DEFAULT_DATE_FORMAT) => {
   return parsedDate;
 };
 
-export { parseDate };
+function formatRelative(date, prefix = false) {
+  const formatRelativeLocale = i18n.t(prefix ? "formats.relative_with_prefix" : "formats.relative", { returnObjects: true });
+  const locale = {
+    ...getLocale(i18n.language),
+    formatRelative: token => formatRelativeLocale[token],
+  }
+  return formatRelativeOrig(new Date(date), new Date(), { locale });
+}
+
+export { parseDate, formatRelative };
