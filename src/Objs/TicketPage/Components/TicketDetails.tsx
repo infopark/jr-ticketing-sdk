@@ -93,15 +93,14 @@ function translateValue(name: string, value: string | undefined, schema: Keyable
   } else if (value) {
     switch (schema.type) {
       case "string":
-        if (schema.enum) {
-          return i18n.t(`Ticket.${name}.${value}`);
-        }
         switch (schema.format) {
           case "uri":
           case "data-url":
             return <a href={value} target="_blank" rel="noreferrer">{value}</a>;
           case "email":
             return <a href={`mailto:${value}`} target="_blank" rel="noreferrer">{value}</a>;
+          default:
+            return i18n.t(`Ticket.${name}.${value}`, value);
         }
         break;
       case "integer":

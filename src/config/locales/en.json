@@ -140,20 +140,20 @@
   },
   "formats": {
     "relative": {
-      "lastWeek": "'last' eeee p",
+      "lastWeek": "P 'at' p",
       "yesterday": "'yesterday at' p",
       "today": "'today at' p",
       "tomorrow": "'tomorrow at' p",
-      "nextWeek": "eeee 'at' p",
-      "other": "Pp"
+      "nextWeek": "P 'at' p",
+      "other": "P 'at' p"
     },
     "relative_with_prefix": {
-      "lastWeek": "'last' eeee p",
+      "lastWeek": "'on' P 'at' p",
       "yesterday": "'yesterday at' p",
       "today": "'today at' p",
       "tomorrow": "'tomorrow at' p",
-      "nextWeek": "'on' eeee 'at' p",
-      "other": "'on' Pp"
+      "nextWeek": "'on' P 'at' p",
+      "other": "'on' P 'at' p"
     }
   }
 }

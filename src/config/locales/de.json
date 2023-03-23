@@ -140,20 +140,20 @@
   },
   "formats": {
     "relative": {
-      "lastWeek": "'letzten' eeee 'um' p",
+      "lastWeek": "P 'um' p",
       "yesterday": "'gestern um' p",
       "today": "'heute um' p",
       "tomorrow": "'morgen um' p",
-      "nextWeek": "eeee 'um' p",
-      "other": "Pp"
+      "nextWeek": "P 'um' p",
+      "other": "P 'um' p"
     },
     "relative_with_prefix": {
-      "lastWeek": "'letzten' eeee 'um' p",
+      "lastWeek": "'am' P 'um' p",
       "yesterday": "'gestern um' p",
       "today": "'heute um' p",
       "tomorrow": "'morgen um' p",
-      "nextWeek": "'am' eeee 'um' p",
-      "other": "'am' Pp"
+      "nextWeek": "'am' P 'um' p",
+      "other": "'am' P 'um' p"
     }
   }
 }
