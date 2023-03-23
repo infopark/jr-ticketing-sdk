@@ -2,9 +2,8 @@ import React from "react";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
-import { DEFAULT_TIME_FORMAT } from "../../../utils/constants";
+import { formatRelative } from "../../../utils/dateUtils";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
-import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { Keyable } from "../../../utils/types";
 import MessageAttachment from "./MessageAttachment";
@@ -27,7 +26,7 @@ function Message({ message }) {
           {[message.user.first_name, message.user.last_name].filter(e => !!e).join(" ")}
         </h5>
         <span className="time_stamp">
-          {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
+          {formatRelative(message.created_at)}
         </span>
       </div>
 

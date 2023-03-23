@@ -80,8 +80,8 @@
   "Ticket": {
     "labels": {
       "id": "ID",
-      "created_at": "Erstellt am",
-      "updated_at": "Zuletzt geändert am",
+      "created_at": "Erstellt",
+      "updated_at": "Aktualisiert",
       "title": "Titel",
       "message": {
         "text": "Nachricht",
@@ -107,7 +107,7 @@
   },
   "CreateNewTicket": {
     "attach_file": "Datei anhängen",
-    "create_new_ticket": "Ticket im Helpdesk anlegen",
+    "create_new_ticket": "Ticket anlegen",
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "processing_file": "Die Datei wird bearbeitet ...",
@@ -136,6 +136,24 @@
       "open": "Offen",
       "waiting": "Wartend",
       "closed": "Geschlossen"
+    }
+  },
+  "formats": {
+    "relative": {
+      "lastWeek": "P 'um' p",
+      "yesterday": "'gestern um' p",
+      "today": "'heute um' p",
+      "tomorrow": "'morgen um' p",
+      "nextWeek": "P 'um' p",
+      "other": "P 'um' p"
+    },
+    "relative_with_prefix": {
+      "lastWeek": "'am' P 'um' p",
+      "yesterday": "'gestern um' p",
+      "today": "'heute um' p",
+      "tomorrow": "'morgen um' p",
+      "nextWeek": "'am' P 'um' p",
+      "other": "'am' P 'um' p"
     }
   }
 }
