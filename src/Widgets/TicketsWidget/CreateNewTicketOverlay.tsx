@@ -184,7 +184,7 @@ function CreateNewTicketOverlay({
       }
 
       Scrivito.navigateTo(ticketPage, {
-        ticketid: newTicket.id,
+        ticketid: String(newTicket.number),
       });
     } catch (error) {
       addError("Error submitting ticket", "CreateNewTicketOverlay", error);
