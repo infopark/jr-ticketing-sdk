@@ -141,7 +141,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
 
   return (
     <div className="col-lg-12 jr-ticketing-sdk sdk-ticket-details">
-      <TicketHeader ticket={ticket} />
+      <TicketHeader ticket={ticket} page={page as Scrivito.Obj} />
 
       <div className="content_padding">
         <div className="page_content">
