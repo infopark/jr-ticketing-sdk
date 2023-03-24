@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import classNames from "classnames";
 
 import Loader from "../../../Components/Loader";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
@@ -23,7 +24,7 @@ const CommunicationTree = ({
     <div className="text_content box_bg_white box">
       <div className="com_tree max_width_element">
         {messages.length > 1 && (
-          <div className={`previous-messages-container ${collapsed && "collapsed" || ""}`}>
+          <div className={classNames("previous-messages-container", { collapsed: collapsed })}>
             <div className="button-wrapper">
               <button className="btn btn-link" type="button" onClick={() => setCollapsed(false)}>
                 {i18n.t("TicketListWidget.show_previous_messages")}

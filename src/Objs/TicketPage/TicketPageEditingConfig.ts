@@ -14,28 +14,11 @@ Scrivito.provideEditingConfig("TicketPage", {
       title: "Title",
       description: "Limit to 55 characters.",
     },
-    ticketsLink: {
-      title: "Link to tickets list page",
-    },
   },
-  properties: ["title", "formId", "ticketsLink"],
+  properties: ["title", "formId"],
   propertiesGroups: [...metadataPropertiesGroups],
   initialContent: {
     ...metadataInitialContent,
   },
-  validations: [
-    ...metadataValidations as any,
-    [
-      "ticketsLink",
-
-      (link) => {
-        if (!link) {
-          return {
-            message: "The target must be set.",
-            severity: "error",
-          };
-        }
-      },
-    ],
-  ],
+  validations: metadataValidations as any,
 });

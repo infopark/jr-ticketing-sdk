@@ -129,7 +129,7 @@
     "download_attachment": "Download"
   },
   "TicketPage": {
-    "latest_message": "Latest message"
+    "latest_message": "Letzte Nachricht"
   },
   "TicketListWidget": {
     "title": "Meine Tickets",
@@ -142,8 +142,8 @@
       "waiting": "Wartend",
       "closed": "Geschlossen"
     },
-    "empty": "kein Ticket vorhanden",
-    "show_previous_messages": "show previous messages"
+    "empty": "Keine Tickets vorhanden",
+    "show_previous_messages": "alle Nachrichten zeigen"
   },
   "formats": {
     "relative": {
