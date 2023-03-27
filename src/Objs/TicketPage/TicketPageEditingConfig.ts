@@ -20,5 +20,5 @@ Scrivito.provideEditingConfig("TicketPage", {
   initialContent: {
     ...metadataInitialContent,
   },
-  validations: [...metadataValidations as any],
+  validations: metadataValidations as any,
 });

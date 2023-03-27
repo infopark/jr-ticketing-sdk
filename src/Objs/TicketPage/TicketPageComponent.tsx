@@ -95,14 +95,6 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     };
   }, []);
 
-  const onScrollLast = useCallback(() => {
-    setStatus("uploading");
-
-    setTimeout(() => {
-      setStatus(status);
-    });
-  }, []);
-
   if (ticket === TICKET_NOT_FOUND) {
     return (
       <div className="col-lg-12 jr-ticketing-sdk sdk-ticket-details">
@@ -149,7 +141,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
 
   return (
     <div className="col-lg-12 jr-ticketing-sdk sdk-ticket-details">
-      <TicketHeader ticket={ticket} />
+      <TicketHeader ticket={ticket} page={page as Scrivito.Obj} />
 
       <div className="content_padding">
         <div className="page_content">
@@ -173,7 +165,6 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
         ticketId={ticket.id}
         refreshCallback={refreshCallback}
         isClosed={isTicketClosed}
-        onScrollLast={onScrollLast}
       />
     </div>
   );
