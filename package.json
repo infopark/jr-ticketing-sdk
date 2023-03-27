@@ -73,7 +73,7 @@
     "react-dom": "*",
     "react-overlays": "*",
     "sanitize-html": "*",
-    "scrivito": "^1.32.0-rc1",
+    "scrivito": "^1.32.0",
     "uuid": "*"
   }
 }
