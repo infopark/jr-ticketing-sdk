@@ -2,14 +2,14 @@ import React from "react";
 import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
-import { DEFAULT_TIME_FORMAT } from "../../../utils/constants";
+import { formatRelative } from "../../../utils/dateUtils";
+import i18n from "../../../config/i18n";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
-import { parseDate } from "../../../utils/dateUtils";
 import noUserImg from "../../../assets/images/icons/profile_img.svg";
 import { Keyable } from "../../../utils/types";
 import MessageAttachment from "./MessageAttachment";
 
-function Message({ message }) {
+function Message({ message, isLast }) {
   return (
     <>
       <span className="person_list_img">
@@ -25,9 +25,14 @@ function Message({ message }) {
       <div className="name_time_stamp_wrapper">
         <h5>
           {[message.user.first_name, message.user.last_name].filter(e => !!e).join(" ")}
+          {isLast && (
+            <span className="badge badge-brand-bkgrd">
+              {i18n.t("TicketPage.latest_message")}
+            </span>
+          )}
         </h5>
         <span className="time_stamp">
-          {parseDate(message.created_at, DEFAULT_TIME_FORMAT)}
+          {formatRelative(message.created_at)}
         </span>
       </div>
 

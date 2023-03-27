@@ -1,13 +1,11 @@
 import React from "react";
-import parse from "html-react-parser";
 import sanitizeHtml from "sanitize-html";
 
-import { parseDate } from "../../../utils/dateUtils";
-import { DEFAULT_DATE_FORMAT } from "../../../utils/constants";
 import i18n from "../../../config/i18n";
+import { formatRelative } from "../../../utils/dateUtils";
 import { useTenantContext } from "../../../Components/TenantContextProvider";
-import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import { Keyable } from "../../../utils/types";
+import { Accordion } from "react-bootstrap";
 
 const TicketDetails = ({ ticket }) => {
   const {
@@ -15,10 +13,7 @@ const TicketDetails = ({ ticket }) => {
     number,
     type,
     created_at,
-    messages,
   } = ticket;
-  const description = messages[0] ? messages[0].text : "";
-
   const { ticketSchema, ticketUiSchema } = useTenantContext();
 
   if (!ticketSchema || !ticketUiSchema) {
@@ -36,66 +31,59 @@ const TicketDetails = ({ ticket }) => {
     });
 
   return (
-    <div className="responsive-collapsible-content accordion" id="ticket-info">
-      <div className="accordion-item">
-        <h2 className="accordion-header" id="headingOne">
-          <button className="btn accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Ticket Info
-          </button>
-        </h2>
-        <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#ticket-info">
-          <div className="accordion-body">
-            <div className="text_content">
-              <dl className="mb-3">
+    <Accordion defaultActiveKey="0" className="responsive-collapsible-content">
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>
+          Ticket Info
+        </Accordion.Header>
+        <Accordion.Body>
+          <div className="text_content">
+            <dl className="mb-3">
+              <dt className="flex_order_1 bold">
+                {i18n.t("Ticket.labels.title")}
+              </dt>
+              <dd className="flex_order_2 item_label_content">
+                {sanitizeHtml(title)}
+              </dd>
+            </dl>
+            <dl className="mb-3">
+              <dt className="flex_order_1 bold">
+                {i18n.t("Ticket.labels.type")}
+              </dt>
+              <dd className="flex_order_2 item_label_content">
+                {i18n.t(`Ticket.type.${type}`)}
+              </dd>
+            </dl>
+            <dl className="mb-3">
+              <dt className="flex_order_1 bold">
+                {i18n.t("Ticket.labels.number")}
+              </dt>
+              <dd className="flex_order_2 item_label_content">
+                {number}
+              </dd>
+            </dl>
+            <dl className="mb-3">
+              <dt className="flex_order_1 bold">
+                {i18n.t("Ticket.labels.created_at")}
+              </dt>
+              <dd className="flex_order_2 item_label_content">
+                {formatRelative(created_at)}
+              </dd>
+            </dl>
+            {customAttributes.map((name: string, index: number) => (
+              <dl className="mb-3" key={`${index}-${name}`}>
                 <dt className="flex_order_1 bold">
-                  {i18n.t("Ticket.labels.title")}
+                  {ticketSchema.properties[name].title || name}
                 </dt>
                 <dd className="flex_order_2 item_label_content">
-                  {sanitizeHtml(title)}
+                  {translateValue(name, ticket[name], ticketSchema.properties[name])}
                 </dd>
               </dl>
-              <dl className="mb-3">
-                <dt className="flex_order_1 bold">
-                  {i18n.t("Ticket.labels.type")}
-                </dt>
-                <dd className="flex_order_2 item_label_content">
-                  {i18n.t(`Ticket.type.${type}`)}
-                </dd>
-              </dl>
-              <dl className="mb-3">
-                <dt className="flex_order_1 bold">
-                  {i18n.t("Ticket.labels.number")}
-                </dt>
-                <dd className="flex_order_2 item_label_content">
-                  {number}
-                </dd>
-              </dl>
-              <dl className="mb-3">
-                <dt className="flex_order_1 bold">
-                  {i18n.t("Ticket.labels.created_at")}
-                </dt>
-                <dd className="flex_order_2 item_label_content">
-                  {parseDate(
-                    created_at,
-                    DEFAULT_DATE_FORMAT,
-                  )}
-                </dd>
-              </dl>
-              {customAttributes.map((name: string, index: number) => (
-                <dl className="mb-3" key={`${index}-${name}`}>
-                  <dt className="flex_order_1 bold">
-                    {ticketSchema.properties[name].title || name}
-                  </dt>
-                  <dd className="flex_order_2 item_label_content">
-                    {translateValue(name, ticket[name], ticketSchema.properties[name])}
-                  </dd>
-                </dl>
-              ))}
-            </div>
+            ))}
           </div>
-        </div>
-      </div>
-    </div>
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
   );
 };
 
@@ -105,15 +93,14 @@ function translateValue(name: string, value: string | undefined, schema: Keyable
   } else if (value) {
     switch (schema.type) {
       case "string":
-        if (schema.enum) {
-          return i18n.t(`Ticket.${name}.${value}`);
-        }
         switch (schema.format) {
           case "uri":
           case "data-url":
             return <a href={value} target="_blank" rel="noreferrer">{value}</a>;
           case "email":
             return <a href={`mailto:${value}`} target="_blank" rel="noreferrer">{value}</a>;
+          default:
+            return i18n.t(`Ticket.${name}.${value}`, value);
         }
         break;
       case "integer":

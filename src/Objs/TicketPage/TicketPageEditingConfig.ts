@@ -7,7 +7,7 @@ import {
 } from "../_metadataEditingConfig";
 
 Scrivito.provideEditingConfig("TicketPage", {
-  title: "Chat Page",
+  title: "Ticket Page",
   attributes: {
     ...metadataEditingConfigAttributes,
     title: {
@@ -20,5 +20,5 @@ Scrivito.provideEditingConfig("TicketPage", {
   initialContent: {
     ...metadataInitialContent,
   },
-  validations: [...metadataValidations as any],
+  validations: metadataValidations as any,
 });

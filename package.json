@@ -1,6 +1,6 @@
 {
   "name": "jr-ticketing-sdk",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "JustRelate Portal Ticketing integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -73,7 +73,7 @@
     "react-dom": "*",
     "react-overlays": "*",
     "sanitize-html": "*",
-    "scrivito": "^1.32.0-rc1",
+    "scrivito": "^1.32.0",
     "uuid": "*"
   }
 }

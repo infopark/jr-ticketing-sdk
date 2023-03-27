@@ -81,8 +81,8 @@
   "Ticket": {
     "labels": {
       "id": "ID",
-      "created_at": "Created on",
-      "updated_at": "Last updated at",
+      "created_at": "Created",
+      "updated_at": "Last updated",
       "title": "Title",
       "message": {
         "text": "Message",
@@ -113,8 +113,10 @@
     "file_upload_failed": "File upload failed",
     "processing_file": "Processing file ..."
   },
+  "TicketHeader": {
+    "back": "zurück"
+  },
   "MessageArea": {
-    "attach_file": "Attach File",
     "file_too_big": "File is too big",
     "file_upload_failed": "File upload failed",
     "message_placeholder": "Your Message...",
@@ -126,6 +128,9 @@
     "delete_attachment": "Delete",
     "download_attachment": "Download"
   },
+  "TicketPage": {
+    "latest_message": "Latest message"
+  },
   "TicketListWidget": {
     "title": "Meine Tickets",
     "header": "({{count}} of {{total}} tickets)",
@@ -136,6 +141,26 @@
       "open": "Open",
       "waiting": "Waiting",
       "closed": "Closed"
+    },
+    "empty": "no ticket available",
+    "show_previous_messages": "show previous messages"
+  },
+  "formats": {
+    "relative": {
+      "lastWeek": "P 'at' p",
+      "yesterday": "'yesterday at' p",
+      "today": "'today at' p",
+      "tomorrow": "'tomorrow at' p",
+      "nextWeek": "P 'at' p",
+      "other": "P 'at' p"
+    },
+    "relative_with_prefix": {
+      "lastWeek": "'on' P 'at' p",
+      "yesterday": "'yesterday at' p",
+      "today": "'today at' p",
+      "tomorrow": "'tomorrow at' p",
+      "nextWeek": "'on' P 'at' p",
+      "other": "'on' P 'at' p"
     }
   }
 }

@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as Scrivito from "scrivito";
 
-import attachmentIcon from "../../assets/images/icons/paperclip.svg";
+import { formatRelative } from "../../utils/dateUtils";
 import i18n from "../../config/i18n";
-import { parseDate } from "../../utils/dateUtils";
-import { DEFAULT_DATE_FORMAT } from "../../utils/constants";
 import TicketBadge from "../../Components/TicketBadge";
+
+import attachmentIcon from "../../assets/images/icons/paperclip.svg";
 
 export interface Ticket {
   id: string;
@@ -60,11 +60,14 @@ function TicketEntry({
               <span className="col-md-2">
                 <span className="ticket-box dots">
                   <span className="d-md-none">
-                    {i18n.t("Created on")}
+                    {i18n.t("Ticket.labels.created_at")}
                   </span>
                   &nbsp;
-                  <span>
-                    {parseDate(ticket.created_at, DEFAULT_DATE_FORMAT)}
+                  <span className="d-md-none">
+                    {formatRelative(ticket.created_at, true)}
+                  </span>
+                  <span className="d-none d-md-inline">
+                    {formatRelative(ticket.created_at)}
                   </span>
                 </span>
               </span>
@@ -72,11 +75,14 @@ function TicketEntry({
               <span className="col-md-2">
                 <span className="ticket-box dots">
                   <span className="d-md-none">
-                    {i18n.t("Updated on")}
+                    {i18n.t("Ticket.labels.updated_at")}
                   </span>
                   &nbsp;
-                  <span>
-                    {parseDate(ticket.updated_at, DEFAULT_DATE_FORMAT)}
+                  <span className="d-md-none">
+                    {formatRelative(ticket.updated_at, true)}
+                  </span>
+                  <span className="d-none d-md-inline">
+                    {formatRelative(ticket.updated_at)}
                   </span>
                 </span>
               </span>
