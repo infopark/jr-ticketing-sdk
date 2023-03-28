@@ -110,8 +110,8 @@
     "create_new_ticket": "Ticket anlegen",
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
-    "processing_file": "Die Datei wird bearbeitet ...",
-    "upload_failed": "Gescheitert"
+    "file_upload_hint": "Sie können eine Datei bis zu einer Größe von 20 MB anhängen",
+    "processing_file": "Die Datei wird bearbeitet ..."
   },
   "TicketHeader": {
     "back": "zurück"
