@@ -79,19 +79,16 @@ const CustomAttachment = function({ id, value, onChange }) {
 
   return (
     <div>
-      <div className="mb-1">
-        <label htmlFor={id} className="file-upload">
-          {i18n.t("CreateNewTicket.attach_file")}
-          <input
-            type="file"
-            id={id}
-            name={id}
-            value=""
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => e.target.files && uploadFile(e.target.files)}
-            multiple
-          />
-          <small>Sie können eine Datei bis zu einer Größe von 20 MB anhängen</small>
-        </label>
+      <div className="mb-1 file-upload">
+        <input
+          type="file"
+          id={id}
+          name={id}
+          value=""
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => e.target.files && uploadFile(e.target.files)}
+          multiple
+        />
+        <small>{i18n.t("CreateNewTicket.file_upload_hint")}</small>
       </div>
 
       {files.map((file: Keyable, index: number) => (

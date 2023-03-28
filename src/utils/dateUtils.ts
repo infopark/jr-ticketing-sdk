@@ -56,7 +56,7 @@ function formatRelative(date, prefix = false) {
   const locale = {
     ...getLocale(i18n.language),
     formatRelative: token => formatRelativeLocale[token],
-  }
+  };
   return formatRelativeOrig(new Date(date), new Date(), { locale });
 }
 
