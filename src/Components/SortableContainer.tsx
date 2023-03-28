@@ -1,3 +1,4 @@
+import React from "react";
 import {
   DndContext,
   DragOverlay,
@@ -14,8 +15,8 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import * as React from "react";
-import { Keyable } from "../../utils/types";
+
+import { Keyable } from "../utils/types";
 
 export function SortableContainer({
   items,

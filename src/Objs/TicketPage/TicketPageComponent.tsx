@@ -1,10 +1,5 @@
 /* eslint-disable no-console */
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-} from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
 
 import TicketingApi from "../../api/TicketingApi";
@@ -21,9 +16,11 @@ import useWS from "../../utils/useWS";
 const TICKET_NOT_FOUND = { status: "ticket-not-found" };
 
 Scrivito.provideComponent("TicketPage", ({ page }) => {
-  const [ticket, setTicket] = useState<Keyable>();
-  const [status, setStatus] = useState<string>("idle");
+  const [ticket, setTicket] = React.useState<Keyable>();
+  const [status, setStatus] = React.useState<string>("idle");
   const msg = useWS("tickets", ticket?.id);
+
+  const ticketUiSchema = JSON.parse(page?.get("uiSchema") as string || "{}");
 
   const getTicket = async (effectStatus) => {
     try {
@@ -67,12 +64,12 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     }
   };
 
-  const getTicketCallback = useCallback((effectStatus) => {
+  const getTicketCallback = React.useCallback((effectStatus) => {
     const refreshTicket = getTicket;
     refreshTicket(effectStatus);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const effectStatus = { canceled: false };
     getTicketCallback(effectStatus);
     return () => {
@@ -86,7 +83,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     setStatus("idle");
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     saveScrollPosition();
     window.addEventListener("scroll", saveScrollPosition);
     return () => {
@@ -148,7 +145,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
           <div className="wrapper_box min_hight_box">
             <div className="row">
               <div className="col-lg-4 order-lg-2">
-                <TicketDetails ticket={ticket} />
+                <TicketDetails ticket={ticket} ticketUiSchema={ticketUiSchema} />
               </div>
               <div className="col-lg-8 order-lg-1">
                 <CommunicationTree

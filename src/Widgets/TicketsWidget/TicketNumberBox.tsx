@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
 
 function TicketNumberBox({ number, link, className, todoBox, text }) {
