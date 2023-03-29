@@ -1,7 +1,7 @@
 import React from "react";
 import CreateNewTicketOverlay from "./CreateNewTicketOverlay";
 
-function CreateNewTicket({ className, chatPage, text, ticketUiSchema }) {
+function CreateNewTicket({ className, ticketPage, text, ticketUiSchema }) {
   const [overlayOpen, setOverlayOpen] = React.useState<boolean>(false);
 
   return (
@@ -25,7 +25,7 @@ function CreateNewTicket({ className, chatPage, text, ticketUiSchema }) {
         close={() => {
           setOverlayOpen(false);
         }}
-        chatPage={chatPage}
+        ticketPage={ticketPage}
         ticketUiSchema={ticketUiSchema}
       />
     </div>

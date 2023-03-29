@@ -38,7 +38,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const helpdeskPage = helpdeskPages.first();
   const link = widget.get("link") || helpdeskPage;
   const boxClassName = "col-sm-6";
-  const chatPage = Scrivito.Obj.where(
+  const ticketPage = Scrivito.Obj.where(
     "_objClass",
     "equals",
     "TicketPage"
@@ -48,7 +48,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
     <Scrivito.WidgetTag className="row equal sdk">
       <CreateNewTicket
         className={boxClassName}
-        chatPage={chatPage}
+        ticketPage={ticketPage}
         text={i18n.t("CreateNewTicket.create_new_ticket")}
         ticketUiSchema={ticketUiSchema}
       />

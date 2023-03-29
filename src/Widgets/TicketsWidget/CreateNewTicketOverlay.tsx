@@ -128,12 +128,12 @@ const widgets: RegistryWidgetsType = {
 function CreateNewTicketOverlay({
   isOpen,
   close,
-  chatPage,
+  ticketPage,
   ticketUiSchema,
 }: {
   isOpen: boolean,
   close: React.MouseEventHandler<HTMLElement>,
-  chatPage: Scrivito.Obj,
+  ticketPage: Scrivito.Obj,
   ticketUiSchema: Keyable,
 }) {
   const [loading, setLoading] = React.useState(false);
@@ -177,7 +177,7 @@ function CreateNewTicketOverlay({
         return;
       }
 
-      Scrivito.navigateTo(chatPage, {
+      Scrivito.navigateTo(ticketPage, {
         ticketid: newTicket.id,
       });
     } catch (error) {

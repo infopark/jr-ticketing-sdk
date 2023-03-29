@@ -1,7 +1,7 @@
 import React from "react";
 import * as Scrivito from "scrivito";
 
-import { TicketFormConfigDialog, TicketFormConfigDialogMode } from "../../Components/TicketFormConfigDialog";
+import { TicketFormConfigDialog } from "../../Components/TicketFormConfigDialog";
 
 Scrivito.provideEditingConfig("TicketsWidget", {
   title: "Tickets",
@@ -13,10 +13,10 @@ Scrivito.provideEditingConfig("TicketsWidget", {
   },
   properties: ["link"],
   propertiesGroups: [{
-    title: "UI Schema",
+    title: "Create Ticket Form",
     key: 'ui-schema',
     component: (props: any) => {
-      return <TicketFormConfigDialog object={props.widget} mode={TicketFormConfigDialogMode.CREATE} />;
+      return <TicketFormConfigDialog object={props.widget} />;
     }
   }],
   validations: [

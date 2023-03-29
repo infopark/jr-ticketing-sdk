@@ -1,7 +1,7 @@
 import React from "react";
 import * as Scrivito from "scrivito";
 
-import { TicketFormConfigDialog, TicketFormConfigDialogMode } from "../../Components/TicketFormConfigDialog";
+import { TicketFormConfigDialog } from "../../Components/TicketFormConfigDialog";
 
 import {
   metadataEditingConfigAttributes,
@@ -23,10 +23,10 @@ Scrivito.provideEditingConfig("TicketPage", {
   propertiesGroups: [
     ...metadataPropertiesGroups,
     {
-      title: "UI Schema",
+      title: "Ticket Details",
       key: 'ui-schema',
       component: (props: any) => {
-        return <TicketFormConfigDialog object={props.page} mode={TicketFormConfigDialogMode.DETAILS} />;
+        return <TicketFormConfigDialog object={props.page} />;
       }
     },
   ],

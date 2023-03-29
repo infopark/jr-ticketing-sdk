@@ -11,7 +11,6 @@ module.exports = {
   entry: {
     index: "./src/index.ts",
     ScrivitoExtensions: "./src/ScrivitoExtensions/index.ts",
-    ScrivitoEditing: "./src/ScrivitoEditing/index.ts",
     // cssBundle: "./src/assets/stylesheets/main.scss",
   },
   module: {
