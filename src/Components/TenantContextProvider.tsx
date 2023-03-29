@@ -58,7 +58,7 @@ export function TenantContextProvider({ children }) {
     try {
       const customTicketProps = {};
       const order = ticketUiSchema["ui:order"] || [];
-      Object.entries(customAttributes.Ticket).forEach(([name, schema]) => {
+      Object.entries(customAttributes.Ticket || {}).forEach(([name, schema]) => {
         if (order.indexOf(name) >= 0) {
           customTicketProps[name] = schema;
         }
@@ -133,7 +133,7 @@ export function TenantContextProvider({ children }) {
   };
 
   function isTenantContextReady() {
-    return !isEmpty(ticketSchema) && !isEmpty(ticketUiSchema) && userId;
+    return ticketSchema && ticketUiSchema && userId;
   }
 
   const updateLanguage = useCallback((language) => {

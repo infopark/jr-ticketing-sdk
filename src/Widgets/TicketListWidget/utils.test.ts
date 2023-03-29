@@ -68,7 +68,7 @@ const tickets = [
     created_at: "2023-01-09T09:02:35.000Z",
     updated_at: "2023-01-09T10:42:00.000Z"
   }
-]
+];
 
 describe("ticketSorters", () => {
   describe("byCreatedAt", () => {
