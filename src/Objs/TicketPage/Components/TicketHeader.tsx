@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
 
 import TicketBadge from "../../../Components/TicketBadge";

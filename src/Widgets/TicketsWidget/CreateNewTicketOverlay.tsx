@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
-import classNames from "classnames";
 import { isEmpty } from "lodash-es";
 import Modal from "react-overlays/Modal";
 
@@ -17,7 +16,7 @@ import { MAX_ATTACHMENT_SIZE } from "../../utils/constants";
 import { FileObject, Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
-  const [files, setFiles] = useState<object[]>([]);
+  const [files, setFiles] = React.useState<object[]>([]);
 
   function updateFiles(fileObject) {
     setFiles((files) => files.map((f) => f === fileObject ? fileObject : f));
@@ -129,20 +128,22 @@ const widgets: RegistryWidgetsType = {
 function CreateNewTicketOverlay({
   isOpen,
   close,
-  chatPage
+  ticketPage,
+  ticketUiSchema,
 }: {
   isOpen: boolean,
   close: React.MouseEventHandler<HTMLElement>,
-  chatPage: Scrivito.Obj
+  ticketPage: Scrivito.Obj,
+  ticketUiSchema: Keyable,
 }) {
-  const [loading, setLoading] = useState(false);
-  const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [showError, setShowError] = React.useState(false);
 
   const renderBackdrop = (props) => (
     <div className="mute_bg_2" {...props} />
   );
 
-  const { userId } = useTenantContext();
+  const { currentUser } = useTenantContext();
 
   const onSubmitForm = async () => {
     setLoading(true);
@@ -165,7 +166,7 @@ function CreateNewTicketOverlay({
         data: {
           ...ticketAttributes,
           message: messageAttributes,
-          requester_id: userId,
+          requester_id: currentUser?.id,
           status: "new",
         }
       });
@@ -176,7 +177,7 @@ function CreateNewTicketOverlay({
         return;
       }
 
-      Scrivito.navigateTo(chatPage, {
+      Scrivito.navigateTo(ticketPage, {
         ticketid: newTicket.id,
       });
     } catch (error) {
@@ -188,7 +189,14 @@ function CreateNewTicketOverlay({
   const [schema, setSchema] = React.useState({});
   const [uiSchema, setUiSchema] = React.useState({});
   const [formData, setFormData] = React.useState({});
-  const { ticketSchema, ticketUiSchema } = useTenantContext();
+  const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
+  const { prepareTicketSchema, instance } = useTenantContext();
+
+  React.useEffect(() => {
+    setTicketSchema(
+      prepareTicketSchema(ticketUiSchema, instance)
+    );
+  }, [ticketUiSchema, instance]);
 
   React.useEffect(() => {
     if (ticketSchema && ticketUiSchema) {

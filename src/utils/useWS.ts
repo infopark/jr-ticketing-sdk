@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React from "react";
 
 import ws from "./ws";
 
 export default function useWS(...channel: string[]): unknown {
-  const [data, setData] = useState<unknown>(null);
+  const [data, setData] = React.useState<unknown>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = ws.subscribe(...channel, (msg: string) => {
       setData({
         msg,

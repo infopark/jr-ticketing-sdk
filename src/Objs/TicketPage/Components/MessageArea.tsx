@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { isEmpty } from "lodash-es";
 
 import TicketingApi from "../../../api/TicketingApi";
@@ -11,11 +11,14 @@ import { FileObject, Keyable } from "../../../utils/types";
 import AttachIcon from "../../../assets/images/icons/attach_icon.svg";
 import SendIcon from "../../../assets/images/icons/send_icon.svg";
 
+const MinInputHeight = 46;
+const LineHeight = 20;
+
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
-  const { userId } = useTenantContext();
-  const [message, setMessage] = useState("");
-  const [files, setFiles] = useState<FileObject[]>([]);
-  const [textareaHeight, setTextareaHeight] = useState<number>(46);
+  const { currentUser } = useTenantContext();
+  const [message, setMessage] = React.useState("");
+  const [files, setFiles] = React.useState<FileObject[]>([]);
+  const [textareaHeight, setTextareaHeight] = React.useState<number>(MinInputHeight);
 
   const filesError = files.some((f: Keyable) => !isEmpty(f.error));
 
@@ -26,7 +29,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const handleKeys = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.keyCode === 13 || e.keyCode === 8) {
       const numberOfLineBreaks = (message.match(/\n/g) || []).length;
-      const newHeight = 45 + numberOfLineBreaks * 20;
+      const newHeight = MinInputHeight + numberOfLineBreaks * LineHeight;
       setTextareaHeight(newHeight);
     }
   };
@@ -43,13 +46,13 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
 
     const msgData = {
       text: newlinesToBreaks(message),
-      user_id: userId,
+      user_id: currentUser?.id,
       attachments: attachments
     };
 
     const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
-    setTextareaHeight(46);
+    setTextareaHeight(MinInputHeight);
     setFiles([]);
     setMessage("");
 
@@ -180,7 +183,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
             value={message}
             onChange={handleChange}
             onKeyUp={handleKeys}
-            style={{ height: textareaHeight, minHeight: "46px" }}
+            style={{ height: textareaHeight, minHeight: `${MinInputHeight}px` }}
           />
         </div>
         <div className="textfield_btn">

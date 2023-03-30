@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
 
 import TicketingApi from "../../api/TicketingApi";
@@ -10,20 +10,20 @@ import TicketListBoxHeader from "./TicketListBoxHeader";
 import { ticketFilters } from "./utils";
 
 Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
-  const [loading, setLoading] = useState(true);
-  const [ticketList, setTicketList] = useState([]);
-  const [sortKey, setSortKey] = useState("byNumber");
-  const [filterKey, setFilterKey] = useState("active");
-  const allowDeferredBaseLink = useRef(true);
-  const { addError, userId } = useTenantContext();
-  const msg = useWS("users", userId);
+  const [loading, setLoading] = React.useState(true);
+  const [ticketList, setTicketList] = React.useState([]);
+  const [sortKey, setSortKey] = React.useState("byNumber");
+  const [filterKey, setFilterKey] = React.useState("active");
+  const allowDeferredBaseLink = React.useRef(true);
+  const { addError, currentUser } = useTenantContext();
+  const msg = useWS("users", currentUser?.id);
 
-  useEffect(() => {
-    if (!userId) {
+  React.useEffect(() => {
+    if (!currentUser?.id) {
       return;
     }
 
-    TicketingApi.get(`tickets?filter[requester_id][eq]=${userId}`)
+    TicketingApi.get(`tickets?filter[requester_id][eq]=${currentUser?.id}`)
       .then((response) => {
         if (!response.failedRequest) {
           setTicketList(response);
@@ -33,7 +33,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
         addError("Error loading ticket list", "TicketListWidget", error);
       })
       .finally(() => setLoading(false));
-  }, [msg, addError, userId]);
+  }, [msg, addError, currentUser?.id]);
 
   const baseLink = widget.get("link");
   if (!baseLink && allowDeferredBaseLink.current) {
@@ -54,7 +54,6 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     <Scrivito.WidgetTag className="row jr-ticketing-sdk">
       <div className="col-lg-12 pt-2 mt-1">
         <TicketListBoxHeader
-          widget={widget}
           active={!loading && !!baseLink}
           ticketFilters={ticketFilters}
           filterKey={filterKey}

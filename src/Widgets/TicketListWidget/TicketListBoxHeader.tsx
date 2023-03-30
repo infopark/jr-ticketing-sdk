@@ -1,9 +1,8 @@
-import * as React from "react";
+import React from "react";
 
 import i18n from "../../config/i18n";
 
 function TicketListBoxHeader({
-  widget,
   active,
   ticketFilters,
   filterKey,

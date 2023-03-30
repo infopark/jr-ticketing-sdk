@@ -75,8 +75,7 @@
   "Status": "Status",
   "TicketFormConfigDialog": {
     "fieldname": "Field name:",
-    "showInCreateForm": "Show in create form",
-    "showInDetails": "Show in details"
+    "show": "show"
   },
   "Ticket": {
     "labels": {

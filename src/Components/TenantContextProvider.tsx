@@ -1,6 +1,4 @@
-import * as Scrivito from "scrivito";
-import React, { useState, useEffect, useCallback } from "react";
-import { isEmpty } from "lodash-es";
+import React from "react";
 
 import getUserData from "../api/getUserData";
 import TicketingApi from "../api/TicketingApi";
@@ -36,63 +34,67 @@ const TicketAttributes = {
 
 export function TenantContextProvider({ children }) {
   const [instance, setInstance] = React.useState<Keyable>();
-  const [customAttributes, setCustomAttributes] = React.useState<Keyable>();
-  const [ticketSchema, setTicketSchema] = useState<Keyable>();
-  const [ticketUiSchema, setTicketUiSchema] = useState<Keyable>();
 
-  const [userData, setUserData] = useState<Keyable>();
-  const [userId, setUserId] = useState<string | null>(null);
-  const [error, setError] = useState<Keyable | null>(null);
+  const [currentUser, setCurrentUser] = React.useState<Keyable>();
+  const [error, setError] = React.useState<Keyable | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     loadUserInfo();
     loadConfiguration();
-    loadTicketFormConfiguration();
   }, []);
-
-  useEffect(() => {
-    if (!ticketUiSchema || !customAttributes) {
-      return;
-    }
-
-    try {
-      const customTicketProps = {};
-      const order = ticketUiSchema["ui:order"] || [];
-      Object.entries(customAttributes.Ticket || {}).forEach(([name, schema]) => {
-        if (order.indexOf(name) >= 0) {
-          customTicketProps[name] = schema;
-        }
-      });
-      setTicketSchemaForInstance({ ...TicketAttributes, ...customTicketProps });
-    } catch (error) {
-      setTicketSchemaForInstance({ ...TicketAttributes });
-      addError("Error load ticket schema", "TenantContextProvider", error);
-    }
-  }, [ticketUiSchema, customAttributes]);
-
-  const loadTicketFormConfiguration = () => {
-    Scrivito.load(() => {
-      const [obj] = Scrivito.Obj.onAllSites()
-        .where("_objClass", "equals", "TicketFormConfiguration")
-        .take(1);
-      return obj;
-    }).then((obj) => {
-      const schema = JSON.parse(obj?.get("uiSchema") as string || "{}");
-      setTicketUiSchema(schema);
-    });
-  };
 
   const loadConfiguration = async () => {
     const instance = await TicketingApi.get("instance");
 
     setInstance(instance);
-    setCustomAttributes(instance.custom_attributes);
     addI18nBundles(instance.locales);
 
     ws.init(instance.id);
   };
 
-  const setTicketSchemaForInstance = (properties) => {
+  const loadUserInfo = async () => {
+    try {
+      const data = await getUserData();
+      if (!data) {
+        setCurrentUser(undefined);
+        return;
+      }
+
+      if (data.failedRequest) {
+        setCurrentUser(undefined);
+        if (data.tooManyIamRedirects) {
+          setCurrentUser(data);
+        }
+        return;
+      }
+
+      setCurrentUser(data);
+    } catch (error) {
+      addError("Error load user info", "TenantContextProvider", error);
+    }
+  };
+
+  const prepareTicketSchema = React.useCallback((ticketUiSchema: Keyable, instance: Keyable): Keyable | null => {
+    if (!ticketUiSchema || !instance) {
+      return null;
+    }
+
+    const properties = (() => {
+      try {
+        const customTicketProps = {};
+        const order = ticketUiSchema["ui:order"] || [];
+        Object.entries(instance.custom_attributes.Ticket || {}).forEach(([name, schema]) => {
+          if (order.indexOf(name) >= 0) {
+            customTicketProps[name] = schema;
+          }
+        });
+        return { ...TicketAttributes, ...customTicketProps };
+      } catch (error) {
+        addError("Error load ticket schema", "TenantContextProvider", error);
+        return { ...TicketAttributes };
+      }
+    })();
+
     Object.keys(properties).forEach((key) => {
       const prop = properties[key];
 
@@ -102,47 +104,24 @@ export function TenantContextProvider({ children }) {
       }
     });
 
-    setTicketSchema({
+    return {
       type: "object",
       properties,
       required: Object.keys(properties).filter((name) => properties[name]["ui:required"]),
-    });
-  };
-
-  const loadUserInfo = async () => {
-    try {
-      const data = await getUserData();
-      if (!data) {
-        setUserId(null);
-        return;
-      }
-
-      if (data.failedRequest) {
-        setUserId(null);
-        if (data.tooManyIamRedirects) {
-          setUserData(data);
-        }
-        return;
-      }
-
-      setUserId(data.id);
-      setUserData(data);
-    } catch (error) {
-      addError("Error load user info", "TenantContextProvider", error);
-    }
-  };
+    };
+  }, []);
 
   function isTenantContextReady() {
-    return ticketSchema && ticketUiSchema && userId;
+    return !!(instance && currentUser?.id);
   }
 
-  const updateLanguage = useCallback((language) => {
+  const updateLanguage = React.useCallback((language: string) => {
     i18n.changeLanguage(language);
   }, []);
 
   const removeError = () => setError(null);
 
-  const addError = useCallback((message, location, error) => {
+  const addError = React.useCallback((message, location, error) => {
     console.error(location, message, error);
     setError({ message, location, error });
   }, []);
@@ -151,12 +130,9 @@ export function TenantContextProvider({ children }) {
     <TenantContext.Provider
       value={{
         instance,
-        customAttributes,
-        ticketSchema,
-        ticketUiSchema,
+        prepareTicketSchema,
         isTenantContextReady,
-        userData,
-        userId,
+        currentUser,
         updateLanguage,
         error,
         addError,
@@ -168,6 +144,17 @@ export function TenantContextProvider({ children }) {
   );
 }
 
-export function useTenantContext() {
-  return React.useContext(TenantContext);
+type TTenantContext = {
+  instance: Keyable;
+  prepareTicketSchema: (ticketUiSchema: Keyable, instance: Keyable) => Keyable | null;
+  isTenantContextReady: () => boolean;
+  currentUser: Keyable;
+  updateLanguage: (language: string) => void;
+  error: Keyable | null;
+  addError: (message: string, location: string, error: string) => void;
+  removeError: () => void;
+}
+
+export function useTenantContext(): TTenantContext {
+  return React.useContext(TenantContext) as TTenantContext;
 }
