@@ -32,6 +32,9 @@ class WS {
       }, 1*60*1000);
     }
 
+    // NOTE: Disable WebSockets until authentication issue is solved
+    return;
+
     const ws = new WebSocket(`${this.url}/ticketing/${this.instanceId}`);
 
     ws.addEventListener("close", () => {
@@ -107,7 +110,7 @@ class WS {
   }
 }
 
-const url = process.env.API_BASE_URL?.replace(/^http:\/\//, "ws://").replace(/^https:\/\//, "wss://");
+const url = process.env.JR_REST_API_ENDPOINT?.replace(/^http:\/\//, "ws://").replace(/^https:\/\//, "wss://");
 const ws: WS = new WS(`${url}`);
 
 export default ws;
