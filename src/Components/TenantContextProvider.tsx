@@ -44,12 +44,16 @@ export function TenantContextProvider({ children }) {
   }, []);
 
   const loadConfiguration = async () => {
-    const instance = await TicketingApi.get("instance");
+    try {
+      const instance = await TicketingApi.get("instance");
 
-    setInstance(instance);
-    addI18nBundles(instance.locales);
+      setInstance(instance);
+      addI18nBundles(instance.locales);
 
-    ws.init(instance.id);
+      ws.init(instance.id);
+    } catch (error) {
+      addError("Error loading instance info", "TenantContextProvider", error);
+    }
   };
 
   const loadUserInfo = async () => {
@@ -60,17 +64,14 @@ export function TenantContextProvider({ children }) {
         return;
       }
 
-      if (data.failedRequest) {
+      if (!data) {
         setCurrentUser(undefined);
-        if (data.tooManyIamRedirects) {
-          setCurrentUser(data);
-        }
         return;
       }
 
       setCurrentUser(data);
     } catch (error) {
-      addError("Error load user info", "TenantContextProvider", error);
+      addError("Error loading user info", "TenantContextProvider", error);
     }
   };
 
@@ -121,7 +122,7 @@ export function TenantContextProvider({ children }) {
 
   const removeError = () => setError(null);
 
-  const addError = React.useCallback((message, location, error) => {
+  const addError = React.useCallback((message: string, location: string, error: unknown) => {
     console.error(location, message, error);
     setError({ message, location, error });
   }, []);
@@ -151,9 +152,9 @@ type TTenantContext = {
   currentUser: Keyable;
   updateLanguage: (language: string) => void;
   error: Keyable | null;
-  addError: (message: string, location: string, error: string) => void;
+  addError: (message: string, location: string, error: unknown) => void;
   removeError: () => void;
-}
+};
 
 export function useTenantContext(): TTenantContext {
   return React.useContext(TenantContext) as TTenantContext;

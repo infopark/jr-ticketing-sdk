@@ -16,22 +16,25 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
 
   const ticketUiSchema = JSON.parse(widget.get("uiSchema") as string || "{}");
 
+  async function loadTickets() {
+    try {
+      const tickets = await TicketingApi.get(`tickets?filter[requester_id][eq]=${currentUser?.id}`);
+      if (tickets) {
+        const defaultFilter = createDefaultTicketListFilter();
+        const filteredTickets = defaultFilter.filter(tickets);
+        setRunningTickets(filteredTickets.length);
+      }
+    } catch (error) {
+      addError("Error loading ticket list", "TicketListComponent", error);
+    }
+  }
+
   React.useEffect(() => {
     if (!currentUser?.id) {
       return;
     }
 
-    TicketingApi.get(`tickets?filter[requester_id][eq]=${currentUser?.id}`)
-      .then((response) => {
-        if (!response.failedRequest) {
-          const defaultFilter = createDefaultTicketListFilter();
-          const filteredResponse = defaultFilter.filter(response);
-          setRunningTickets(filteredResponse.length);
-        }
-      })
-      .catch((error) => {
-        addError("Error loading ticket list", "TicketListComponent", error);
-      });
+    loadTickets();
   }, [msg, addError, currentUser?.id]);
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
