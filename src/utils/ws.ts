@@ -19,7 +19,7 @@ class WS {
     this._init();
   }
 
-  _init() {
+  async _init() {
     this.close();
 
     if (!this.timer) {
@@ -32,7 +32,11 @@ class WS {
       }, 1*60*1000);
     }
 
-    const ws = new WebSocket(`${this.url}/ticketing/${this.instanceId}`);
+    const portalUrl = `${window.location.protocol}//${window.location.host}`;
+    const res = await fetch(`${process.env.JR_REST_API_ENDPOINT}/iam/${this.instanceId}/short_term_token?origin=${encodeURIComponent(portalUrl)}`);
+    const { access_token } = await res.json();
+
+    const ws = new WebSocket(`${this.url}/ticketing/${this.instanceId}/${access_token}`);
 
     ws.addEventListener("close", () => {
       setTimeout(() => {
@@ -107,7 +111,7 @@ class WS {
   }
 }
 
-const url = process.env.API_BASE_URL?.replace(/^http:\/\//, "ws://").replace(/^https:\/\//, "wss://");
+const url = process.env.WS_BASE_URL?.replace(/^http:\/\//, "ws://").replace(/^https:\/\//, "wss://");
 const ws: WS = new WS(`${url}`);
 
 export default ws;
