@@ -2,6 +2,7 @@ import React from "react";
 import * as Scrivito from "scrivito";
 
 import { TicketFormConfigDialog } from "../../Components/TicketFormConfigDialog";
+import { Keyable } from "../../utils/types";
 
 Scrivito.provideEditingConfig("TicketsWidget", {
   title: "Tickets",
@@ -15,7 +16,7 @@ Scrivito.provideEditingConfig("TicketsWidget", {
   propertiesGroups: [{
     title: "Create Ticket Form",
     key: 'ui-schema',
-    component: (props: any) => {
+    component: (props: Keyable) => {
       return <TicketFormConfigDialog object={props.widget} />;
     }
   }],

@@ -14,7 +14,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const { addError, currentUser } = useTicketingContext();
   const msg = useWS("users", currentUser?.id);
 
-  const ticketUiSchema = JSON.parse(widget.get("uiSchema") as string || "{}");
+  const ticketUiSchema = JSON.parse(widget!.get("uiSchema") as string || "{}");
 
   const loadTickets = React.useCallback(async () => {
     try {
@@ -39,7 +39,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
   const helpdeskPage = helpdeskPages.first();
-  const link = widget.get("link") || helpdeskPage;
+  const link = widget!.get("link") || helpdeskPage;
   const boxClassName = "col-sm-6";
   const ticketPage = Scrivito.Obj.where(
     "_objClass",
@@ -64,4 +64,4 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       />
     </Scrivito.WidgetTag>
   );
-}) as any);
+}) as React.ComponentType<Partial<Scrivito.WidgetComponentProps>>);

@@ -36,11 +36,11 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
     loadTickets();
   }, [msg, loadTickets, currentUser?.id]);
 
-  const baseLink = widget.get("link");
+  const baseLink = widget!.get("link");
   if (!baseLink && allowDeferredBaseLink.current) {
     // chat page is not loaded yet
     allowDeferredBaseLink.current = false;
-    Scrivito.load(() => widget.get("link"));
+    Scrivito.load(() => widget!.get("link"));
   }
 
   const handleSort = (key) => {
@@ -74,4 +74,4 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
       </div>
     </Scrivito.WidgetTag>
   );
-}) as any);
+}) as React.ComponentType<Partial<Scrivito.WidgetComponentProps>>);
