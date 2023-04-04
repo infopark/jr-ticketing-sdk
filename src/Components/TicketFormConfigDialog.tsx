@@ -2,18 +2,18 @@ import React from "react";
 import * as Scrivito from "scrivito";
 
 import { Keyable } from "../utils/types";
-import { TenantContextProvider, useTenantContext } from "./TenantContextProvider";
+import { TicketingContextProvider, useTicketingContext } from "./TicketingContextProvider";
 import { SortableObjList } from "./TicketFormConfigDialog/SortableObjList";
 
 export const TicketFormConfigDialog = ({ object }: { object: Scrivito.Obj }) => (
-  <TenantContextProvider>
+  <TicketingContextProvider>
     <TicketFormConfigDialogContent object={object} />
-  </TenantContextProvider>
+  </TicketingContextProvider>
 );
 
 const TicketFormConfigDialogContent = Scrivito.connect(({ object }: { object: Scrivito.Obj }) => {
   const [orderedObjs, setOrderedObjs] = React.useState<Keyable[]>([]);
-  const { prepareTicketSchema, instance } = useTenantContext();
+  const { prepareTicketSchema, instance } = useTicketingContext();
   const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
   const [ticketUiSchema, setTicketUiSchema] = React.useState<Keyable>();
   const disabled = !Scrivito.canWrite();

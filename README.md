@@ -1,4 +1,4 @@
-# JustRelate Customer Portal SDK
+# JustRelate Ticketing SDK
 
 ## Description
 
@@ -17,7 +17,7 @@ npm run build
 To install the package to your project run the following in your shell:
 
 ```bash
-npm install jr-customer-portal-sdk
+npm install jr-ticketing-sdk
 ```
 
 ## JustRelate Customer Portal SDK and Scrivito Example App
@@ -29,7 +29,7 @@ In your App.js you should include the following:
 ```javascript
 import {
   UserDataProvider,
-  TenantContextProvider,
+  TicketingContextProvider,
   ErrorAPIProvider,
   ErrorNotification
 } from "jr-customer-portal-sdk";
@@ -38,14 +38,9 @@ import {
 It could look for example like:
 
 ```javascript
-<ErrorAPIProvider>
-  <UserDataProvider>
-    <TenantContextProvider>
-      <ErrorNotification />
-      …
-    </TenantContextProvider>
-  </UserDataProvider>
-</ErrorAPIProvider>
+  <TicketingContextProvider>
+    ...
+  </TicketingContextProvider>
 ```
 
 ### For Editing the ticket form with custom attributes and order

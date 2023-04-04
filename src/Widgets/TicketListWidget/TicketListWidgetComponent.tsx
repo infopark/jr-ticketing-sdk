@@ -2,7 +2,7 @@ import React from "react";
 import * as Scrivito from "scrivito";
 
 import TicketingApi from "../../api/TicketingApi";
-import { useTenantContext } from "../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../Components/TicketingContextProvider";
 import useWS from "../../utils/useWS";
 
 import TicketList from "./TicketList";
@@ -15,7 +15,7 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const [sortKey, setSortKey] = React.useState("byNumber");
   const [filterKey, setFilterKey] = React.useState("active");
   const allowDeferredBaseLink = React.useRef(true);
-  const { addError, currentUser } = useTenantContext();
+  const { addError, currentUser } = useTicketingContext();
   const msg = useWS("users", currentUser?.id);
 
   const loadTickets = React.useCallback(async () => {

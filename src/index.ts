@@ -2,5 +2,5 @@ import "./Objs";
 import "./Widgets";
 import "./Components";
 
-export { TenantContextProvider, useTenantContext } from "./Components/TenantContextProvider";
+export { TicketingContextProvider, useTicketingContext } from "./Components/TicketingContextProvider";
 export { default as getUserData } from "./api/getUserData";

@@ -3,7 +3,7 @@ import { isEmpty } from "lodash-es";
 
 import TicketingApi from "../../../api/TicketingApi";
 import { MAX_ATTACHMENT_SIZE } from "../../../utils/constants";
-import { useTenantContext } from "../../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../../Components/TicketingContextProvider";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import i18n from "../../../config/i18n";
 import { FileObject, Keyable } from "../../../utils/types";
@@ -12,7 +12,7 @@ import AttachIcon from "../../../assets/images/icons/attach_icon.svg";
 import SendIcon from "../../../assets/images/icons/send_icon.svg";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
-  const { currentUser, addError } = useTenantContext();
+  const { currentUser, addError } = useTicketingContext();
   const [message, setMessage] = React.useState("");
   const [files, setFiles] = React.useState<FileObject[]>([]);
   const [rows, setRows] = React.useState<number>(1);

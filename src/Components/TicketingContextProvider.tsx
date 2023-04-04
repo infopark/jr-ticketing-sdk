@@ -7,7 +7,7 @@ import addI18nBundles from "../config/addI18nBundles";
 import { Keyable } from "../utils/types";
 import ws from "../utils/ws";
 
-const TenantContext = React.createContext({} as Keyable);
+const TicketingContext = React.createContext({} as Keyable);
 
 const TicketAttributes = {
   "title": {
@@ -32,7 +32,7 @@ const TicketAttributes = {
   }
 };
 
-export function TenantContextProvider({ children }) {
+export function TicketingContextProvider({ children }) {
   const [instance, setInstance] = React.useState<Keyable>();
 
   const [currentUser, setCurrentUser] = React.useState<Keyable>();
@@ -52,7 +52,7 @@ export function TenantContextProvider({ children }) {
 
       ws.init(instance.id);
     } catch (error) {
-      addError("Error loading instance info", "TenantContextProvider", error);
+      addError("Error loading instance info", "TicketingContextProvider", error);
     }
   };
 
@@ -71,7 +71,7 @@ export function TenantContextProvider({ children }) {
 
       setCurrentUser(data);
     } catch (error) {
-      addError("Error loading user info", "TenantContextProvider", error);
+      addError("Error loading user info", "TicketingContextProvider", error);
     }
   };
 
@@ -91,7 +91,7 @@ export function TenantContextProvider({ children }) {
         });
         return { ...TicketAttributes, ...customTicketProps };
       } catch (error) {
-        addError("Error load ticket schema", "TenantContextProvider", error);
+        addError("Error loading ticket schema", "TicketingContextProvider", error);
         return { ...TicketAttributes };
       }
     })();
@@ -112,7 +112,7 @@ export function TenantContextProvider({ children }) {
     };
   }, []);
 
-  function isTenantContextReady() {
+  function isTicketingContextReady() {
     return !!(instance && currentUser?.id);
   }
 
@@ -128,11 +128,11 @@ export function TenantContextProvider({ children }) {
   }, []);
 
   return (
-    <TenantContext.Provider
+    <TicketingContext.Provider
       value={{
         instance,
         prepareTicketSchema,
-        isTenantContextReady,
+        isTicketingContextReady,
         currentUser,
         updateLanguage,
         error,
@@ -141,14 +141,14 @@ export function TenantContextProvider({ children }) {
       }}
     >
       {children}
-    </TenantContext.Provider>
+    </TicketingContext.Provider>
   );
 }
 
-type TTenantContext = {
+type TTicketingContext = {
   instance: Keyable;
   prepareTicketSchema: (ticketUiSchema: Keyable, instance: Keyable) => Keyable | null;
-  isTenantContextReady: () => boolean;
+  isTicketingContextReady: () => boolean;
   currentUser: Keyable;
   updateLanguage: (language: string) => void;
   error: Keyable | null;
@@ -156,6 +156,6 @@ type TTenantContext = {
   removeError: () => void;
 };
 
-export function useTenantContext(): TTenantContext {
-  return React.useContext(TenantContext) as TTenantContext;
+export function useTicketingContext(): TTicketingContext {
+  return React.useContext(TicketingContext) as TTicketingContext;
 }
