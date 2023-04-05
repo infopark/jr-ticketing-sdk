@@ -11,27 +11,29 @@ import { FileObject, Keyable } from "../../../utils/types";
 import AttachIcon from "../../../assets/images/icons/attach_icon.svg";
 import SendIcon from "../../../assets/images/icons/send_icon.svg";
 
-const MinInputHeight = 46;
-const LineHeight = 20;
-
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const { currentUser } = useTenantContext();
   const [message, setMessage] = React.useState("");
   const [files, setFiles] = React.useState<FileObject[]>([]);
-  const [textareaHeight, setTextareaHeight] = React.useState<number>(MinInputHeight);
+  const [rows, setRows] = React.useState<number>(1);
 
   const filesError = files.some((f: Keyable) => !isEmpty(f.error));
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-  };
 
-  const handleKeys = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.keyCode === 13 || e.keyCode === 8) {
-      const numberOfLineBreaks = (message.match(/\n/g) || []).length;
-      const newHeight = MinInputHeight + numberOfLineBreaks * LineHeight;
-      setTextareaHeight(newHeight);
+    const { paddingTop, paddingBottom, lineHeight } = getComputedStyle(e.target);
+
+    const previousRows = e.target.rows;
+    e.target.rows = 1;
+
+		const currentRows = Math.floor((e.target.scrollHeight - parseFloat(paddingTop) - parseFloat(paddingBottom)) / parseFloat(lineHeight));
+
+    if (currentRows === previousRows) {
+      e.target.rows = currentRows;
     }
+
+    setRows(currentRows);
   };
 
   const onSubmit = async () => {
@@ -52,7 +54,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
 
     const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
-    setTextareaHeight(MinInputHeight);
+    setAutoGrowRows(1);
     setFiles([]);
     setMessage("");
 
@@ -182,8 +184,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
             placeholder={i18n.t("MessageArea.message_placeholder")}
             value={message}
             onChange={handleChange}
-            onKeyUp={handleKeys}
-            style={{ height: textareaHeight, minHeight: `${MinInputHeight}px` }}
+            rows={rows}
           />
         </div>
         <div className="textfield_btn">
