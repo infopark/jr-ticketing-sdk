@@ -5,50 +5,18 @@ import { Keyable } from "../utils/types";
 import { TenantContextProvider, useTenantContext } from "./TenantContextProvider";
 import { SortableObjList } from "./TicketFormConfigDialog/SortableObjList";
 
-function transformPropertiesToArray(input: Keyable, uiSchema: Keyable) {
-  const fieldList = Object.entries(input).map(([key, schema]: [string, Keyable]) => ({
-    ...schema,
-    name: key,
-    show: schema["ui:regular"] || (uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : false),
-  }));
-  if (uiSchema["ui:order"]) {
-    const order = uiSchema["ui:order"];
-    fieldList.sort((a, b) => {
-      const indexA = 1 + order.indexOf(a.name) || 1 + Object.keys(input).indexOf(a.name);
-      const indexB = 1 + order.indexOf(b.name) || 1 + Object.keys(input).indexOf(b.name);
-
-      return indexA - indexB;
-    });
-  }
-  return fieldList;
-}
-
-function fromPropertiesDefinitionToSchema(inputList: Keyable[]) {
-  const uiSchema = {};
-  inputList.forEach((item) => {
-    const { name, show } = item;
-    uiSchema[name] = {};
-    if (!show) {
-      uiSchema[name]["ui:widget"] = "hidden";
-    }
-  });
-  uiSchema["ui:order"] = inputList.map((item) => item.name);
-  return {
-    uiSchema,
-  };
-}
-
-const TicketFormConfigDialog = ({ object }: { object: Scrivito.Obj }) => (
+export const TicketFormConfigDialog = ({ object }: { object: Scrivito.Obj }) => (
   <TenantContextProvider>
     <TicketFormConfigDialogContent object={object} />
   </TenantContextProvider>
 );
 
-const TicketFormConfigDialogContent = ({ object }: { object: Scrivito.Obj }) => {
+const TicketFormConfigDialogContent = Scrivito.connect(({ object }: { object: Scrivito.Obj }) => {
   const [orderedObjs, setOrderedObjs] = React.useState<Keyable[]>([]);
   const { prepareTicketSchema, instance } = useTenantContext();
   const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
   const [ticketUiSchema, setTicketUiSchema] = React.useState<Keyable>();
+  const disabled = !Scrivito.canWrite();
 
   React.useEffect(() => {
     setTicketUiSchema(
@@ -93,9 +61,41 @@ const TicketFormConfigDialogContent = ({ object }: { object: Scrivito.Obj }) => 
         objs={orderedObjs}
         onSortEnd={onSortEnd}
         updateField={updateField}
+        disabled={disabled}
       />
     </div>
   );
-};
+});
 
-export { TicketFormConfigDialog };
+function transformPropertiesToArray(input: Keyable, uiSchema: Keyable) {
+  const fieldList = Object.entries(input).map(([key, schema]: [string, Keyable]) => ({
+    ...schema,
+    name: key,
+    show: schema["ui:regular"] || (uiSchema[key] ? uiSchema[key]["ui:widget"] !== "hidden" : false),
+  }));
+  if (uiSchema["ui:order"]) {
+    const order = uiSchema["ui:order"];
+    fieldList.sort((a, b) => {
+      const indexA = 1 + order.indexOf(a.name) || 1 + Object.keys(input).indexOf(a.name);
+      const indexB = 1 + order.indexOf(b.name) || 1 + Object.keys(input).indexOf(b.name);
+
+      return indexA - indexB;
+    });
+  }
+  return fieldList;
+}
+
+function fromPropertiesDefinitionToSchema(inputList: Keyable[]) {
+  const uiSchema = {};
+  inputList.forEach((item) => {
+    const { name, show } = item;
+    uiSchema[name] = {};
+    if (!show) {
+      uiSchema[name]["ui:widget"] = "hidden";
+    }
+  });
+  uiSchema["ui:order"] = inputList.map((item) => item.name);
+  return {
+    uiSchema,
+  };
+}

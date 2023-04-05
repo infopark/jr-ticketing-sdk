@@ -8,6 +8,7 @@ function SortableObjList({
   objs,
   onSortEnd,
   updateField,
+  disabled,
 }) {
   return (
     <div id="scrivito_obj_sorting_sortable">
@@ -15,7 +16,7 @@ function SortableObjList({
         ids={objs.map((obj: Keyable) => obj.name)}
         items={objs}
         onSortEnd={onSortEnd}
-        disabled={false}
+        disabled={disabled}
         useDragHandle={null}
       >
         {objs.map((obj) => (
@@ -23,6 +24,7 @@ function SortableObjList({
             key={obj.name}
             obj={obj}
             updateField={updateField}
+            disabled={disabled}
           />
         ))}
       </SortableContainer>
@@ -30,7 +32,7 @@ function SortableObjList({
   );
 }
 
-const SortableObjListItem = ({ obj, updateField }) => {
+const SortableObjListItem = ({ obj, updateField, disabled }) => {
   return (
     <li>
       <div>
@@ -45,6 +47,7 @@ const SortableObjListItem = ({ obj, updateField }) => {
               type="checkbox"
               name="show"
               checked={obj.show}
+              disabled={disabled}
               onChange={(_event) => {
                 updateField(obj, { show: !obj.show });
               }}
