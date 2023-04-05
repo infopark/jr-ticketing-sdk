@@ -16,7 +16,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
 
   const ticketUiSchema = JSON.parse(widget.get("uiSchema") as string || "{}");
 
-  async function loadTickets() {
+  const loadTickets = React.useCallback(async () => {
     try {
       const tickets = await TicketingApi.get(`tickets?filter[requester_id][eq]=${currentUser?.id}`);
       if (tickets) {
@@ -27,7 +27,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
     } catch (error) {
       addError("Error loading ticket list", "TicketListComponent", error);
     }
-  }
+  }, [currentUser?.id, addError, setRunningTickets]);
 
   React.useEffect(() => {
     if (!currentUser?.id) {
@@ -35,7 +35,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
     }
 
     loadTickets();
-  }, [msg, addError, currentUser?.id]);
+  }, [msg, loadTickets, currentUser?.id]);
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
   const helpdeskPage = helpdeskPages.first();
