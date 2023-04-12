@@ -18,22 +18,23 @@ Scrivito.provideComponent("TicketListWidget", (({ widget }) => {
   const { addError, currentUser } = useTenantContext();
   const msg = useWS("users", currentUser?.id);
 
+  const loadTickets = React.useCallback(async () => {
+    try {
+      const tickets = await TicketingApi.get(`tickets?filter[requester_id][eq]=${currentUser?.id}`);
+      setTicketList(tickets);
+    } catch (error) {
+      addError("Error loading ticket list", "TicketListWidget", error);
+    }
+    setLoading(false);
+  }, [currentUser?.id, addError, setTicketList]);
+
   React.useEffect(() => {
     if (!currentUser?.id) {
       return;
     }
 
-    TicketingApi.get(`tickets?filter[requester_id][eq]=${currentUser?.id}`)
-      .then((response) => {
-        if (!response.failedRequest) {
-          setTicketList(response);
-        }
-      })
-      .catch((error) => {
-        addError("Error loading ticket list", "TicketListWidget", error);
-      })
-      .finally(() => setLoading(false));
-  }, [msg, addError, currentUser?.id]);
+    loadTickets();
+  }, [msg, loadTickets, currentUser?.id]);
 
   const baseLink = widget.get("link");
   if (!baseLink && allowDeferredBaseLink.current) {

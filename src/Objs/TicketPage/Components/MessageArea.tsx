@@ -12,7 +12,7 @@ import AttachIcon from "../../../assets/images/icons/attach_icon.svg";
 import SendIcon from "../../../assets/images/icons/send_icon.svg";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
-  const { currentUser } = useTenantContext();
+  const { currentUser, addError } = useTenantContext();
   const [message, setMessage] = React.useState("");
   const [files, setFiles] = React.useState<FileObject[]>([]);
   const [rows, setRows] = React.useState<number>(1);
@@ -37,29 +37,33 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   };
 
   const onSubmit = async () => {
-    if (isClosed) {
-      return;
-    }
+    try {
+      if (isClosed) {
+        return;
+      }
 
-    const attachments = files.reduce(
-      (result: object[], file) => file.filename
-        ? [...result, { filename: file.filename}]
-        : result, []);
+      const attachments = files.reduce(
+        (result: object[], file) => file.filename
+          ? [...result, { filename: file.filename}]
+          : result, []);
 
-    const msgData = {
-      text: newlinesToBreaks(message),
-      user_id: currentUser?.id,
-      attachments: attachments
-    };
+      const msgData = {
+        text: newlinesToBreaks(message),
+        user_id: currentUser?.id,
+        attachments: attachments
+      };
 
-    const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
+      const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
-    setAutoGrowRows(1);
+    setRows(1);
     setFiles([]);
     setMessage("");
 
-    if (!response.failedRequest) {
-      refreshCallback();
+      if (response) {
+        refreshCallback();
+      }
+    } catch (error) {
+      addError("Error submitting message", "MessageArea", error);
     }
   };
 
@@ -92,32 +96,36 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
         return;
       }
 
-      const signedResult = await TicketingApi.post("signed-upload-url", {
-        data: {
-          filename: file.name,
-        }
-      });
+      try {
+        const signedResult = await TicketingApi.post("signed-upload-url", {
+          data: {
+            filename: file.name,
+          }
+        });
 
-      if (signedResult.failedRequest) {
-        fileObject.error = "file_upload_failed";
+        if (!signedResult) {
+          fileObject.error = "file_upload_failed";
+          fileObject.loading = false;
+          updateFiles(fileObject);
+          return;
+        }
+
+        const uploadResult = await fetch(signedResult.url, {
+          method: "PUT",
+          body: file as BodyInit,
+        });
+
+        if (uploadResult.status >= 200 && uploadResult.status < 300) {
+          fileObject.filename = signedResult.filename;
+        } else {
+          fileObject.error = "file_upload_failed";
+        }
+
         fileObject.loading = false;
         updateFiles(fileObject);
-        return;
+      } catch (error) {
+        addError("Error uploading file", "MessageArea", error);
       }
-
-      const uploadResult = await fetch(signedResult.url, {
-        method: "PUT",
-        body: file as BodyInit,
-      });
-
-      if (uploadResult.status >= 200 && uploadResult.status < 300) {
-        fileObject.filename = signedResult.filename;
-      } else {
-        fileObject.error = "file_upload_failed";
-      }
-
-      fileObject.loading = false;
-      updateFiles(fileObject);
     });
   };
 

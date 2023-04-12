@@ -16,6 +16,7 @@ import { MAX_ATTACHMENT_SIZE } from "../../utils/constants";
 import { FileObject, Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
+  const { addError } = useTenantContext();
   const [files, setFiles] = React.useState<object[]>([]);
 
   function updateFiles(fileObject) {
@@ -43,32 +44,36 @@ const CustomAttachment = function({ id, value, onChange }) {
         return;
       }
 
-      const signedResult = await TicketingApi.post("signed-upload-url", {
-        data: {
-          filename: file.name,
-        }
-      });
+      try {
+        const signedResult = await TicketingApi.post("signed-upload-url", {
+          data: {
+            filename: file.name,
+          }
+        });
 
-      if (signedResult.failedRequest) {
-        fileObject.error = "file_upload_failed";
+        if (!signedResult) {
+          fileObject.error = "file_upload_failed";
+          fileObject.loading = false;
+          updateFiles(fileObject);
+          return;
+        }
+
+        const uploadResult = await fetch(signedResult.url, {
+          method: "PUT",
+          body: file as BodyInit,
+        });
+
+        if (uploadResult.status >= 200 && uploadResult.status < 300) {
+          filenames.push(signedResult.filename);
+          onChange(filenames);
+        } else {
+          fileObject.error = "file_upload_failed";
+        }
         fileObject.loading = false;
         updateFiles(fileObject);
-        return;
+      } catch (error) {
+        addError("Error uploading file", "CreateNewTicketOverlay", error);
       }
-
-      const uploadResult = await fetch(signedResult.url, {
-        method: "PUT",
-        body: file as BodyInit,
-      });
-
-      if (uploadResult.status >= 200 && uploadResult.status < 300) {
-        filenames.push(signedResult.filename);
-        onChange(filenames);
-      } else {
-        fileObject.error = "file_upload_failed";
-      }
-      fileObject.loading = false;
-      updateFiles(fileObject);
     });
   }
 
@@ -143,7 +148,7 @@ function CreateNewTicketOverlay({
     <div className="mute_bg_2" {...props} />
   );
 
-  const { currentUser } = useTenantContext();
+  const { currentUser, addError } = useTenantContext();
 
   const onSubmitForm = async () => {
     setLoading(true);
@@ -162,6 +167,7 @@ function CreateNewTicketOverlay({
           ticketAttributes[name] = value;
         }
       });
+
       const newTicket = await TicketingApi.post("tickets", {
         data: {
           ...ticketAttributes,
@@ -171,7 +177,7 @@ function CreateNewTicketOverlay({
         }
       });
 
-      if (newTicket.failedRequest) {
+      if (!newTicket) {
         setLoading(false);
         setShowError(true);
         return;
@@ -181,6 +187,7 @@ function CreateNewTicketOverlay({
         ticketid: newTicket.id,
       });
     } catch (error) {
+      addError("Error submitting ticket", "CreateNewTicketOverlay", error);
       setLoading(false);
       setShowError(true);
     }
