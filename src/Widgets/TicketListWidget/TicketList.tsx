@@ -61,7 +61,7 @@ function TicketList({
       {filteredList.map((ticket: Ticket, index: number) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
-          query: `ticketid=${ticket.number}`,
+          query: `id=${ticket.number}`,
         });
 
         return (

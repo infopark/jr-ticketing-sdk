@@ -1,5 +1,11 @@
 ## Changelog
 
+#### 0.3.0
+- [new] split `TicketFormConfiguration` between CreateTicket widget and TicketPage
+- [new] use ticket.number in URLs
+- [break] rename `TenantContext` to `TicketingContext`
+- disable websocket connection
+
 #### 0.2.3
 - [fix] allow empty instance configurations
 

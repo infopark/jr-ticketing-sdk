@@ -26,8 +26,9 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
   const getTicket = async (effectStatus) => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      const ticketid = urlParams.get("ticketid");
-      const ticket = ticketid && (await TicketingApi.get(`tickets?continuation=no&filter[number][eq]=${ticketid}&include=messages,messages.user`));
+      const ticketnr = urlParams.get("id");
+      const ticket = ticketnr && (await TicketingApi.get(`tickets?continuation=no&filter[number][eq]=${ticketnr}&include=messages,messages.user`))[0];
+
       if (effectStatus.canceled) {
         return;
       }
@@ -42,7 +43,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
       if (wasTicketCreatedLessThanMsAgo(ticket, 1000)) {
         // ask again about the ticket details, it was created just now
         setTimeout(async () => {
-          const result = await TicketingApi.get(`tickets/${ticketid}`);
+          const result = await TicketingApi.get(`tickets/${ticketnr}`);
           if (!effectStatus.canceled) {
             setTicket(result);
           }
@@ -110,7 +111,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
               </div>
               <div className="col-lg-8 order-lg-1">
                 <CommunicationTree
-                  messages={ticket.messages}
+                  messages={ticket.messages || []}
                   status={status}
                 />
               </div>
@@ -129,7 +130,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
 });
 
 function wasTicketCreatedLessThanMsAgo(ticket, diffMs) {
-  const d = new Date(ticket && ticket.creationdate);
+  const d = new Date(ticket && ticket.created_at);
   return Date.now() - d.getTime() < diffMs;
 }
 
