@@ -5,16 +5,16 @@ import TicketingApi from "../../api/TicketingApi";
 import { createDefaultTicketListFilter } from "../../utils/listFilters";
 import TicketNumberBox from "./TicketNumberBox";
 import CreateNewTicket from "./CreateNewTicket";
-import { useTenantContext } from "../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../Components/TicketingContextProvider";
 import i18n from "../../config/i18n";
 import useWS from "../../utils/useWS";
 
 Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
   const [runningTickets, setRunningTickets] = React.useState(0);
-  const { addError, currentUser } = useTenantContext();
+  const { addError, currentUser } = useTicketingContext();
   const msg = useWS("users", currentUser?.id);
 
-  const ticketUiSchema = JSON.parse(widget.get("uiSchema") as string || "{}");
+  const ticketUiSchema = JSON.parse(widget!.get("uiSchema") as string || "{}");
 
   const loadTickets = React.useCallback(async () => {
     try {
@@ -39,7 +39,7 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
 
   const helpdeskPages = Scrivito.Obj.where("_objClass", "equals", "Page");
   const helpdeskPage = helpdeskPages.first();
-  const link = widget.get("link") || helpdeskPage;
+  const link = widget!.get("link") || helpdeskPage;
   const boxClassName = "col-sm-6";
   const ticketPage = Scrivito.Obj.where(
     "_objClass",
@@ -64,4 +64,4 @@ Scrivito.provideComponent("TicketsWidget", (({ widget }) => {
       />
     </Scrivito.WidgetTag>
   );
-}) as any);
+}) as React.ComponentType<Partial<Scrivito.WidgetComponentProps>>);

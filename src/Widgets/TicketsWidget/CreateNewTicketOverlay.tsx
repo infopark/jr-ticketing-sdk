@@ -11,12 +11,12 @@ import i18n from "../../config/i18n";
 import Loader from "../../Components/Loader";
 import TicketingApi from "../../api/TicketingApi";
 import FooterButtons from "./FooterButtons";
-import { useTenantContext } from "../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../Components/TicketingContextProvider";
 import { MAX_ATTACHMENT_SIZE } from "../../utils/constants";
 import { FileObject, Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
-  const { addError } = useTenantContext();
+  const { addError } = useTicketingContext();
   const [files, setFiles] = React.useState<object[]>([]);
 
   function updateFiles(fileObject) {
@@ -148,7 +148,7 @@ function CreateNewTicketOverlay({
     <div className="mute_bg_2" {...props} />
   );
 
-  const { currentUser, addError } = useTenantContext();
+  const { currentUser, addError } = useTicketingContext();
 
   const onSubmitForm = async () => {
     setLoading(true);
@@ -197,7 +197,7 @@ function CreateNewTicketOverlay({
   const [uiSchema, setUiSchema] = React.useState({});
   const [formData, setFormData] = React.useState({});
   const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
-  const { prepareTicketSchema, instance } = useTenantContext();
+  const { prepareTicketSchema, instance } = useTicketingContext();
 
   React.useEffect(() => {
     setTicketSchema(

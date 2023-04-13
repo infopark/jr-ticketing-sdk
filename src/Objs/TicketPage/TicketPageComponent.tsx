@@ -12,14 +12,14 @@ import TicketHeader from "./Components/TicketHeader";
 import { Keyable } from "../../utils/types";
 import useWS from "../../utils/useWS";
 import useAsyncError from "../../utils/useAsyncError";
-import { useTenantContext } from "../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../Components/TicketingContextProvider";
 
 Scrivito.provideComponent("TicketPage", ({ page }) => {
   const [ticket, setTicket] = React.useState<Keyable>();
   const [status, setStatus] = React.useState<string>("idle");
   const msg = useWS("tickets", ticket?.id);
   const throwError = useAsyncError();
-  const { addError } = useTenantContext();
+  const { addError } = useTicketingContext();
 
   const ticketUiSchema = JSON.parse(page?.get("uiSchema") as string || "{}");
 

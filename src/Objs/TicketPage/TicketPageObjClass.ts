@@ -1,12 +1,14 @@
 import * as Scrivito from "scrivito";
+
 import metadataAttributes from "../_metadataAttributes";
+import { Keyable } from "../../utils/types";
 
 const TicketPage = Scrivito.provideObjClass("TicketPage", {
   attributes: {
     title: "string",
     uiSchema: "string",
     body: ["widgetlist", { only: "SectionWidget" }],
-    ...metadataAttributes as any,
+    ...metadataAttributes as Keyable,
   },
   extractTextAttributes: ["body"],
 });

@@ -3,13 +3,13 @@ import sanitizeHtml from "sanitize-html";
 
 import i18n from "../../../config/i18n";
 import { formatRelative } from "../../../utils/dateUtils";
-import { useTenantContext } from "../../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../../Components/TicketingContextProvider";
 import { Keyable } from "../../../utils/types";
 import { Accordion } from "react-bootstrap";
 
 const TicketDetails = ({ ticket, ticketUiSchema }) => {
   const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
-  const { prepareTicketSchema, instance } = useTenantContext();
+  const { prepareTicketSchema, instance } = useTicketingContext();
 
   React.useEffect(() => {
     setTicketSchema(
