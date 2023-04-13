@@ -27,7 +27,7 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const ticketid = urlParams.get("ticketid");
-      const ticket = ticketid && (await TicketingApi.get(`tickets/${ticketid}?include=messages,messages.user`));
+      const ticket = ticketid && (await TicketingApi.get(`tickets?continuation=no&filter[number][eq]=${ticketid}&include=messages,messages.user`));
       if (effectStatus.canceled) {
         return;
       }
