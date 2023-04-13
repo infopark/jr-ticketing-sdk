@@ -6,7 +6,7 @@ import { TicketingContextProvider, useTicketingContext } from "./TicketingContex
 import { SortableObjList } from "./TicketFormConfigDialog/SortableObjList";
 
 export const TicketFormConfigDialog = ({ object }: { object: Scrivito.Obj }) => (
-  <TicketingContextProvider>
+  <TicketingContextProvider history={null}>
     <TicketFormConfigDialogContent object={object} />
   </TicketingContextProvider>
 );

@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserHistory } from "history";
 
 import getUserData from "../api/getUserData";
 import TicketingApi from "../api/TicketingApi";
@@ -32,7 +33,7 @@ const TicketAttributes = {
   }
 };
 
-export function TicketingContextProvider({ children }) {
+export function TicketingContextProvider({ history, children }) {
   const [instance, setInstance] = React.useState<Keyable>();
 
   const [currentUser, setCurrentUser] = React.useState<Keyable>();
@@ -130,6 +131,7 @@ export function TicketingContextProvider({ children }) {
   return (
     <TicketingContext.Provider
       value={{
+        history,
         instance,
         prepareTicketSchema,
         isTicketingContextReady,
@@ -146,6 +148,7 @@ export function TicketingContextProvider({ children }) {
 }
 
 type TTicketingContext = {
+  history: BrowserHistory,
   instance: Keyable;
   prepareTicketSchema: (ticketUiSchema: Keyable, instance: Keyable) => Keyable | null;
   isTicketingContextReady: () => boolean;

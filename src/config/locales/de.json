@@ -110,7 +110,8 @@
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "file_upload_hint": "Sie können eine Datei bis zu einer Größe von 20 MB anhängen",
-    "processing_file": "Die Datei wird bearbeitet ..."
+    "processing_file": "Die Datei wird bearbeitet ...",
+    "leaving_confirmation": "Are you sure you want to drop your changes?"
   },
   "TicketHeader": {
     "back": "zurück"
@@ -121,7 +122,8 @@
     "message_placeholder": "Ihre Nachricht ...",
     "processing_file": "Die Datei wird bearbeitet ...",
     "submit": "Nachricht abschicken",
-    "go_to_last_message": "Zur letzten Nachricht"
+    "go_to_last_message": "Zur letzten Nachricht",
+    "leaving_confirmation": "Are you sure you want to drop your changes?"
   },
   "Message": {
     "delete_attachment": "Löschen",

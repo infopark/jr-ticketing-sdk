@@ -110,7 +110,8 @@
     "create_new_ticket": "Create Ticket",
     "file_too_big": "File is too big",
     "file_upload_failed": "File upload failed",
-    "processing_file": "Processing file ..."
+    "processing_file": "Processing file ...",
+    "leaving_confirmation": "Are you sure you want to drop your changes?"
   },
   "TicketHeader": {
     "back": "zurück"
@@ -121,7 +122,8 @@
     "message_placeholder": "Your Message...",
     "processing_file": "Processing file ...",
     "submit": "Post Message",
-    "go_to_last_message": "Go to most recent message"
+    "go_to_last_message": "Go to most recent message",
+    "leaving_confirmation": "Are you sure you want to drop your changes?"
   },
   "Message": {
     "delete_attachment": "Delete",
