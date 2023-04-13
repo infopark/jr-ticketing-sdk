@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
-import classNames from "classnames";
 import { isEmpty } from "lodash-es";
 import Modal from "react-overlays/Modal";
 
@@ -12,12 +11,13 @@ import i18n from "../../config/i18n";
 import Loader from "../../Components/Loader";
 import TicketingApi from "../../api/TicketingApi";
 import FooterButtons from "./FooterButtons";
-import { useTenantContext } from "../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../Components/TicketingContextProvider";
 import { MAX_ATTACHMENT_SIZE } from "../../utils/constants";
 import { FileObject, Keyable } from "../../utils/types";
 
 const CustomAttachment = function({ id, value, onChange }) {
-  const [files, setFiles] = useState<object[]>([]);
+  const { addError } = useTicketingContext();
+  const [files, setFiles] = React.useState<object[]>([]);
 
   function updateFiles(fileObject) {
     setFiles((files) => files.map((f) => f === fileObject ? fileObject : f));
@@ -44,32 +44,36 @@ const CustomAttachment = function({ id, value, onChange }) {
         return;
       }
 
-      const signedResult = await TicketingApi.post("signed-upload-url", {
-        data: {
-          filename: file.name,
-        }
-      });
+      try {
+        const signedResult = await TicketingApi.post("signed-upload-url", {
+          data: {
+            filename: file.name,
+          }
+        });
 
-      if (signedResult.failedRequest) {
-        fileObject.error = "file_upload_failed";
+        if (!signedResult) {
+          fileObject.error = "file_upload_failed";
+          fileObject.loading = false;
+          updateFiles(fileObject);
+          return;
+        }
+
+        const uploadResult = await fetch(signedResult.url, {
+          method: "PUT",
+          body: file as BodyInit,
+        });
+
+        if (uploadResult.status >= 200 && uploadResult.status < 300) {
+          filenames.push(signedResult.filename);
+          onChange(filenames);
+        } else {
+          fileObject.error = "file_upload_failed";
+        }
         fileObject.loading = false;
         updateFiles(fileObject);
-        return;
+      } catch (error) {
+        addError("Error uploading file", "CreateNewTicketOverlay", error);
       }
-
-      const uploadResult = await fetch(signedResult.url, {
-        method: "PUT",
-        body: file as BodyInit,
-      });
-
-      if (uploadResult.status >= 200 && uploadResult.status < 300) {
-        filenames.push(signedResult.filename);
-        onChange(filenames);
-      } else {
-        fileObject.error = "file_upload_failed";
-      }
-      fileObject.loading = false;
-      updateFiles(fileObject);
     });
   }
 
@@ -129,20 +133,22 @@ const widgets: RegistryWidgetsType = {
 function CreateNewTicketOverlay({
   isOpen,
   close,
-  chatPage
+  ticketPage,
+  ticketUiSchema,
 }: {
   isOpen: boolean,
   close: React.MouseEventHandler<HTMLElement>,
-  chatPage: Scrivito.Obj
+  ticketPage: Scrivito.Obj,
+  ticketUiSchema: Keyable,
 }) {
-  const [loading, setLoading] = useState(false);
-  const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [showError, setShowError] = React.useState(false);
 
   const renderBackdrop = (props) => (
     <div className="mute_bg_2" {...props} />
   );
 
-  const { userId } = useTenantContext();
+  const { currentUser, addError } = useTicketingContext();
 
   const onSubmitForm = async () => {
     setLoading(true);
@@ -161,25 +167,27 @@ function CreateNewTicketOverlay({
           ticketAttributes[name] = value;
         }
       });
+
       const newTicket = await TicketingApi.post("tickets", {
         data: {
           ...ticketAttributes,
           message: messageAttributes,
-          requester_id: userId,
+          requester_id: currentUser?.id,
           status: "new",
         }
       });
 
-      if (newTicket.failedRequest) {
+      if (!newTicket) {
         setLoading(false);
         setShowError(true);
         return;
       }
 
-      Scrivito.navigateTo(chatPage, {
-        ticketid: newTicket.id,
+      Scrivito.navigateTo(ticketPage, {
+        id: String(newTicket.number),
       });
     } catch (error) {
+      addError("Error submitting ticket", "CreateNewTicketOverlay", error);
       setLoading(false);
       setShowError(true);
     }
@@ -188,7 +196,14 @@ function CreateNewTicketOverlay({
   const [schema, setSchema] = React.useState({});
   const [uiSchema, setUiSchema] = React.useState({});
   const [formData, setFormData] = React.useState({});
-  const { ticketSchema, ticketUiSchema } = useTenantContext();
+  const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
+  const { prepareTicketSchema, instance } = useTicketingContext();
+
+  React.useEffect(() => {
+    setTicketSchema(
+      prepareTicketSchema(ticketUiSchema, instance)
+    );
+  }, [ticketUiSchema, instance]);
 
   React.useEffect(() => {
     if (ticketSchema && ticketUiSchema) {

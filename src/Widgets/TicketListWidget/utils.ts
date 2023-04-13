@@ -40,7 +40,7 @@ export const ticketSorters = {
       return [...objects].sort(dynamicSort("-updated_at"));
     },
   },
-}
+};
 
 export const ticketFilters = {
   all: {
@@ -96,5 +96,5 @@ function dynamicSort(property: string) {
       case av > bv: return 1 * sortOrder;
       default: return 0;
     }
-  }
+  };
 }

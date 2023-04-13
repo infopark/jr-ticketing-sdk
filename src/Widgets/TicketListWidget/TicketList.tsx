@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import * as Scrivito from "scrivito";
 
 import Loader from "../../Components/Loader";
@@ -61,7 +61,7 @@ function TicketList({
       {filteredList.map((ticket: Ticket, index: number) => {
         const targetLink = new Scrivito.Link({
           obj: baseLink,
-          query: `ticketid=${ticket.id}`,
+          query: `id=${ticket.number}`,
         });
 
         return (

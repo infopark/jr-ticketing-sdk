@@ -3,18 +3,19 @@ import sanitizeHtml from "sanitize-html";
 
 import i18n from "../../../config/i18n";
 import { formatRelative } from "../../../utils/dateUtils";
-import { useTenantContext } from "../../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../../Components/TicketingContextProvider";
 import { Keyable } from "../../../utils/types";
 import { Accordion } from "react-bootstrap";
 
-const TicketDetails = ({ ticket }) => {
-  const {
-    title,
-    number,
-    type,
-    created_at,
-  } = ticket;
-  const { ticketSchema, ticketUiSchema } = useTenantContext();
+const TicketDetails = ({ ticket, ticketUiSchema }) => {
+  const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
+  const { prepareTicketSchema, instance } = useTicketingContext();
+
+  React.useEffect(() => {
+    setTicketSchema(
+      prepareTicketSchema(ticketUiSchema, instance)
+    );
+  }, [ticketUiSchema, instance]);
 
   if (!ticketSchema || !ticketUiSchema) {
     return <>Loading ...</>;
@@ -23,7 +24,7 @@ const TicketDetails = ({ ticket }) => {
   const customAttributesOrder = ticketUiSchema["ui:order"] || [];
   const customAttributes = Object.keys(ticketSchema.properties || {})
     .filter(name => !ticketSchema.properties[name]["ui:regular"])
-    .filter(name => ticketUiSchema[name]?.["ui:details"] !== "hidden")
+    .filter(name => ticketUiSchema[name]?.["ui:widget"] !== "hidden")
     .sort((a, b) => {
       const posA = (1 + customAttributesOrder.indexOf(a));
       const posB = (1 + customAttributesOrder.indexOf(b));
@@ -43,7 +44,7 @@ const TicketDetails = ({ ticket }) => {
                 {i18n.t("Ticket.labels.title")}
               </dt>
               <dd className="flex_order_2 item_label_content">
-                {sanitizeHtml(title)}
+                {sanitizeHtml(ticket.title)}
               </dd>
             </dl>
             <dl className="mb-3">
@@ -51,7 +52,7 @@ const TicketDetails = ({ ticket }) => {
                 {i18n.t("Ticket.labels.type")}
               </dt>
               <dd className="flex_order_2 item_label_content">
-                {i18n.t(`Ticket.type.${type}`)}
+                {i18n.t(`Ticket.type.${ticket.type}`)}
               </dd>
             </dl>
             <dl className="mb-3">
@@ -59,7 +60,7 @@ const TicketDetails = ({ ticket }) => {
                 {i18n.t("Ticket.labels.number")}
               </dt>
               <dd className="flex_order_2 item_label_content">
-                {number}
+                {ticket.number}
               </dd>
             </dl>
             <dl className="mb-3">
@@ -67,7 +68,7 @@ const TicketDetails = ({ ticket }) => {
                 {i18n.t("Ticket.labels.created_at")}
               </dt>
               <dd className="flex_order_2 item_label_content">
-                {formatRelative(created_at)}
+                {formatRelative(ticket.created_at)}
               </dd>
             </dl>
             {customAttributes.map((name: string, index: number) => (

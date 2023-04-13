@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { isEmpty } from "lodash-es";
 
 import TicketingApi from "../../../api/TicketingApi";
 import { MAX_ATTACHMENT_SIZE } from "../../../utils/constants";
-import { useTenantContext } from "../../../Components/TenantContextProvider";
+import { useTicketingContext } from "../../../Components/TicketingContextProvider";
 import newlinesToBreaks from "../../../utils/newlinesToBreaks";
 import i18n from "../../../config/i18n";
 import { FileObject, Keyable } from "../../../utils/types";
@@ -12,49 +12,58 @@ import AttachIcon from "../../../assets/images/icons/attach_icon.svg";
 import SendIcon from "../../../assets/images/icons/send_icon.svg";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
-  const { userId } = useTenantContext();
-  const [message, setMessage] = useState("");
-  const [files, setFiles] = useState<FileObject[]>([]);
-  const [textareaHeight, setTextareaHeight] = useState<number>(46);
+  const { currentUser, addError } = useTicketingContext();
+  const [message, setMessage] = React.useState("");
+  const [files, setFiles] = React.useState<FileObject[]>([]);
+  const [rows, setRows] = React.useState<number>(1);
 
   const filesError = files.some((f: Keyable) => !isEmpty(f.error));
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-  };
 
-  const handleKeys = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.keyCode === 13 || e.keyCode === 8) {
-      const numberOfLineBreaks = (message.match(/\n/g) || []).length;
-      const newHeight = 45 + numberOfLineBreaks * 20;
-      setTextareaHeight(newHeight);
+    const { paddingTop, paddingBottom, lineHeight } = getComputedStyle(e.target);
+
+    const previousRows = e.target.rows;
+    e.target.rows = 1;
+
+		const currentRows = Math.floor((e.target.scrollHeight - parseFloat(paddingTop) - parseFloat(paddingBottom)) / parseFloat(lineHeight));
+
+    if (currentRows === previousRows) {
+      e.target.rows = currentRows;
     }
+
+    setRows(currentRows);
   };
 
   const onSubmit = async () => {
-    if (isClosed) {
-      return;
-    }
+    try {
+      if (isClosed) {
+        return;
+      }
 
-    const attachments = files.reduce(
-      (result: object[], file) => file.filename
-        ? [...result, { filename: file.filename}]
-        : result, []);
+      const attachments = files.reduce(
+        (result: object[], file) => file.filename
+          ? [...result, { filename: file.filename}]
+          : result, []);
 
-    const msgData = {
-      text: newlinesToBreaks(message),
-      user_id: userId,
-      attachments: attachments
-    };
+      const msgData = {
+        text: newlinesToBreaks(message),
+        user_id: currentUser?.id,
+        attachments: attachments
+      };
 
-    const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
+      const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
-    setTextareaHeight(46);
+    setRows(1);
     setFiles([]);
     setMessage("");
 
-    if (!response.failedRequest) {
-      refreshCallback();
+      if (response) {
+        refreshCallback();
+      }
+    } catch (error) {
+      addError("Error submitting message", "MessageArea", error);
     }
   };
 
@@ -87,32 +96,36 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
         return;
       }
 
-      const signedResult = await TicketingApi.post("signed-upload-url", {
-        data: {
-          filename: file.name,
-        }
-      });
+      try {
+        const signedResult = await TicketingApi.post("signed-upload-url", {
+          data: {
+            filename: file.name,
+          }
+        });
 
-      if (signedResult.failedRequest) {
-        fileObject.error = "file_upload_failed";
+        if (!signedResult) {
+          fileObject.error = "file_upload_failed";
+          fileObject.loading = false;
+          updateFiles(fileObject);
+          return;
+        }
+
+        const uploadResult = await fetch(signedResult.url, {
+          method: "PUT",
+          body: file as BodyInit,
+        });
+
+        if (uploadResult.status >= 200 && uploadResult.status < 300) {
+          fileObject.filename = signedResult.filename;
+        } else {
+          fileObject.error = "file_upload_failed";
+        }
+
         fileObject.loading = false;
         updateFiles(fileObject);
-        return;
+      } catch (error) {
+        addError("Error uploading file", "MessageArea", error);
       }
-
-      const uploadResult = await fetch(signedResult.url, {
-        method: "PUT",
-        body: file as BodyInit,
-      });
-
-      if (uploadResult.status >= 200 && uploadResult.status < 300) {
-        fileObject.filename = signedResult.filename;
-      } else {
-        fileObject.error = "file_upload_failed";
-      }
-
-      fileObject.loading = false;
-      updateFiles(fileObject);
     });
   };
 
@@ -179,8 +192,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
             placeholder={i18n.t("MessageArea.message_placeholder")}
             value={message}
             onChange={handleChange}
-            onKeyUp={handleKeys}
-            style={{ height: textareaHeight, minHeight: "46px" }}
+            rows={rows}
           />
         </div>
         <div className="textfield_btn">

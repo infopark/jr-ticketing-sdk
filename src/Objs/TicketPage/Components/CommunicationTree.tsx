@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
 import Loader from "../../../Components/Loader";
@@ -10,11 +10,11 @@ const CommunicationTree = ({
   messages,
   status,
 }) => {
-  const [collapsed, setCollapsed] = useState<Boolean>(true);
-  const messagesEndRef = useRef(null as any);
+  const [collapsed, setCollapsed] = React.useState<boolean>(true);
+  const messagesEndRef = React.useRef(null as any);
   const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (status === "uploading") {
       scrollToBottom();
     }

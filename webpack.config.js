@@ -10,8 +10,7 @@ module.exports = {
   target: ['web', ecmascriptTarget],
   entry: {
     index: "./src/index.ts",
-    ScrivitoExtensions: "./src/Components/ScrivitoExtensions/index.ts",
-    ScrivitoEditing: "./src/ScrivitoEditing/index.ts",
+    ScrivitoExtensions: "./src/ScrivitoExtensions/index.ts",
     // cssBundle: "./src/assets/stylesheets/main.scss",
   },
   module: {

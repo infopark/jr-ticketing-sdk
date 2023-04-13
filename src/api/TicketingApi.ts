@@ -11,48 +11,27 @@ const ticketingPath = [ticketingStage, "ticketing", process.env.SCRIVITO_TENANT]
 async function get(endpoint: string, options?): Promise<any> {
   const path = `${ticketingPath}/${endpoint}`;
 
-  try {
-    const response: any = await unstable_JrRestApi.get(path, options);
+  const response: any = await unstable_JrRestApi.get(path, options);
 
-    return response.data;
-  } catch (e) {
-    return handleError(e);
-  }
+  return response.data;
 }
 
 /** @public */
 async function post(endpoint: string, options?): Promise<any> {
   const path = `${ticketingPath}/${endpoint}`;
 
-  try {
-    const response: any = await unstable_JrRestApi.post(path, options);
+  const response: any = await unstable_JrRestApi.post(path, options);
 
-    return response.data;
-  } catch (e) {
-    return handleError(e);
-  }
+  return response.data;
 }
 
 /** @public */
 async function put(endpoint: string, options?): Promise<any> {
   const path = `${ticketingPath}/${endpoint}`;
 
-  try {
-    const response: any = await unstable_JrRestApi.put(path, options);
+  const response: any = await unstable_JrRestApi.put(path, options);
 
-    return response.data;
-  } catch (e) {
-    return handleError(e);
-  }
-}
-
-function handleError(error: any) {
-  console.error("TicketingApi Error: ", error);
-
-  return {
-    error: error.message,
-    tooManyIamRedirects: false
-  };
+  return response.data;
 }
 
 export default {
