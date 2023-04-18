@@ -16,20 +16,6 @@ const TicketAttributes = {
     "ui:autofocus": true,
     "ui:required": true,
     "ui:regular": true
-  },
-  "message.text": {
-    type: "string",
-    "ui:widget": "textarea",
-    "ui:required": true,
-    "ui:regular": true
-  },
-  "message.attachments": {
-    type: "array",
-    items: {
-      type: "string",
-      format: "data-url"
-    },
-    "ui:regular": true
   }
 };
 

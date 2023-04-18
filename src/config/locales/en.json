@@ -15,7 +15,6 @@
   "new ticket": "New Ticket",
   "my tickets": "My Tickets",
   "create ticket": "Create Ticket",
-  "cancel": "Cancel",
   "close": "Close",
   "search for ticket": "Search for Ticket",
   "Please enter a subject": "Please specify the subject of your request.",
@@ -105,13 +104,14 @@
       "null": "-"
     }
   },
-  "CreateNewTicketOverlay": {
+  "CreateNewTicket": {
     "attach_file": "Attach File",
     "create_new_ticket": "Create Ticket",
     "file_too_big": "File is too big",
     "file_upload_failed": "File upload failed",
-    "processing_file": "Processing file ...",
-    "leaving_confirmation": "Are you sure you want to drop your changes?"
+    "file_upload_hint": "You can attach a file up to 20MB in size",
+    "leaving_confirmation": "Are you sure you want to drop your changes?",
+    "message_placeholder": "Your Message..."
   },
   "TicketHeader": {
     "back": "zurück"
@@ -120,7 +120,6 @@
     "file_too_big": "File is too big",
     "file_upload_failed": "File upload failed",
     "message_placeholder": "Your Message...",
-    "processing_file": "Processing file ...",
     "submit": "Post Message",
     "go_to_last_message": "Go to most recent message",
     "leaving_confirmation": "Are you sure you want to drop your changes?"

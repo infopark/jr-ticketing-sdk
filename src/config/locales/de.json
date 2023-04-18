@@ -15,7 +15,6 @@
   "new ticket": "Neues Ticket",
   "my tickets": "Meine Tickets",
   "create ticket": "Ticket erstellen",
-  "cancel": "Abbrechen",
   "close": "Schließen",
   "search for ticket": "Ticket suchen",
   "Please enter a subject": "Bitte geben Sie das Thema Ihres Anliegens an.",
@@ -110,8 +109,8 @@
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "file_upload_hint": "Sie können eine Datei bis zu einer Größe von 20 MB anhängen",
-    "processing_file": "Die Datei wird bearbeitet ...",
-    "leaving_confirmation": "Wollen Sie Ihre Änderungen verwerfen?"
+    "leaving_confirmation": "Wollen Sie Ihre Änderungen verwerfen?",
+    "message_placeholder": "Ihre Nachricht ..."
   },
   "TicketHeader": {
     "back": "zurück"
@@ -120,7 +119,6 @@
     "file_too_big": "Die Datei ist zu groß",
     "file_upload_failed": "Upload fehlgeschlagen",
     "message_placeholder": "Ihre Nachricht ...",
-    "processing_file": "Die Datei wird bearbeitet ...",
     "submit": "Nachricht abschicken",
     "go_to_last_message": "Zur letzten Nachricht",
     "leaving_confirmation": "Wollen Sie Ihre Änderungen verwerfen?"

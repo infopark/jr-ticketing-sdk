@@ -41,7 +41,7 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
     const previousRows = e.target.rows;
     e.target.rows = 1;
 
-		const currentRows = Math.floor((e.target.scrollHeight - parseFloat(paddingTop) - parseFloat(paddingBottom)) / parseFloat(lineHeight));
+    const currentRows = Math.floor((e.target.scrollHeight - parseFloat(paddingTop) - parseFloat(paddingBottom)) / parseFloat(lineHeight));
 
     if (currentRows === previousRows) {
       e.target.rows = currentRows;
