@@ -12,12 +12,26 @@ import AttachIcon from "../../../assets/images/icons/attach_icon.svg";
 import SendIcon from "../../../assets/images/icons/send_icon.svg";
 
 const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
-  const { currentUser, addError } = useTicketingContext();
+  const { history, currentUser, addError } = useTicketingContext();
   const [message, setMessage] = React.useState("");
   const [files, setFiles] = React.useState<FileObject[]>([]);
   const [rows, setRows] = React.useState<number>(1);
 
   const filesError = files.some((f: Keyable) => !isEmpty(f.error));
+
+  React.useEffect(() => {
+    if (message.length === 0 && files.length === 0) return;
+
+    const unblock = history?.block((tx) => {
+      if (!window.confirm(i18n.t("MessageArea.leaving_confirmation"))) return;
+      unblock && unblock();
+      tx.retry();
+    });
+
+    return () => {
+      unblock && unblock();
+    };
+  }, [message, files]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -55,9 +69,9 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
 
       const response = await TicketingApi.post(`tickets/${ticketId}/messages`, { data: msgData });
 
-    setRows(1);
-    setFiles([]);
-    setMessage("");
+      setMessage("");
+      setRows(1);
+      setFiles([]);
 
       if (response) {
         refreshCallback();

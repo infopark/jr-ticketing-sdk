@@ -39,16 +39,6 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
 
       setStatus("idle");
       setTicket(ticket);
-
-      if (wasTicketCreatedLessThanMsAgo(ticket, 1000)) {
-        // ask again about the ticket details, it was created just now
-        setTimeout(async () => {
-          const result = await TicketingApi.get(`tickets/${ticketnr}`);
-          if (!effectStatus.canceled) {
-            setTicket(result);
-          }
-        }, 3500);
-      }
     } catch (error) {
       addError("Error loading ticket", "TicketPage", error);
     }
@@ -128,11 +118,6 @@ Scrivito.provideComponent("TicketPage", ({ page }) => {
     </div>
   );
 });
-
-function wasTicketCreatedLessThanMsAgo(ticket, diffMs) {
-  const d = new Date(ticket && ticket.created_at);
-  return Date.now() - d.getTime() < diffMs;
-}
 
 function saveScrollPosition() {
   const { pageYOffset } = window;
