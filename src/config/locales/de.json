@@ -111,7 +111,7 @@
     "file_upload_failed": "Upload fehlgeschlagen",
     "file_upload_hint": "Sie können eine Datei bis zu einer Größe von 20 MB anhängen",
     "processing_file": "Die Datei wird bearbeitet ...",
-    "leaving_confirmation": "Are you sure you want to drop your changes?"
+    "leaving_confirmation": "Wollen Sie Ihre Änderungen verwerfen?"
   },
   "TicketHeader": {
     "back": "zurück"
@@ -123,7 +123,7 @@
     "processing_file": "Die Datei wird bearbeitet ...",
     "submit": "Nachricht abschicken",
     "go_to_last_message": "Zur letzten Nachricht",
-    "leaving_confirmation": "Are you sure you want to drop your changes?"
+    "leaving_confirmation": "Wollen Sie Ihre Änderungen verwerfen?"
   },
   "Message": {
     "delete_attachment": "Löschen",

@@ -20,12 +20,13 @@ const MessageArea = ({ ticketId, refreshCallback, isClosed }) => {
   const filesError = files.some((f: Keyable) => !isEmpty(f.error));
 
   React.useEffect(() => {
-    const unblock = (message.length > 0 || files.length > 0)
-      ? history?.block((tx) => {
-        if (!window.confirm(i18n.t("MessageArea.leaving_confirmation"))) return;
-        unblock && unblock();
-        tx.retry();
-      }) : null;
+    if (message.length === 0 && files.length === 0) return;
+
+    const unblock = history?.block((tx) => {
+      if (!window.confirm(i18n.t("MessageArea.leaving_confirmation"))) return;
+      unblock && unblock();
+      tx.retry();
+    });
 
     return () => {
       unblock && unblock();

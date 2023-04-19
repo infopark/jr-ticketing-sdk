@@ -150,6 +150,10 @@ function CreateNewTicketOverlay({
 
   const { currentUser, addError } = useTicketingContext();
 
+  function resetForm() {
+    setFormData({});
+  }
+
   const onSubmitForm = async () => {
     setLoading(true);
 
@@ -199,22 +203,21 @@ function CreateNewTicketOverlay({
   const [ticketSchema, setTicketSchema] = React.useState<Keyable | null>();
   const { history, prepareTicketSchema, instance } = useTicketingContext();
 
-  function isDraft(): boolean {
-    return isOpen && (formData["title"]?.length > 0 || formData["message.text"]?.length > 0 || formData["message.attachments"]?.length > 0);
-  }
+  const isDraft = isOpen && (formData["title"]?.length > 0 || formData["message.text"]?.length > 0 || formData["message.attachments"]?.length > 0);
 
   function leavingConfirmation(): boolean {
-    return (!isDraft() || window.confirm(i18n.t("CreateNewTicket.leaving_confirmation")));
+    return (!isDraft || window.confirm(i18n.t("CreateNewTicket.leaving_confirmation")));
   }
 
   React.useEffect(() => {
-    const unblock = isDraft()
-      ? history?.block((tx) => {
-        if (window.confirm(i18n.t("CreateNewTicket.leaving_confirmation"))) {
-          unblock && unblock();
-          tx.retry();
-        }
-      }) : null;
+    if (!isDraft) return;
+
+    const unblock = history?.block((tx) => {
+      if (window.confirm(i18n.t("CreateNewTicket.leaving_confirmation"))) {
+        unblock && unblock();
+        tx.retry();
+      }
+    });
 
     return () => {
       unblock && unblock();
@@ -256,7 +259,7 @@ function CreateNewTicketOverlay({
       show={isOpen}
       onHide={
         ((event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-          leavingConfirmation() && close(event);
+          leavingConfirmation() && (resetForm(), close(event));
         }) as any
       }
       renderBackdrop={renderBackdrop}
@@ -295,7 +298,7 @@ function CreateNewTicketOverlay({
             </div>
             <FooterButtons
               onSubmit={onSubmitForm}
-              onCancel={(e) => leavingConfirmation() && close(e)}
+              onCancel={(e) => leavingConfirmation() && (resetForm(), close(e))}
               disabled={false}
             />
           </div>
