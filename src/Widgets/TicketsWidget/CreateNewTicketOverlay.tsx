@@ -160,6 +160,8 @@ function CreateNewTicketOverlay({
 
   function resetForm() {
     setFormData({});
+    setMessage("");
+    setFiles([]);
   }
 
   const onSubmitForm = async () => {
@@ -195,8 +197,12 @@ function CreateNewTicketOverlay({
         return;
       }
 
-      Scrivito.navigateTo(ticketPage, {
-        id: String(newTicket.number),
+      resetForm();
+
+      setTimeout(() => {
+        Scrivito.navigateTo(ticketPage, {
+          id: String(newTicket.number),
+        });
       });
     } catch (error) {
       addError("Error submitting ticket", "CreateNewTicketOverlay", error);
