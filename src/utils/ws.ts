@@ -8,6 +8,7 @@ class WS {
   private listeners: { [key: string]: Callback[] };
   private instanceId: string | undefined;
   private timer: NodeJS.Timer | undefined;
+  private lastAutoRefreshed: number | undefined;
 
   constructor (url: string) {
     this.url = url;
@@ -19,17 +20,35 @@ class WS {
     this._init();
   }
 
+  handleFocusChange() {
+    if (document.visibilityState === "visible") {
+      this.autoRefresh();
+    }
+  }
+
+  autoRefresh() {
+    if (document.visibilityState !== "visible") return;
+
+    if(this.lastAutoRefreshed && new Date().getTime() - this.lastAutoRefreshed < 5000) return;
+    this.lastAutoRefreshed = new Date().getTime();
+
+    Object.values(this.listeners).forEach((callbacks) => {
+      callbacks.forEach((callback) => {
+        callback("dummy");
+      });
+    });
+  }
+
   _init() {
     this.close();
 
     if (!this.timer) {
       this.timer = setInterval(() => {
-        Object.values(this.listeners).forEach((callbacks) => {
-          callbacks.forEach((callback) => {
-            callback("dummy");
-          });
-        });
+        this.autoRefresh();
       }, 1*60*1000);
+
+      document.addEventListener("visibilitychange", this.handleFocusChange.bind(this));
+      document.addEventListener("focus", this.autoRefresh.bind(this));
     }
 
     // NOTE: Disable WebSockets until authentication issue is solved
@@ -52,6 +71,8 @@ class WS {
           if (this.timer) {
             clearInterval(this.timer);
             this.timer = undefined;
+            window.removeEventListener("visibilitychange", this.handleFocusChange.bind(this));
+            window.removeEventListener("focus", this.autoRefresh.bind(this));
           }
           this.ws = ws;
           delay = 1;

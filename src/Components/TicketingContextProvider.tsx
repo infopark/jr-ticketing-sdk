@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserHistory } from "history";
 
 import getUserData from "../api/getUserData";
 import TicketingApi from "../api/TicketingApi";
@@ -15,24 +16,10 @@ const TicketAttributes = {
     "ui:autofocus": true,
     "ui:required": true,
     "ui:regular": true
-  },
-  "message.text": {
-    type: "string",
-    "ui:widget": "textarea",
-    "ui:required": true,
-    "ui:regular": true
-  },
-  "message.attachments": {
-    type: "array",
-    items: {
-      type: "string",
-      format: "data-url"
-    },
-    "ui:regular": true
   }
 };
 
-export function TicketingContextProvider({ children }) {
+export function TicketingContextProvider({ history, children }) {
   const [instance, setInstance] = React.useState<Keyable>();
 
   const [currentUser, setCurrentUser] = React.useState<Keyable>();
@@ -130,6 +117,7 @@ export function TicketingContextProvider({ children }) {
   return (
     <TicketingContext.Provider
       value={{
+        history,
         instance,
         prepareTicketSchema,
         isTicketingContextReady,
@@ -146,6 +134,7 @@ export function TicketingContextProvider({ children }) {
 }
 
 type TTicketingContext = {
+  history: BrowserHistory,
   instance: Keyable;
   prepareTicketSchema: (ticketUiSchema: Keyable, instance: Keyable) => Keyable | null;
   isTicketingContextReady: () => boolean;
